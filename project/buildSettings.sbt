@@ -1,28 +1,31 @@
 // needed for custom scalastyle package
-resolvers += "namin.github.com/maven-repository" at "http://namin.github.com/maven-repository/"
+// resolvers += "namin.github.com/maven-repository" at "http://namin.github.com/maven-repository/"
 
-resolvers += "Spray Repository" at "http://repo.spray.cc/"
+// resolvers += "Spray Repository" at "http://repo.spray.cc/"
 
-libraryDependencies += "net.databinder" %% "dispatch-http" % "0.8.8"
+resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
-  libraryDependencies += "org.scalastyle" % "scalastyle_2.9.1" % "0.1.3-SNAPSHOT"
 
-libraryDependencies += "cc.spray" %%  "spray-json" % "1.1.1"
+// libraryDependencies += "net.databinder" %% "dispatch-http" % "0.8.8"
 
-// need scalatest also as a build dependency: the build implements a custom reporter
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.8"
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.2.0")
+
+
+// libraryDependencies += "cc.spray" %%  "spray-json" % "1.1.1"
+
+libraryDependencies += "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
+
+libraryDependencies += "com.assembla.scala-incubator" % "graph-core_2.10" % "1.6.1"
 
 // dispatch uses commons-codec, in version 1.4, so we can't  go for 1.6.
 // libraryDependencies += "commons-codec" % "commons-codec" % "1.4"
 
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.1"
 
-// sbteclipse-plugin uses scalaz-core 6.0.3, so we can't go 6.0.4
-// libraryDependencies += "org.scalaz" %% "scalaz-core" % "6.0.3"
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.1.2")
 
 scalacOptions ++= Seq("-deprecation")
 
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.1.0")
 
 // for dependency-graph plugin
 // net.virtualvoid.sbt.graph.Plugin.graphSettings

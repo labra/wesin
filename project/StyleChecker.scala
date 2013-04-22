@@ -1,4 +1,4 @@
-import sbt.File
+/*import sbt.File
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import org.scalastyle._
@@ -68,3 +68,4 @@ object StyleChecker {
     (msg, score(outputResult))
   }
 }
+*/
