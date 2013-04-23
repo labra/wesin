@@ -108,7 +108,7 @@ abstract class RDFGraph {
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A 
   
-//  def isomorphic(other : RDFGraph) : Boolean
+  //  def isomorphic(other : RDFGraph) : Boolean
 
   
 }
