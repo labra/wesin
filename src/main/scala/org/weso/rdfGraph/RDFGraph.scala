@@ -3,13 +3,13 @@ package org.weso.rdfGraph
 import org.weso.rdfNode._
 import org.weso.rdfTriple._
 import org.weso.graph._
-import org.weso.graph.MGraph
-import org.weso.graph.MGraphImpl
+import org.weso.graph.TGraph
+import org.weso.graph.TGraphImpl
 
 import scala.collection.Set
 
 import scala.collection.immutable.Map
-import scalax.collection.Graph
+import scalax.collection.immutable.Graph
 import scalax.collection.GraphEdge._
  
 object RDFGraph {
@@ -113,7 +113,7 @@ abstract class RDFGraph {
   
 }
 
-case class Ground(val graph : MGraph[RDFNode]) extends RDFGraph {
+case class Ground(val graph : TGraph[RDFNode]) extends RDFGraph {
 
   override def isEmpty = graph.isEmpty
   
@@ -204,7 +204,7 @@ case class Ground(val graph : MGraph[RDFNode]) extends RDFGraph {
   }
   
   override def foldRDFGraphSeed[A] (e: A, f:(Context[RDFNode],A) => A, seed : BNodeId) : A = {
-    graph.foldMGraph(e)(f)
+    graph.foldTGraph(e)(f)
   }
 
   def foldRDFGraphSeedOrd[A] (
@@ -212,7 +212,7 @@ case class Ground(val graph : MGraph[RDFNode]) extends RDFGraph {
 		  f: (Context[RDFNode],A) => A,
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A = {
-    graph.foldMGraphOrd(e)(f)(ord)
+    graph.foldTGraphOrd(e)(f)(ord)
   }
     
 }
@@ -282,7 +282,7 @@ case class Exists(fn : BNodeId => RDFGraph) extends RDFGraph {
  /**
   * Empty RDF Graph (no nodes and edges)
   */
- def empty : RDFGraph = Ground(new MGraphImpl(Graph[RDFNode,DiHyperEdge]()))
+ def empty : RDFGraph = Ground(new TGraphImpl(Graph[RDFNode,DiHyperEdge]()))
  
  /**
   * Context represents the context of an IRI in a RDF Graph
