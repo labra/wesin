@@ -282,7 +282,7 @@ object RDFGraph {
  /**
   * Empty RDF Graph (no nodes and edges)
   */
- def empty : RDFGraph = Ground(new TGraphImpl(Graph[RDFNode,DiHyperEdge]()))
+ def empty : RDFGraph = Ground(new TGraphImpl(Graph[RDFNode,Triple]()))
  
  /**
   * Context represents the context of an IRI in a RDF Graph

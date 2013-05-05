@@ -14,31 +14,31 @@ import scalax.collection.GraphEdge._
 class GraphSuite extends FunSuite {
 
   test("empty graph") {
-    val g = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g = new TGraphImpl(Graph[Int,Triple]())
     assert(g.isEmpty,true)
   }
   
   test("simple triple contains origin") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple(('a','b','c'))
     assert(g1.nodes.contains('a'))
   }
 
   test("simple triple contains edge") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple(('a','b','c'))
     assert(g1.nodes.contains('b'))
   }
 
   test("simple triple contains destiny") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple(('a','b','c'))
     assert(g1.nodes.contains('c'))
   }
 
 
   test("decomp with two triples, a") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('a','b','d')
     assert(g2.decomp('a').get._1.pred === Set())
@@ -47,7 +47,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("decomp with two triples, b") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('a','b','d')
     assert(g2.decomp('b').get._1.pred === Set())
@@ -56,7 +56,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("decomp with two triples, c") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('a','b','d')
     assert(g2.decomp('c').get._1.pred === Set(('a','b')))
@@ -65,20 +65,20 @@ class GraphSuite extends FunSuite {
   }
 
   test("triples, a b c") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     assert(g1.triples == Set(('a','b','c')))
   }
 
   test("triples, abc, abd") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('a','b','d')
     assert(g2.triples == Set(('a','b','c'),('a','b','d')))
   }
 
   test("foldGraph min") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('b','c','a')
     val g2 = g1.addTriple('a','b','d')
     val g = g2
@@ -87,7 +87,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("foldGraph min loop") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('c','b','d')
     val g3 = g2.addTriple('d','b','a')
@@ -97,7 +97,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("foldGraph max") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('b','c','a')
     val g2 = g1.addTriple('a','b','d')
     val g = g2
@@ -107,13 +107,13 @@ class GraphSuite extends FunSuite {
   }
 
   test("map empty") {
-    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Int,Triple]())
     val g = g0.map((x:Int) => x + 1)
     assert(g.nodes === Set())
   }
 
   test("mapGraph (+1)") {
-    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Int,Triple]())
     val g1 = g0.addTriple(1,2,3)
     val g2 = g1.addTriple(3,2,1)
 
@@ -122,7 +122,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("map toString") {
-    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Int,Triple]())
     val g1 = g0.addTriple(1,2,3)
     val g2 = g1.addTriple(3,2,1)
 
@@ -131,7 +131,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("extend empty with a list of succ") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
     val ctx = Context('a',e,Set(('b','c'),('b','d')),e)
     val g1 = g0.extend(ctx)
@@ -139,7 +139,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("extend empty with a list of pred") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
     val ctx = Context('a',Set(('b','c'),('b','d')),e,e)
     val g1 = g0.extend(ctx)
@@ -147,7 +147,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("extend empty with a list of rels") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
     val ctx = Context('a',e,e,Set(('b','c'),('b','d')))
     val g1 = g0.extend(ctx)
@@ -155,7 +155,7 @@ class GraphSuite extends FunSuite {
   }
 
   test("extend empty with succ, rels and pred") {
-    val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
     val ctx = Context('x',
     		Set(('a','b'),('c','d')),

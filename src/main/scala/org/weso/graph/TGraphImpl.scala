@@ -10,7 +10,7 @@ import scala.collection.immutable.Set
 
 
 
-case class TGraphImpl[A](graph: Graph[A,DiHyperEdge]) extends TGraph[A] {
+case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
 
   // TODO: Consider defining a custom edge instead of DiHyperEdge
 
@@ -36,16 +36,16 @@ case class TGraphImpl[A](graph: Graph[A,DiHyperEdge]) extends TGraph[A] {
   def extend(ctx : Context[A]) = {
     TGraphImpl( 
          ((((graph + ctx.node) 
-         /: ctx.succ) { (g,p) => g + (ctx.node ~> p._1 ~> p._2) }
-         /: ctx.pred) { (g,p) => g + (p._1 ~> p._2 ~> ctx.node) }
-         /: ctx.rels) { (g,p) => g + (p._1 ~> ctx.node ~> p._2) }
+         /: ctx.succ) { (g,p) => g + Triple(ctx.node,p._1,p._2) }
+         /: ctx.pred) { (g,p) => g + Triple(p._1,p._2,ctx.node) }
+         /: ctx.rels) { (g,p) => g + Triple(p._1,ctx.node,p._2) }
       )
   }    
   
   override def isEmpty = graph.isEmpty
 
   override def addTriple (triple: (A,A,A)) : TGraphImpl[A] = {
-    TGraphImpl(graph + (triple._1 ~> triple._2 ~> triple._3))
+    TGraphImpl(graph + Triple(triple._1,triple._2,triple._3))
   }
 
   override def addNode (node : A) : TGraphImpl[A] = {
@@ -103,7 +103,7 @@ case class TGraphImpl[A](graph: Graph[A,DiHyperEdge]) extends TGraph[A] {
 
   def map[B : Manifest](f : A => B) : TGraph[B] = {
     this.decompAny match {
-      case None => TGraphImpl(Graph[B,DiHyperEdge]())
+      case None => TGraphImpl(Graph[B,Triple]())
       case Some((ctx,g)) => g.map(f).extend(ctx.map(f))
     } 
   }
