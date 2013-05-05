@@ -1,4 +1,5 @@
 wesin
 =====
 
-Web semantics using inductive graphs
+Web semantics interactive
+This is a proof-of-concept RDF library using Inductive triple graphs

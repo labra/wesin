@@ -14,4 +14,12 @@ case class Context[A](
     rels.foldLeft(emptyTriples) { (r,p) => Set((p._1,node,p._2)) ++ r }
    }
   
+  def map[B](f : A => B): Context[B] = {
+    Context(f(node),mapPairs(f,pred),mapPairs(f,succ),mapPairs(f,rels))
+  }
+  
+  def mapPairs[A,B](f: A => B, ls : Set[(A,A)]): Set[(B,B)] = {
+    ls.map((x:(A,A)) => (f(x._1),f(x._2)))
+  }
+
 }

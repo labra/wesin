@@ -106,6 +106,30 @@ class GraphSuite extends FunSuite {
     assert(ls === List('d','c','b','a'))
   }
 
+  test("map empty") {
+    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g = g0.map((x:Int) => x + 1)
+    assert(g.nodes === Set())
+  }
+
+  test("mapGraph (+1)") {
+    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g1 = g0.addTriple(1,2,3)
+    val g2 = g1.addTriple(3,2,1)
+
+    val gN = g2.map((x:Int) => x + 1)
+    assert(gN.nodes === Set(2,3,4))
+  }
+
+  test("map toString") {
+    val g0 = new TGraphImpl(Graph[Int,DiHyperEdge]())
+    val g1 = g0.addTriple(1,2,3)
+    val g2 = g1.addTriple(3,2,1)
+
+    val gN = g2.map((x:Int) => x.toString)
+    assert(gN.nodes === Set("1","2","3"))
+  }
+
   test("extend empty with a list of succ") {
     val g0 = new TGraphImpl(Graph[Char,DiHyperEdge]())
     val e = Set[(Char,Char)]()

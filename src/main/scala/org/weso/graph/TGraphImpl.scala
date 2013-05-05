@@ -27,6 +27,12 @@ case class TGraphImpl[A](graph: Graph[A,DiHyperEdge]) extends TGraph[A] {
      } yield (Context(node,p,s,r),this.remove(node))  
   }
 
+  def decompAny : Option[(Context[A],TGraph[A])] = {
+    if (graph.isEmpty) None 
+    else 
+      decomp(nodes.head)
+  }
+
   def extend(ctx : Context[A]) = {
     TGraphImpl( 
          ((((graph + ctx.node) 
@@ -95,7 +101,12 @@ case class TGraphImpl[A](graph: Graph[A,DiHyperEdge]) extends TGraph[A] {
     TGraphImpl(graph - node)
   }
 
-
+  def map[B : Manifest](f : A => B) : TGraph[B] = {
+    this.decompAny match {
+      case None => TGraphImpl(Graph[B,DiHyperEdge]())
+      case Some((ctx,g)) => g.map(f).extend(ctx.map(f))
+    } 
+  }
 }
 
 

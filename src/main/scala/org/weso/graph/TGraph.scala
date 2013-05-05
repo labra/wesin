@@ -87,10 +87,10 @@ trait TGraph[A] {
      }
     }
   }
+  
+  def map[B : Manifest](f : A => B) : TGraph[B]
+
 }
 
 object TGraph {
-  
-  
-
 }

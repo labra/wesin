@@ -11,18 +11,11 @@ import scala.collection.Set
 import scala.collection.immutable.Map
 import scalax.collection.immutable.Graph
 import scalax.collection.GraphEdge._
- 
-object RDFGraph {
-
-	// Implicit definition for starting BNodeId
-	// Should I put it in other place?
-	implicit val initialBNode = BNodeId(0)
 
 /**
  * Type of exceptions raised
  */
- case class RDFGraphException(val msg: String) extends Exception
-  
+case class RDFGraphException(val msg: String) extends Exception
 
 abstract class RDFGraph {
   
@@ -113,7 +106,8 @@ abstract class RDFGraph {
   
 }
 
-case class Ground(val graph : TGraph[RDFNode]) extends RDFGraph {
+case class Ground(val graph : TGraph[RDFNode])
+                 (implicit seed : BNodeId) extends RDFGraph {
 
   override def isEmpty = graph.isEmpty
   
@@ -217,10 +211,9 @@ case class Ground(val graph : TGraph[RDFNode]) extends RDFGraph {
     
 }
 
+case class Exists(fn : BNodeId => RDFGraph)
+				   (implicit seed : BNodeId) extends RDFGraph {
 
-
-case class Exists(fn : BNodeId => RDFGraph) extends RDFGraph {
-  
   override def isEmpty = false
   
   override def insertTriple(triple: RDFTriple) : RDFGraph = {
@@ -236,8 +229,7 @@ case class Exists(fn : BNodeId => RDFGraph) extends RDFGraph {
   }
 
   override def IRIs: Set[IRI] = {
-   // We don't care about bNodeId's so we always feed initialBnode
-   (fn(initialBNode)).IRIs  
+   (fn(seed)).IRIs  
   }
 
   /*
@@ -278,6 +270,14 @@ case class Exists(fn : BNodeId => RDFGraph) extends RDFGraph {
   }
   
 }
+
+
+
+object RDFGraph {
+
+  // Implicit definition for starting BNodeId
+  // Should I put it in other place?
+  implicit val initialBNode = BNodeId(0)
 
  /**
   * Empty RDF Graph (no nodes and edges)
@@ -322,5 +322,12 @@ case class Exists(fn : BNodeId => RDFGraph) extends RDFGraph {
    	}
    	g.foldRDFGraphOrd("", ((ctx : Context[RDFNode],r : String) => "ctx: " + ctx + "\n" + r ))
   }
+
+  
+
+
+
+
+
 
 }
