@@ -14,7 +14,7 @@ import org.weso.rdfTriple._
 import scala.util.parsing.input.CharArrayReader
 
 @RunWith(classOf[JUnitRunner])
-class NTriplesParserSuite extends NTriplesParser with FunSuite {
+class TurtleParserSuite extends TurtleParser with FunSuite {
   
   test("parser string") {
     val parser = NTriplesParser

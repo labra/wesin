@@ -323,11 +323,5 @@ object RDFGraph {
    	g.foldRDFGraphOrd("", ((ctx : Context[RDFNode],r : String) => "ctx: " + ctx + "\n" + r ))
   }
 
-  
-
-
-
-
-
 
 }

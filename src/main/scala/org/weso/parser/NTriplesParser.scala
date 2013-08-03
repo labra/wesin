@@ -17,7 +17,7 @@ import org.weso.rdfTriple._
  * @since 18/11/2012
  */
 
-class NTriplesParser extends Positional with RegexParsers {
+trait NTriplesParser extends Positional with RegexParsers {
   val bNodesMap = scala.collection.mutable.Map.empty[String,BNodeId]
   
   override protected val whiteSpace = """(\s|\t)+""".r
@@ -114,35 +114,5 @@ class NTriplesParser extends Positional with RegexParsers {
 
   def chrExcept(cs: Char*) = elem("", ch => (cs forall (ch !=)))
 }
-
-object NTriplesParser extends NTriplesParser {
-  def main(args: Array[String]) {
-    
-	  val t1 = "<a> <b> <c> .\n"
-	  println("t1: " + parseAll(line, t1))
-
-	  val t2 = "# Comment \n"
-	  println("t2: " + parseAll(line, t2))
-	  
-	  val t3 = "\n"
-	  println("t3: " + parseAll(line, t3))
-
  
-	  val ts = """# a comment 
-	             |<a> <b> <c> .
-	             |<a> <b> <d> .""".stripMargin('|')
-	             
-	  val t4 =
-"""# Example 3 of N-Triples with bNodes
-<http://example.org/a> <http://example.org/b> _:b1 . 
-<http://example.org/a> <http://example.org/b> _:b2 . 
-_:b1 <http://example.org/b> <http://example.org/c> . 
-_:b1 <http://example.org/b> <http://example.org/d> . 
-_:b2 <http://example.org/b> _:b1 . 
-_:b2 <http://example.org/b> <http://example.org/e> . """.stripMargin
-
-	  val triples = parseAll(ntripleDoc, t4).get
-	  println("Parsed")
-	  for { t <- triples } { println(t) }
-	}
-}
+object NTriplesParser extends NTriplesParser 

@@ -12,8 +12,6 @@ import scala.collection.immutable.Set
 
 case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
 
-  // TODO: Consider defining a custom edge instead of DiHyperEdge
-
   def empty = TGraphImpl(graph.empty)
 
   def nodes = graph.nodes.map(_.value).toSet
@@ -56,8 +54,6 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
     TGraphImpl(graph - node)
   }
 
-  
-  
  /**
    * List of successors: outgoing edges (rel,destiny)
    * @param node resource 
