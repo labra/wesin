@@ -15,7 +15,7 @@ import scala.util.parsing.input.CharArrayReader
 
 @RunWith(classOf[JUnitRunner])
 class TurtleParserSuite extends TurtleParser with FunSuite {
-  
+  /*  
   test("parser string") {
     val parser = NTriplesParser
     assert(parser.parseAll(parser.string,"\"hello\"").get === "hello")
@@ -193,5 +193,5 @@ class TurtleParserSuite extends TurtleParser with FunSuite {
         	println(res)
         	fail
     }
-  } 
+  } */
 }

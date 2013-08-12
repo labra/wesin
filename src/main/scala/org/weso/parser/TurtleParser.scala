@@ -11,101 +11,30 @@ import org.weso.rdfNode._
 import org.weso.rdfTriple._
 
 trait TurtleParser extends Positional with RegexParsers {
-  val bNodesMap = scala.collection.mutable.Map.empty[String,BNodeId]
-  
-  override protected val whiteSpace = """(\s|\t)+""".r
-  override val skipWhitespace = false
+ override val skipWhitespace = false
 
-  
-  def lazyrep[T] (p: Parser[Stream[T]]): Parser[Stream[T]] = (
-    p ~ lazyrep(p) ^^ { case hd~tl => hd ++ tl }
-    | success(Stream.empty)
-  )
+ lazy val PN_CHARS_BASE_STR =
+ 	"[a-zA-Z]|[\\u00C0-\\u00D6]|[\\u00D8-\\u00F6]|[\\u00F8-\\u02FF]|[\\u0370-\\u037D]|[\\u037F-\\u1FFF]|" + 
+   	"[\\u200C-\\u200D]|[\\u2070-\\u218F]|[\\u2C00-\\u2FEF]|[\\u3001-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|" + 
+   	"[\\x{10000}-\\x{EFFFF}]"
 
-  def ntripleDoc : Parser[Stream[RDFTriple]] = {
-    bNodesMap.clear()
-    lazyrep(line) 
-  }
-  
-  def line: Parser[Stream[RDFTriple]] =
-    (comment | triple | eoln) ^^ {
-      case Some(t) => Stream(t)
-      case None => Stream.Empty
-    }
-  
-  def triple : Parser[Option[RDFTriple]] = 
-     opt(ws) ~> (subj <~ ws) ~ (pred <~ ws) ~ (obj <~ opt(ws)) <~ "." <~ opt(ws) ^^ 
-       { case s ~ p ~ o => Some(RDFTriple(s,p,o)) } 
+ lazy val PN_CHARS_BASE				= PN_CHARS_BASE_STR.r
+ lazy val PN_CHARS_U				= PN_CHARS_BASE | "_"
+ lazy val PN_CHARS					= PN_CHARS_U | "-" | "[0-9]".r | "\\u00B7" | 
+                                      "[\\u0300-\u036F]".r | "[\\u203F-\\u2040]".r
  
-  def comment : Parser[Option[RDFTriple]] = 
-    opt(ws) ~> """#[^\n\r]*""".r ~ eoln ^^ { case _ => None }
+ lazy val PN_PREFIX					= PN_CHARS_BASE ~ opt ( rep(PN_CHARS | ".") ~ PN_CHARS) ^^ 
+   { case c1 ~ None => c1
+     case c1 ~ Some(ls) => c1 + ls
+   } 
+ 
+ lazy val PLX						= PERCENT | PN_LOCAL_ESC
+ lazy val PERCENT : Parser[String]	= "%" ~> HEX ~ HEX ^^ { case h1 ~ h2 => "%" + h1 + h2 } // To convert: Integer.parseInt(h1 + h2,16) } 
+ lazy val HEX 						= """[0-9A-Fa-f]""".r
+ lazy val PN_LOCAL_ESC 				= """[\\][_~\.\-!$&'\(\)*+,;=/?#@%]""".r 
+ 
 
-  
-  def subj : Parser[RDFNode] = ( uriref | nodeID )
-  def pred : Parser[IRI] = uriref
-  def obj : Parser[RDFNode] = (uriref | nodeID | literal )
-  
-  def uriref : Parser[IRI] = "<" ~> absoluteURI <~ ">" ^^ IRI
-  def nodeID : Parser[BNodeId] = "_:" ~> name ^^ 
-    {(name) => 
-     { bNodesMap.getOrElse(name, 
-                      { val v = BNodeId(bNodesMap.size)
-                      	bNodesMap.update(name,v);
-                        v 
-                      }) 
-     }
-    }
-  def literal : Parser[Literal] = ( datatypeLiteral | langLiteral )
-  
-  def langLiteral : Parser[LangLiteral] = string ~ opt("@" ~> language) ^^ 
-  		  { case str ~ Some(lang) => LangLiteral(str,lang)
-  		  	case str ~ None       => LangLiteral(str,Lang(""))
-  		  } 
-  
-  def datatypeLiteral : Parser[DatatypeLiteral] = string ~ "^^" ~ uriref ^^ 
-		  { case str ~ "^^" ~ uri => DatatypeLiteral(str,uri) }
-  
-  def language : Parser[Lang] = """[a-z]+(-[a-z0-9]+)*""".r ^^ Lang
-  
-  def ws = """(\t|\s)+""".r
-  
-  def eof = """\z""".r
-  
-  def eoln = """\n|\r|\n\r""".r ^^ { case _ => None }
-  def tab = """\t""".r 
-  def string : Parser[String] = "\"" ~> rep(charSeq | chrExcept('\"', '\n', EofCh)) <~ "\"" ^^ { _ mkString "" }  
-  
-  def name: Parser[String] = """[A-Za-z][A-Za-z0-9]*""".r 
-  def absoluteURI : Parser[String] = rep(charURI | chrExcept('>', '\n', EofCh) ) ^^ { _ mkString "" }
 
-  def charURI = elem("URI char", 
-      (ch) => ch != '<' && ch != '>' 
-        				&& ch > 0x32 // Not allowed control and space chars in URIs
-        				&& ch <= 0x7F // Only ASCII (chars < 127) in URIs 
-        				) 
-        				
-  def character = elem("character", (ch) => ch >= 20 && ch <= 126)
-
-  def charSeq: Parser[String] =
-    ('\\' ~ '\"' ^^^ "\""
-    |'\\' ~ '\\' ^^^ "\\"
-    |'\\' ~ '/'  ^^^ "/"
-    |'\\' ~ 'b'  ^^^ "\b"
-    |'\\' ~ 'f'  ^^^ "\f"
-    |'\\' ~ 'n'  ^^^ "\n"
-    |'\\' ~ 'r'  ^^^ "\r"
-    |'\\' ~ 't'  ^^^ "\t"
-    |'\\' ~> 'u' ~> unicodeBlock)
-
-  private def unicodeBlock = hexDigit ~ hexDigit ~ hexDigit ~ hexDigit ^^ {
-    case a ~ b ~ c ~ d =>
-      new String(Array(Integer.parseInt(List(a, b, c, d) mkString "", 16)), 0, 1)
-  }
-  
-  val hexDigits = Set[Char]() ++ "0123456789abcdefABCDEF".toArray
-  def hexDigit = elem("hex digit", hexDigits.contains(_))
-
-  def chrExcept(cs: Char*) = elem("", ch => (cs forall (ch !=)))
 }
 
 object TurtleParser extends TurtleParser 
