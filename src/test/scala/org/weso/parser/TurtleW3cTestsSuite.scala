@@ -34,8 +34,11 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
    describe("PN_PREFIX") {
      val p = parser.PN_PREFIX
 	 shouldParse(p,"A")
-// fails	 shouldParse(p,"AA")
-// fails	 shouldParse(p, "b.a")
+	 shouldParse(p,"a.o")
+//	 shouldParse(p,"a-1")
+	 shouldParse(p,"año")
+     shouldParse(p,"AA")
+     shouldParse(p, "b.a")
 	 shouldNotParse(p, "b:a")
    }
 
