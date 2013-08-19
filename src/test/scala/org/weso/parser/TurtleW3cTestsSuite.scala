@@ -12,6 +12,8 @@ import org.weso.rdfNode._
 import org.weso.rdfTriple._
 import scala.util.parsing.input.CharArrayReader
 
+
+
 class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers {
 
   describe("Turtle Lexer") {
@@ -19,7 +21,7 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 
    describe("RDFLiteral") {
      val p = parser.RDFLiteral
-     shouldParseGen(p,"\"John\"")
+//     shouldParseGeneric(p,"\"John\"",Literal("John"))
 	 shouldParseGen(p,"\"123\"^^<xsd:integer>")
 	 shouldParseGen(p,"\"\"\"John Doe\"\"\"")
 	 shouldParseGen(p,"one@es")
@@ -31,8 +33,8 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 
    describe("BooleanLiteral") {
      val p = parser.BooleanLiteral
-     shouldParse(p,"true")
-	 shouldParse(p,"false")
+     shouldParseGeneric(p,"true",RDFNode.trueLiteral)
+	 shouldParseGeneric(p,"false",RDFNode.falseLiteral)
 	 shouldNotParse(p,"tres")
 	 shouldNotParse(p,"one")
    }
@@ -40,13 +42,13 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 	 
 	 describe("string") {
      val p = parser.string
-     shouldParse(p,"\"hi\"")
-	 shouldParse(p,"'Hi'")
-	 shouldParse(p,"'''Hi'John'''")
+     shouldParseGeneric(p,"\"hi\"","hi")
+	 shouldParseGeneric(p,"'Hi'","Hi")
+	 shouldParseGeneric(p,"'''Hi'John'''","Hi\'John")
 	 shouldNotParse(p,"3.2")
    }
 
-   describe("iri") {
+/*   describe("iri") {
      val p = parser.iri
      shouldParse(p,":a")
 	 shouldParse(p,"a:b")
@@ -55,20 +57,20 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 	 shouldParse(p,"<a.com>")
 	 shouldNotParse(p,"3.2")
    }
-
-   describe("PrefixedName") {
+*/
+/*   describe("PrefixedName") {
      val p = parser.PrefixedName
      shouldParse(p,":a")
 	 shouldParse(p,"a:b")
 	 shouldParse(p,"p:")
 	 shouldNotParse(p,"<a>")
-   }
+   } */
 
    describe("BlankNode") {
      val p = parser.BlankNode
-     shouldParse(p,"_:1")
-	 shouldParse(p,"_:a")
-	 shouldParse(p,"[]")
+//     shouldParse(p,"_:1")
+//	 shouldParse(p,"_:a")
+//	 shouldParse(p,"[]")
 	 shouldNotParse(p,"<a>")
    }
 
@@ -83,25 +85,52 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 	 shouldNotParse(p,"<a{a}b>")
    }
 
-   describe("PNAME_NS") {
-     val p = PNAME_NS.r
+   describe("PNAME_NS_STR") {
+     val p = PNAME_NS_STR.r
      shouldParse(p,"a:")
 	 shouldParse(p,":")
 	 shouldParse(p,"año:")
 	 shouldNotParse(p,"a:b")
    }
 
+   describe("PNAME_NS") {
+     val p = parser.PNAME_NS
+     parser.clearState
+     parser.addPrefix("a:",IRI("http://example.org/a#"))
+     parser.addPrefix("año:",IRI("http://example.org/año#"))
+     parser.addPrefix(":",IRI("http://example.org#"))
+     shouldParseGeneric(p,"a:",IRI("http://example.org/a#"))
+	 shouldParseGeneric(p,":",IRI("http://example.org#"))
+	 shouldParseGeneric(p,"año:",IRI("http://example.org#año"))
+	 shouldNotParse(p,"a:b")
+   }
+
    describe("PNAME_LN") {
-     val p = PNAME_LN.r
-     shouldParse(p,"a:b")
-	 shouldParse(p,"a:aa")
-	 shouldParse(p,"a:año")
+     val p = parser.PNAME_LN
+     parser.clearState
+     parser.addPrefix("a:",IRI("http://example.org/a#"))
+     shouldParseGeneric(p,"a:b",IRI("http://example.org/a#b"))
+	 shouldParseGeneric(p,"a:aa",IRI("http://example.org/a#aa"))
+	 shouldParseGeneric(p,"a:año",IRI("http://example.org/a#año"))
+	 shouldParseGeneric(p,"a:a\\~a",IRI("http://example.org/a#a~a"))
 	 shouldNotParse(p,"a:año ")
    }
 
+
    describe("BLANK_NODE_LABEL") {
-     val p = BLANK_NODE_LABEL.r
-	 shouldParse(p,"_:1")
+     val p = parser.BLANK_NODE_LABEL
+     shouldParseGenericWithEmptyState(p,"_:1",BNodeId(0))
+	 shouldParseGenericWithEmptyState(p,"_:aa",BNodeId(0))
+	 shouldParseGenericWithEmptyState(p,"_:año",BNodeId(0))
+	 shouldParseGenericWithEmptyState(p,"_:1.2a",BNodeId(0))
+	 shouldParseGenericWithEmptyState(p,"_:1.a",BNodeId(0))
+	 shouldNotParse(p,"_:1 a .")
+   }
+
+   describe("BLANK_NODE_LABEL_STR") {
+     val p = BLANK_NODE_LABEL_STR.r
+	 parser.clearState
+     shouldParse(p,"_:1")
 	 shouldParse(p,"_:aa")
 	 shouldParse(p,"_:año")
 // fails?	 shouldParse(p,"_:1.2")
@@ -111,30 +140,30 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
    }
 
    describe("LANGTAG") {
-     val p = LANGTAG.r
-	 shouldParse(p,"@es")
-	 shouldParse(p,"@es-am")
-	 shouldParse(p,"@am-am2-23")
+     val p = parser.LANGTAG
+	 shouldParseGeneric(p,"@es",Lang("es"))
+	 shouldParseGeneric(p,"@es-am",Lang("es-am"))
+	 shouldParseGeneric(p,"@am-am2-23",Lang("am-am2-23"))
 	 shouldNotParse(p,"es")
 	 shouldNotParse(p,"@12")
 	 shouldNotParse(p,"@año")
    }
 
    describe("INTEGER") {
-     val p = INTEGER.r
-	 shouldParse(p,"2")
-	 shouldParse(p,"-3")
-	 shouldParse(p,"-33")
+     val p = parser.INTEGER
+	 shouldParseGeneric(p,"2",IntegerLiteral(2))
+	 shouldParseGeneric(p,"-3",IntegerLiteral(-3))
+	 shouldParseGeneric(p,"-33",IntegerLiteral(-33))
 	 shouldNotParse(p,"3.4")
 	 shouldNotParse(p,"334.")
 	 shouldNotParse(p,"-3.34E+98")
    }
 
 	 describe("DECIMAL") {
-     val p = DECIMAL.r
-	 shouldParse(p,"2.34")
-	 shouldParse(p,"-3.0")
-	 shouldParse(p,"-3.3")
+     val p = parser.DECIMAL
+	 shouldParseGeneric(p,"2.34",DecimalLiteral(2.34))
+	 shouldParseGeneric(p,"-3.0",DecimalLiteral(-3.0))
+	 shouldParseGeneric(p,"-3.3",DecimalLiteral(-3.3))
 	 shouldNotParse(p,"3")
 	 shouldNotParse(p,"334")
 	 shouldNotParse(p,"-3.34E+98")
@@ -142,10 +171,10 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
    }
 
    describe("DOUBLE") {
-     val p = DOUBLE.r
-	 shouldParse(p,"2.34e9876")
-	 shouldParse(p,"-3E+98")
-	 shouldParse(p,"-3.34E+98")
+     val p = parser.DOUBLE
+	 shouldParseGeneric(p,"2.34e98",DoubleLiteral(2.34e98))
+	 shouldParseGeneric(p,"-3E+98",DoubleLiteral(-3E98))
+	 shouldParseGeneric(p,"-3.34E+98",DoubleLiteral(-3.34E+98))
 	 shouldNotParse(p,"-3.34EE+98")
 	 shouldNotParse(p,"-3.34E +98")
    }
@@ -162,41 +191,48 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
    }
 
    describe("STRING_LITERAL_QUOTE") {
-     val p = STRING_LITERAL_QUOTE.r
-	 shouldParse(p,"\"Hello\"")
-	 shouldParse(p,"\"\\u0123\t\\u00AF\"")
+     val p = parser.STRING_LITERAL_QUOTE
+	 shouldParseGeneric(p,"\"Hello\"","Hello")
+	 shouldParseGeneric(p,"\"\\u0123\\t\\u00AF\"","\u0123\t\u00AF")
 	 shouldNotParse(p,"\"Ho\"la\"")
    }
 
    describe("STRING_LITERAL_SINGLE_QUOTE") {
-     val p = STRING_LITERAL_SINGLE_QUOTE.r
-	 shouldParse(p,"'Hello'")
-	 shouldParse(p,"'\\u0123'")
+     val p = parser.STRING_LITERAL_SINGLE_QUOTE
+	 shouldParseGeneric(p,"'Hello'","Hello")
+	 shouldParseGeneric(p,"'\\u0123'","\u0123")
 	 shouldNotParse(p,"'Ho'la'")
    }
 
    describe("STRING_LITERAL_LONG_SINGLE_QUOTE") {
-     val p = STRING_LITERAL_LONG_SINGLE_QUOTE.r
-	 shouldParse(p,"'''Hello'''")
-	 shouldParse(p,"'''\\u0123'''")
-	 shouldParse(p,"'''H e l l o . '''")
-	 shouldParse(p,"'''Hi 'John' . '''")
-	 shouldParse(p,"'''Hi'John'''")
-	 shouldParse(p,"'''Hi \"John\" . '''")
-	 shouldParse(p,"'''Hi \"\"John\"\" . '''")
+     val p = parser.STRING_LITERAL_LONG_SINGLE_QUOTE
+	 shouldParseGeneric(p,"'''Hello'''","Hello")
+	 shouldParseGeneric(p,"'''\\u0123'''","\u0123")
+	 shouldParseGeneric(p,"'''H e l l o . '''","H e l l o . ")
+	 shouldParseGeneric(p,"'''Hi 'John' . '''","Hi \'John\' . ")
+	 shouldParseGeneric(p,"'''Hi'John'''","Hi\'John")
+	 shouldParseGeneric(p,"'''Hi \"John\" . '''","Hi \"John\" . ")
+	 shouldParseGeneric(p,"'''Hi \"\"John\"\" . '''","Hi \"\"John\"\" . ")
 	 shouldNotParse(p,"\"\"\"Hi \"\"\"John\"\" . \"\"\"")
    }
 
    describe("STRING_LITERAL_LONG_QUOTE") {
-     val p = STRING_LITERAL_LONG_QUOTE.r
-	 shouldParse(p,"\"\"\"Hello\"\"\"")
-	 shouldParse(p,"\"\"\"\\u0123\"\"\"")
-	 shouldParse(p,"\"\"\"H e l l o . \"\"\"")
-	 shouldParse(p,"\"\"\"Hi \"John\" . \"\"\"")
-	 shouldParse(p,"\"\"\"Hi \'John\' . \"\"\"")
-	 shouldParse(p,"\"\"\"Hi \"\"John\"\" . \"\"\"")
+     val p = parser.STRING_LITERAL_LONG_QUOTE
+	 shouldParseGeneric(p,"\"\"\"Hello\"\"\"","Hello")
+	 shouldParseGeneric(p,"\"\"\"\\u0123\"\"\"","\u0123")
+	 shouldParseGeneric(p,"\"\"\"H e l l o . \"\"\"","H e l l o . ")
+	 shouldParseGeneric(p,"\"\"\"Hi \"John\" . \"\"\"","Hi \"John\" . ")
+	 shouldParseGeneric(p,"\"\"\"Hi \'John\' . \"\"\"","Hi \'John\' . ")
+	 shouldParseGeneric(p,"\"\"\"Hi \"\"John\"\" . \"\"\"","Hi \"\"John\"\" . ")
 	 shouldNotParse(p,"\"\"\"Hi \"\"\"John\"\" . \"\"\"")
 	 
+   }
+
+   describe("UCHAR_Parser") {
+     val p = parser.UCHAR_Parser
+	 shouldParseGeneric(p,"\\u002e",'.')
+	 shouldParseGeneric(p,"\\U00002e",'.')
+	 shouldNotParse(p,"\\x00002e")
    }
    
    describe("UCHAR") {
@@ -208,6 +244,20 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 	 shouldNotParse(p,"\\u0123AD")
 	 shouldNotParse(p,"\\U0123")
 	 shouldNotParse(p,"\\u012H")
+   }
+
+   describe("ECHAR_Parser") {
+     val p = parser.ECHAR_Parser
+	 shouldParseGeneric(p,"\\t",'\t')
+	 shouldParseGeneric(p,"\\n",'\n')
+	 shouldNotParse(p,"\\a")
+	 shouldNotParse(p,"a")
+   }
+   
+   describe("PN_CHARS_BASE") {
+     val p = parser.PN_CHARS_BASE_Parser
+	 shouldParseGeneric(p,"x",'x')
+	 shouldParseGeneric(p,"ñ",'ñ')
    }
 
    describe("ECHAR") {
@@ -228,12 +278,21 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 	 shouldNotParse(p,"a")
    }
 
-   describe("ANON") {
-     val p = ANON.r
+   describe("ANON_STR") {
+     val p = ANON_STR.r
 	 shouldParse(p,"[]")
 	 shouldParse(p,"[ ]")
 	 shouldParse(p,"[ \t]")
 	 shouldParse(p,"[ \n]")
+	 shouldNotParse(p,"[a]")
+   }
+
+   describe("ANON") {
+     val p = parser.ANON
+	 shouldParseGen(p,"[]")
+	 shouldParseGen(p,"[ ]")
+	 shouldParseGen(p,"[ \t]")
+	 shouldParseGen(p,"[ \n]")
 	 shouldNotParse(p,"[a]")
    }
 
@@ -305,6 +364,24 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
      shouldParse(p,"\\!")
      shouldNotParse(p,"a")
    }
+   
+   describe("UCHAR2Char") {
+     it("Should parse unicode with 4 hex") {
+       UCHAR2char("\\u002e") === '.'
+     }
+     it("Should parse unicode with 6 hex") {
+       UCHAR2char("\\U00002e") === '.'
+     }
+   }
+
+   describe("ECHAR2Char") {
+     it("Should parse tab") {
+       ECHAR2char("\\t") === '\t'
+     }
+     it("Should parse newline") {
+       ECHAR2char("\\n") === '\n'
+     }
+   }
 
    def shouldParse(p:TurtleParser.Parser[String], s : String) {
      shouldParseGeneric(p,s,s)
@@ -317,11 +394,19 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
    }
 
    def shouldParseGeneric[A](p:TurtleParser.Parser[A], s : String, a : A) {
-    it("Should parse \"" + s + "\"") {
-      parser.parseAll(p,s).get === a
+    it("Should parse \"" + s + "\"" + " and return " + a.toString) {
+      parser.parseAll(p,s).get should be(a)
     }
    }
  
+   def shouldParseGenericWithEmptyState[A]
+		   (p:TurtleParser.Parser[A], s : String, a : A) {
+    it("Should parse \"" + s + "\"" + " and return " + a.toString) {
+      parser.clearState
+      parser.parseAll(p,s).get should be(a)
+    }
+   }
+
    def shouldNotParse[A](p:TurtleParser.Parser[A], s : String) {
     it("Should not parse \"" + s + "\"") {
       parser.parseAll(p,s) === parser.NoSuccess
