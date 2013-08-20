@@ -13,28 +13,31 @@ import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
-import scala.collection.mutable.Map
+import scala.collection.immutable.Map
 
 
-class PrefixMap {
-  private val prefixMap = Map[String,IRI]()
-  
+case class PrefixMap(map: Map[String,IRI]) {
+
   def getIRI(prefix : String) : Option[IRI] = {
-    prefixMap.get(prefix)
+    map.get(prefix)
   }
   
-  def contains(prefix: String) : Boolean = prefixMap.contains(prefix)
+  def contains(prefix: String) : Boolean = map.contains(prefix)
 
-  def addPrefix(prefix : String, iri: IRI) : Unit = {
-    prefixMap += (prefix -> iri)
-  }
-
-  def clear():Unit = {
-    prefixMap.clear
+  def addPrefix(prefix : String, iri: IRI) : PrefixMap = {
+    PrefixMap(map + (prefix -> iri))
   }
 
   override def toString : String = {
-    "Prefix map: " + prefixMap
+    "Prefix map: " + map
   }
+}
+
+object PrefixMap {
+  def empty = PrefixMap(Map[String,IRI]())
+  
+  def addPrefix(prefix: String, iri: IRI)(pm: PrefixMap) : PrefixMap =
+    pm.addPrefix(prefix,iri)
+
 }
 

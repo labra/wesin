@@ -14,20 +14,16 @@ import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
 
+trait TurtleParser extends Positional with RegexParsers {
 
-trait TurtleParser extends Positional with RegexParsers with PackratParsers {
-
-  val namespaceMap  = new PrefixMap
-  val bNodeTable = new BNodeTable
-  
   override val skipWhitespace = false
 
 //  lazy val turtleDoc = PN_PREFIX
 
-  lazy val RDFLiteral = string ~ opt(LANGTAG | "^^" ~> iri) ^^ {
+  def RDFLiteral(prefixMap: PrefixMap) = string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
     case str ~ None => StringLiteral(str) 
     case str ~ Some(Lang(l)) => LangLiteral(str,Lang(l)) 
-//    case str ~ Some(iri) => DatatypeLiteral(str,iri)
+    case str ~ Some(IRI(iri)) => DatatypeLiteral(str,IRI(iri))
   }
   
   lazy val BooleanLiteral : Parser[Literal] = 
@@ -37,52 +33,68 @@ trait TurtleParser extends Positional with RegexParsers with PackratParsers {
   		
   lazy val string : Parser[String] = 
     	STRING_LITERAL_LONG_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE | 
-  		STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | 
-  		failure("string expected")
+  		STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE 
   					
-  lazy val iri = 
-    	(  IRIREF.r ^^ { case x => IRI(x)}  
-  		| PrefixedName 
+  def iri(prefixMap: PrefixMap) = 
+    	( IRIREF   
+  		| PrefixedName(prefixMap) 
   		| failure("iri expected")
   		)
   		
-  lazy val PrefixedName : Parser[IRI] = 
-      ( PNAME_LN 
-      | PNAME_NS 
+  def PrefixedName(prefixMap: PrefixMap) : Parser[IRI] = 
+      ( PNAME_LN(prefixMap) 
+      | PNAME_NS(prefixMap) 
       )
       
-  lazy val BlankNode : Parser[BNodeId] = BLANK_NODE_LABEL | ANON | failure("Blank Node expected")
+  def BlankNode(bNodeTable: BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
+    	( BLANK_NODE_LABEL(bNodeTable) 
+    	| ANON(bNodeTable) 
+    	| failure("Blank Node expected")
+    	)
   
-  lazy val IRIREF		= "<([^\\u0000-\\u0020<>\\\\\"{}\\|\\^`\\\\]|" + UCHAR + ")*>"
+  lazy val IRIREF_STR  = "<([^\\u0000-\\u0020<>\\\\\"{}\\|\\^`\\\\]|" + UCHAR + ")*>"
+  lazy val IRIREF : Parser[IRI] = {
+    IRIREF_STR.r ^^ {
+      case x => val rex = "<(.*)>".r
+                val rex(cleanIRI) = x  // removes < and >
+                IRI(cleanIRI)
+    }
+  }
 
-  lazy val PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
+  def PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
 
-  lazy val PNAME_NS : Parser[IRI] = 
-     ( PNAME_NS_STR.r ^? 
+  def PNAME_NS(prefixMap: PrefixMap): Parser[IRI] = {
+   PNAME_NS_STR.r ^? 
         ({ case prefix 
-  		   if (namespaceMap.contains(prefix)) => { 
-  		  	    namespaceMap.getIRI(prefix).get
-  		   }
+  		    if (prefixMap.contains(prefix)) => { 
+  		  	    prefixMap.getIRI(prefix).get
+  		    }
   		 },
   		 { case prefix => 
   		   "Prefix " + prefix + 
   		   " not found in Namespce map: " + 
-  		   namespaceMap}
-  		)
-  	)
+  		   prefixMap
+  		 })
+  }
   
   lazy val PNAME_LN_STR = PNAME_NS_STR + PN_LOCAL
   
-  lazy val PNAME_LN : Parser[IRI]	= 
-     PNAME_NS ~ PN_LOCAL.r ^^
+  def PNAME_LN (prefixMap: PrefixMap): Parser[IRI]	= {
+   PNAME_NS(prefixMap) ~ PN_LOCAL.r ^^
   		{ case prefix ~ local => 
-  		  	RDFNode.qNameIRI(prefix, unscapeReservedChars(local))
+  		  	{
+  		  	  println("Prefix: " + prefix + ". Local: " + local)
+  		  	  RDFNode.qNameIRI(prefix, unscapeReservedChars(local))
+  		  	}
   		}
+  }
   
   lazy val BLANK_NODE_LABEL_STR = "_:(" + PN_CHARS_U + "|[0-9])(("+ PN_CHARS + "|\\.)*" + PN_CHARS + ")?"
-  lazy val BLANK_NODE_LABEL : Parser[BNodeId] = BLANK_NODE_LABEL_STR.r ^^ { 
-      s => bNodeTable.getOrAddBNode(s) 
-  }
+  
+  def BLANK_NODE_LABEL(bNodeTable:BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
+    	BLANK_NODE_LABEL_STR.r ^^ { 
+    	  s => bNodeTable.getOrAddBNode(s) 
+      	}
   
   lazy val LANGTAG		= "@" ~> "[a-zA-Z]+(-[a-zA-Z0-9]+)*".r ^^ Lang 
 
@@ -98,7 +110,7 @@ trait TurtleParser extends Positional with RegexParsers with PackratParsers {
   
   lazy val EXPONENT		= "[eE][+-]?[0-9]+"
 
-  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR + "|" + UCHAR + ")*\""
+  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR + "|" + UCHAR + ")*\""
   lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR + "|" + UCHAR + ")*'"
   lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR + "|" + UCHAR + ")*'''"
   lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR + "|" + UCHAR + ")*\"\"\""
@@ -117,7 +129,7 @@ trait TurtleParser extends Positional with RegexParsers with PackratParsers {
     { x => removeQuotes(unscape(x),"\"",3) }
   
   def removeQuotes(s : String, quote: String, number: Int) : String = {
-    val rex = (quote + "{" + number.toString + "}(.*)" + quote + "{"+number.toString + "}").r
+    val rex = ("(?s)"+quote + "{" + number.toString + "}(.*)" + quote + "{"+number.toString + "}").r
     val rex(newS) = s
     newS 
   }
@@ -132,7 +144,9 @@ trait TurtleParser extends Positional with RegexParsers with PackratParsers {
 
   lazy val ANON_STR = "\\[(" + WS + ")*\\]"  
 
-  lazy val ANON : Parser[BNodeId] = ANON_STR.r ^^ { _ => bNodeTable.newBNode } 
+  def ANON(bNodeTable: BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
+    ANON_STR.r ^^ { _ => bNodeTable.newBNode 
+    } 
 
   lazy val PN_CHARS_BASE_Parser : Parser[Char] = PN_CHARS_BASE.r ^^ { x => str2Char(x) }
 
@@ -268,16 +282,7 @@ trait TurtleParser extends Positional with RegexParsers with PackratParsers {
  def unscape2(x:String) : String = 
      (unscapeUnicode4 _ andThen unscapeUnicode6 andThen unscapeCtrl)(x)
  //------------------------------------
- 
- def addPrefix(prefix:String, iri: IRI) : Unit = {
-   namespaceMap.addPrefix(prefix, iri)
- }
- 
- def clearState():Unit = {
-   namespaceMap.clear
-   bNodeTable.clear   
- }
 }
-
+ 
 object TurtleParser extends TurtleParser 
 

@@ -13,29 +13,25 @@ import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
-import scala.collection.mutable.Map
+import scala.collection.immutable.Map
 
-class BNodeTable {
-  type BNodeName = String
-  private val bNodeName = Map[BNodeId,Option[BNodeName]]()
-  private val nameBNode = Map[BNodeName,BNodeId]()
-  private var nodes : Int = 0
+case class BNodeTable(
+  val bNodeName : Map[BNodeId,Option[String]],
+  val nameBNode : Map[String,BNodeId],
+  val nodes : Int = 0) {
   
-  def newBNode : BNodeId = {
-    nodes = nodes + 1
-    BNodeId(nodes)
-  }
+  def newBNode : (BNodeId,BNodeTable) = 
+    (BNodeId(nodes), BNodeTable(bNodeName,nameBNode,nodes + 1))
 
-  def getOrAddBNode(idName : String) : BNodeId = {
+  def getOrAddBNode(idName : String) : (BNodeId,BNodeTable) = {
     nameBNode.get(idName) match {
       case None          => {
         val id = BNodeId(nodes)
-        nodes = nodes + 1
-        bNodeName += (id -> Some(idName))
-        nameBNode += (idName -> id)
-        id
+        (id,BNodeTable(bNodeName + (id -> Some(idName)), 
+        			   nameBNode + (idName -> id),
+        			   nodes + 1))
       } 
-      case Some(bNodeId) => bNodeId
+      case Some(bNodeId) => (bNodeId,this)
     }
   }
 
@@ -43,14 +39,21 @@ class BNodeTable {
     nameBNode.get(name)
   }
 
-  def getBNodeName(id : BNodeId) : Option[BNodeName] = {
+  def getBNodeName(id : BNodeId) : Option[String] = {
     bNodeName.get(id).getOrElse(None)
   }
 
-  def clear() : Unit = {
+/*  def clear() : Unit = {
     nodes = 0
     bNodeName.clear
     nameBNode.clear
+  } */
+  
+  override def toString(): String = {
+    "Nodes: " + nodes + "\nName bNode: " + nameBNode.toString + "\nbNodeName: " + bNodeName.toString
   }
 }
 
+object BNodeTable {
+  def empty = BNodeTable(Map[BNodeId,Option[String]](),Map[String,BNodeId](),0)
+}
