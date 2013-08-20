@@ -163,6 +163,7 @@ object RDFNode {
  val IntegerDatatypeIRI 	= IRI(xsd + "integer")
  val DoubleDatatypeIRI 		= IRI(xsd + "double")
  val DecimalDatatypeIRI 	= IRI(xsd + "decimal")
+ val rdftype				= IRI(rdfSyntax + "type")
  
  val trueLiteral = BooleanLiteral(true)
  val falseLiteral = BooleanLiteral(false)

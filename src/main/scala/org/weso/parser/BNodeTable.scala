@@ -50,10 +50,11 @@ case class BNodeTable(
   } */
   
   override def toString(): String = {
-    "Nodes: " + nodes + "\nName bNode: " + nameBNode.toString + "\nbNodeName: " + bNodeName.toString
+    "Nodes: " + nodes + ", bNodeName: " + bNodeName.toString + ", nameBNode: " + nameBNode
   }
+
 }
 
 object BNodeTable {
-  def empty = BNodeTable(Map[BNodeId,Option[String]](),Map[String,BNodeId](),0)
+  def empty : BNodeTable = BNodeTable(Map[BNodeId,Option[String]](),Map[String,BNodeId](),0)
 }

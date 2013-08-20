@@ -19,6 +19,56 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
   describe("Turtle Lexer") {
    val parser=TurtleParser
 
+   describe("rdf_object") {
+     val prefixMap =
+           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+     	   PrefixMap.empty)))
+     val bNodeTable = BNodeTable.empty
+     val p = parser.rdf_object(prefixMap,bNodeTable)
+     shouldParseRDF(p,"\"Hi\"",StringLiteral("Hi")) 
+     shouldParseRDF(p,"2",IntegerLiteral(2)) 
+     shouldParseRDF(p,"2.3",DecimalLiteral(2.3)) 
+     shouldParseRDF(p,"2.3e-1",DoubleLiteral(2.3e-1)) 
+     shouldParseRDF(p,"-2.3e-1",DoubleLiteral(-2.3e-1)) 
+     shouldParseRDF(p,"a:b",IRI("http://example.org/a#b")) 
+     shouldParseRDF(p,"<http://example.org/a#b>",IRI("http://example.org/a#b")) 
+     shouldParseRDF(p,"_:1",BNodeId(0)) 
+     shouldParseRDF(p,"[]",BNodeId(0)) 
+    }
+   
+   describe("literal") {
+     val prefixMap =
+           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+     	   PrefixMap.empty)))
+     val p = parser.literal(prefixMap)
+     shouldParseGeneric(p,"1.2",DecimalLiteral(1.2))
+     shouldParseGeneric(p,"12",IntegerLiteral(12))
+     shouldParseGeneric(p,"1.2e9",DoubleLiteral(1.2e09))
+     shouldParseGeneric(p,"\"a\"^^a:b",DatatypeLiteral("a",IRI("http://example.org/a#b")))
+     shouldParseGeneric(p,"\"a\"",StringLiteral("a"))
+     shouldParseGeneric(p,"\"a\"@es",LangLiteral("a",Lang("es")))
+   }
+
+   
+   describe("blankNodePropertyList") {
+     
+   }
+
+   describe("collection") {
+     
+   }
+
+   describe("NumericLiteral") {
+     val p = parser.NumericLiteral
+     shouldParseGeneric(p,"1.2",DecimalLiteral(1.2))
+     shouldParseGeneric(p,"12",IntegerLiteral(12))
+     shouldParseGeneric(p,"1.2e9",DoubleLiteral(1.2e09))
+   }
+
    describe("RDFLiteral") {
      val prefixMap =
            PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
@@ -26,7 +76,8 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
      	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = parser.RDFLiteral(prefixMap)
-	 shouldParseGeneric(p,"\"123\"^^<xsd:integer>",DatatypeLiteral("123",IRI("xsd:integer")))
+	 shouldParseGeneric(p,"\"123\"^^a:integer",DatatypeLiteral("123",IRI("http://example.org/a#integer")))
+	 shouldParseGeneric(p,"\"123\"^^<http://example.org/a#integer>",DatatypeLiteral("123",IRI("http://example.org/a#integer")))
 	 shouldParseGeneric(p,"\"\"\"John Doe\"\"\"",StringLiteral("John Doe"))
 	 shouldParseGeneric(p,"\"one\"@es",LangLiteral("one",Lang("es")))
 	 shouldParseGeneric(p,"\"one\"",StringLiteral("one"))
@@ -82,10 +133,13 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
 
    describe("BlankNode") {
      val bNodeTable = BNodeTable.empty
+     val table1 = bNodeTable.getOrAddBNode("1")
+     val tableA = bNodeTable.getOrAddBNode("a")
+     val tableAnon = bNodeTable.newBNode
      val p = parser.BlankNode(bNodeTable)
-//     shouldParse(p,"_:1")
-//	 shouldParse(p,"_:a")
-//	 shouldParse(p,"[]")
+     shouldParseRDF(p,"_:1",BNodeId(0))
+	 shouldParseRDF(p,"_:a",BNodeId(0))
+	 shouldParseRDF(p,"[]",BNodeId(0))
 	 shouldNotParse(p,"<a>")
    }
 
@@ -435,7 +489,17 @@ class TurtleW3cTestsSuite extends TurtleParser with FunSpec with ShouldMatchers 
     }
    }
  
-   def shouldNotParse[A](p:TurtleParser.Parser[A], s : String) {
+    def shouldParseRDF[A](p:TurtleParser.Parser[A], s : String, a : A) {
+    it("Should parse \"" + s + "\"" + " and return " + a.toString) {
+      val result = parser.parseAll(p,s) match {
+        case parser.Success((x,_),_) => x 
+        case parser.NoSuccess(msg,_) => fail(msg)
+      }
+      result should be(a)
+    }
+   }
+ 
+    def shouldNotParse[A](p:TurtleParser.Parser[A], s : String) {
     it("Should not parse \"" + s + "\"") {
       val result = parser.parseAll(p,s) match {
         case parser.Success(x,_) => fail("Should not parse " + s + ", but parsed value " + x) 

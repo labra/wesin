@@ -20,7 +20,41 @@ trait TurtleParser extends Positional with RegexParsers {
 
 //  lazy val turtleDoc = PN_PREFIX
 
-  def RDFLiteral(prefixMap: PrefixMap) = string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
+//  def objectList 
+  def verb (prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
+    Parser[(RDFNode,BNodeTable)] =
+      ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
+      | "a" ^^ { case _ => (RDFNode.rdftype,bNodeTable) }
+      )
+      
+  def subject(prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
+    Parser[(RDFNode,BNodeTable)] = 
+      ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
+      | BlankNode(bNodeTable)
+      )
+
+  def predicate(prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
+    Parser[(RDFNode,BNodeTable)] = 
+      iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
+	
+  def rdf_object(prefixMap: PrefixMap, bNodeTable: BNodeTable) : 
+	  Parser[(RDFNode,BNodeTable)] = 
+	    ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
+	    | BlankNode(bNodeTable) 
+	    | literal(prefixMap) ^^ { case l => (l,bNodeTable) }
+	    )
+  
+  def literal(prefixMap : PrefixMap) : Parser[Literal] = 
+    	RDFLiteral(prefixMap) | NumericLiteral | BooleanLiteral
+  
+  def blankNodePropertyList = ???
+  def collection = ???
+  
+  lazy val NumericLiteral : Parser[Literal] = 
+    DOUBLE | DECIMAL | INTEGER  
+    
+  def RDFLiteral(prefixMap: PrefixMap) = 
+    string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
     case str ~ None => StringLiteral(str) 
     case str ~ Some(Lang(l)) => LangLiteral(str,Lang(l)) 
     case str ~ Some(IRI(iri)) => DatatypeLiteral(str,IRI(iri))
@@ -93,7 +127,7 @@ trait TurtleParser extends Positional with RegexParsers {
   
   def BLANK_NODE_LABEL(bNodeTable:BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
     	BLANK_NODE_LABEL_STR.r ^^ { 
-    	  s => bNodeTable.getOrAddBNode(s) 
+    	  s => bNodeTable.getOrAddBNode(removeBNodePrefix(s)) 
       	}
   
   lazy val LANGTAG		= "@" ~> "[a-zA-Z]+(-[a-zA-Z0-9]+)*".r ^^ Lang 
@@ -128,12 +162,8 @@ trait TurtleParser extends Positional with RegexParsers {
   lazy val STRING_LITERAL_LONG_QUOTE 	         = STRING_LITERAL_LONG_QUOTE_STR.r ^^ 
     { x => removeQuotes(unscape(x),"\"",3) }
   
-  def removeQuotes(s : String, quote: String, number: Int) : String = {
-    val rex = ("(?s)"+quote + "{" + number.toString + "}(.*)" + quote + "{"+number.toString + "}").r
-    val rex(newS) = s
-    newS 
-  }
 
+  
   lazy val UCHAR_Parser : Parser[Char] = UCHAR.r ^^ { x => UCHAR2char(x) }
 
   lazy val UCHAR 		= "\\\\u" + HEX + HEX + HEX + HEX + "|" + "\\\\U" + HEX + HEX + HEX + HEX + HEX + HEX
@@ -194,6 +224,27 @@ trait TurtleParser extends Positional with RegexParsers {
     }
  }
 
+ /**
+  * remove quotes from a quoted string
+  * 
+  * @param s input string
+  * @param quote Type of quotes, may be simple or double
+  * @param Number of quotes, normally 1 or 3
+  * @return the new string
+  * 
+  */
+ def removeQuotes(s : String, quote: String, number: Int) : String = {
+    // Note: (?s) enables multiline matching
+    val rex = ("(?s)"+quote + "{" + number.toString + "}(.*)" + quote + "{"+number.toString + "}").r
+    val rex(newS) = s
+    newS 
+  }
+
+ def removeBNodePrefix(s : String) : String = {
+   val rex = "\\_:(.*)".r
+   val rex(newS) = s
+   newS
+ }
   
  def str2Double(s: String) : Double = s.toDouble 
  def str2Decimal(s: String) : BigDecimal = BigDecimal(s)

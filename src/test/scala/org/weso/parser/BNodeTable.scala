@@ -34,7 +34,7 @@ class BNodeTableSuite extends FunSpec with ShouldMatchers {
      val (_,table1) = table.getOrAddBNode("id0")
      val (_,table2) = table1.getOrAddBNode("id1")
      val (_,table3) = table2.getOrAddBNode("id2")
-     table3.getOrAddBNode("id1")._1 should be(BNodeId(2))
+     table3.getOrAddBNode("id1")._1 should be(BNodeId(1))
    }
 
    it("getBNodeName should return a value from a table with 3 values") {
