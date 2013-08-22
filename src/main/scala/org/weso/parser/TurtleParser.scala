@@ -3,8 +3,8 @@ package org.weso.parser
 import util.parsing.combinator.JavaTokenParsers
 import scala.util.parsing.combinator.{Parsers, RegexParsers}
 import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
 import scala.util.parsing.input._
+import scala.util.parsing.input.Positional
 import util.parsing.input.CharSequenceReader.EofCh
 import org.weso.rdfNode._
 import org.weso.rdfTriple._
@@ -13,45 +13,199 @@ import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
+import scala.collection.mutable.ListBuffer
+import scala.annotation.tailrec
 
 trait TurtleParser extends Positional with RegexParsers {
 
   override val skipWhitespace = false
 
-//  lazy val turtleDoc = PN_PREFIX
+  def turtleDoc(implicit s: ParserState) : 
+	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],ParserState)] = 
+    repState(s,statement) ^^ { case (lss,s) => (lss.flatten,s)
+    }
+  
+  def statement(s:ParserState): 
+	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],ParserState)] = 
+    ( directive(s) ^^ { case s1 => (List(),s1) }
+    | triples(s) <~ token(".") 
+    ) 
 
-//  def objectList 
-  def verb (prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
-    Parser[(RDFNode,BNodeTable)] =
-      ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
-      | "a" ^^ { case _ => (RDFNode.rdftype,bNodeTable) }
+  def directive (s:ParserState) : Parser[ParserState] = 
+    prefixDirective(s) // | baseDirective(s)
+  
+  def prefixDirective (s: ParserState) : Parser[ParserState] = {
+    (SPARQLPrefix | prefixId ) ^^ {
+      case (prefix,iri) => s.addPrefix(prefix, iri)
+    }
+  }
+
+  def SPARQLPrefix : Parser[(String,IRI)] = {
+    ignoreCaseToken("PREFIX") ~> PNAME_NS_Parser ~ (WS ~> IRIREF) ^^ {
+      case s ~ iri => (s,iri)
+    }
+  }
+  
+  def prefixId : Parser[(String,IRI)] = {
+    token("@prefix") ~> PNAME_NS_Parser ~ (WS ~> IRIREF) ^^ {
+      case s ~ iri => (s,iri)
+    }
+  }
+
+  def triples(s:ParserState) : 
+	  Parser[(List[(RDFNode,RDFNode,RDFNode)],ParserState)] = 
+  ( subjPredicatesObjectList(s) ^^ { 
+    case (ns,s) => (toTriples(ns),s)
+   }
+  // TODO: | blankNodePropertyList predicateObjectList
+  )
+  
+  def toTriples[A](ns : (A,List[(A,List[A])])) : List[(A,A,A)] = {
+    for (ps <- ns._2; y <- ps._2 ) yield (ns._1,ps._1,y)
+  } 
+
+  def subjPredicatesObjectList(s:ParserState) :
+      Parser[((RDFNode,List[(RDFNode,List[RDFNode])]),ParserState)] = {
+    seqState(subject, predicateObjectList)(s) ^^ {
+      case (n ~ ls, s) => ((n,ls),s)
+    }
+  } 
+
+  def predicateObjectList(s: ParserState) : 
+	  Parser[(List[(RDFNode,List[RDFNode])],ParserState)] = 
+	 rep1sepOptState(s,verbObjectList,token(";")) 
+
+  def verbObjectList(s: ParserState) : 
+	  Parser[((RDFNode,List[RDFNode]),ParserState)] = 
+	    opt(WS) ~> verb(s.namespaces) ~ objectList(s) ^^ {
+    case node ~ objs => ((node,objs._1),objs._2) 
+  }
+
+  def prueba(s:ParserState):Parser[Any] = 
+     rep1sepOptState(s,As,token(";"))
+
+  def As(s:ParserState) = rep1sepState(s,newT("A"),token(","))
+  
+  def newT(t:String)(s:ParserState):Parser[(BNodeId,ParserState)] =
+    token(t) ^^^ { s.newBNode }
+     
+  def objectList(s: ParserState) : 
+      Parser[(List[RDFNode],ParserState)] =
+	    rep1sepState(s,rdf_object,token(",")) 
+
+  def ignoreCaseToken(tk : String) : Parser[String] =
+    token("(?i)"+ tk)
+	    
+  def token(tk: String): Parser[String] = 
+    ( opt(WS) ~> tk.r <~ opt(WS)
+    | failure (tk + " expected")
+    )
+  
+  def repState[T,S](s: S, 
+		  			p: S => Parser[(T,S)]
+		  		   ): Parser[(List[T],S)] = rep1State(s,p) | success((List(),s))
+  
+  def rep1sepOptState[T,S](s : S, 
+		  				p : S => Parser[(T,S)], 
+		  				q : => Parser[Any]): Parser[(List[T],S)] =
+    p(s) >> { s1 => repState(s1._2, arrowOptState(p,q)) ^^ {
+       case (ls,s2) => (s1._1::ls.flatten,s2)
+       } 
+    }
+
+  def arrowOptState[T,S](p : S => Parser[(T,S)],q: Parser[Any])
+		  			    (s : S) : Parser[(Option[T],S)] =
+    q ~> opt(p(s)) ^^ { 
+      case None => (None,s)
+      case Some((t,s1)) => (Some(t),s1)
+	} 
+
+  def rep1sepState[T,S](s : S, 
+		  				p : S => Parser[(T,S)], 
+		  				q : => Parser[Any]): Parser[(List[T],S)] =
+    p(s) >> { s1 => repState(s1._2, arrowState(p,q)) ^^ {
+       case (ls,s2) => (s1._1::ls,s2)} 
+  }
+
+  def seqState[T,U,S](p:S => Parser[(T,S)],
+		  			  q:S => Parser[(U,S)])(s:S) : Parser[(T ~ U,S)] = {
+    p(s) >> { s1 => q(s1._2) ^^ { case (u,s2) => (new ~(s1._1,u), s2)} }
+  }
+
+  def arrowState[T,S](p : S => Parser[(T,S)],
+		  			       q: Parser[Any])(s : S) : Parser[(T,S)] =
+		  			    q ~> p(s)
+
+  def rep1State[T,S]
+	   (s: S, p: S => Parser[(T,S)]): Parser[(List[T],S)] = 
+    	rep1State(s, p, p)
+
+  def rep1State[T,S](s : S,
+  			         first: S => Parser[(T,S)], 
+  			         p0: S => Parser[(T,S)]
+  			         ): 
+          Parser[(List[T],S)] = 
+   Parser { in =>
+    lazy val p = p0 // lazy argument
+    val elems : ListBuffer[T] = new ListBuffer[T]
+
+    def continue(s: S)
+    			(in: Input): ParseResult[(List[T],S)] = {
+      val p0 = p    // avoid repeatedly re-evaluating by-name parser
+
+      @tailrec def applyp(s0:S)(in0: Input): 
+    	  			ParseResult[(List[T],S)] = p0(s0)(in0) match 
+    	  			{
+        case Success(x, rest) => elems += x._1 ; applyp(x._2)(rest)
+        case e @ Error(_, _)  => e  // still have to propagate error
+        case _                => Success((elems.toList,s0), in0)
+      }
+
+      applyp(s)(in)
+    }
+
+    first(s)(in) match {
+      case Success(x, rest) => elems += x._1 ; continue(x._2)(rest)
+      case ns: NoSuccess    => ns
+    }
+  }	  	  
+	   
+ 	  
+  
+  def verb (ns : PrefixMap) : Parser[RDFNode] =
+      ( predicate(ns)
+      | "a" ^^ { case _ => (RDFNode.rdftype) }
       )
       
-  def subject(prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
-    Parser[(RDFNode,BNodeTable)] = 
-      ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
-      | BlankNode(bNodeTable)
+  def subject(s : ParserState) :  
+    Parser[(RDFNode,ParserState)] = 
+      ( iri(s.namespaces) ^^ { case iri => (iri,s)}
+      | BlankNode(s.bNodeLabels) ^^ { case (id,t) => (id,s.newTable(t))} 
       )
 
-  def predicate(prefixMap:PrefixMap, bNodeTable: BNodeTable) : 
-    Parser[(RDFNode,BNodeTable)] = 
-      iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
+  def predicate = iri _
+  
 	
-  def rdf_object(prefixMap: PrefixMap, bNodeTable: BNodeTable) : 
-	  Parser[(RDFNode,BNodeTable)] = 
-	    ( iri(prefixMap) ^^ { case iri => (iri,bNodeTable)}
-	    | BlankNode(bNodeTable) 
-	    | literal(prefixMap) ^^ { case l => (l,bNodeTable) }
-	    )
+  def rdf_object(s: ParserState) : 
+	  Parser[(RDFNode,ParserState)] = 
+	opt(WS) ~>
+        ( iri(s.namespaces) ^^ { case iri => (iri,s)}
+	    | BlankNode(s.bNodeLabels) ^^ { case (id,table) => (id,s.newTable(table))} 
+	    | literal(s.namespaces) ^^ { case l => (l,s) }
+	    ) <~ opt(WS)
+  
   
   def literal(prefixMap : PrefixMap) : Parser[Literal] = 
-    	RDFLiteral(prefixMap) | NumericLiteral | BooleanLiteral
-  
+    	(  
+    	  NumericLiteral 
+    	| RDFLiteral(prefixMap)
+    	| BooleanLiteral
+    	) 
   def blankNodePropertyList = ???
   def collection = ???
   
-  lazy val NumericLiteral : Parser[Literal] = 
-    DOUBLE | DECIMAL | INTEGER  
+  lazy val NumericLiteral : Parser[Literal] =  
+    ( DOUBLE | DECIMAL | INTEGER ) 
     
   def RDFLiteral(prefixMap: PrefixMap) = 
     string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
@@ -65,9 +219,10 @@ trait TurtleParser extends Positional with RegexParsers {
   		| "false" ^^ { _ => RDFNode.falseLiteral }
   		)
   		
-  lazy val string : Parser[String] = 
+  lazy val string : Parser[String] = opt(WS) ~> (
     	STRING_LITERAL_LONG_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE | 
   		STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE 
+  		)
   					
   def iri(prefixMap: PrefixMap) = 
     	( IRIREF   
@@ -87,18 +242,23 @@ trait TurtleParser extends Positional with RegexParsers {
     	)
   
   lazy val IRIREF_STR  = "<([^\\u0000-\\u0020<>\\\\\"{}\\|\\^`\\\\]|" + UCHAR + ")*>"
-  lazy val IRIREF : Parser[IRI] = {
-    IRIREF_STR.r ^^ {
+  lazy val IRIREF : Parser[IRI] = 
+    acceptRegex("IRIREF",IRIREF_STR.r) ^^ {
       case x => val rex = "<(.*)>".r
                 val rex(cleanIRI) = x  // removes < and >
                 IRI(cleanIRI)
     }
-  }
+  
 
   def PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
+  
+  def acceptRegex(name : String, r : Regex) : Parser[String] = 
+    ( r | failure(name + " expected with regular expression " + r))
+
+  def PNAME_NS_Parser : Parser[String] = acceptRegex("PNAME_NS",PNAME_NS_STR.r) 
 
   def PNAME_NS(prefixMap: PrefixMap): Parser[IRI] = {
-   PNAME_NS_STR.r ^? 
+   PNAME_NS_Parser ^? 
         ({ case prefix 
   		    if (prefixMap.contains(prefix)) => { 
   		  	    prefixMap.getIRI(prefix).get
@@ -170,9 +330,16 @@ trait TurtleParser extends Positional with RegexParsers {
   
   lazy val ECHAR_Parser : Parser[Char] = ECHAR.r ^^ { x => ECHAR2char(x) }
   lazy val ECHAR 		= "\\\\[tbnrf\"]" 
-  lazy val WS 			= """\u0020|\u0009|\u000D|\u000A"""
+  lazy val WS_STR 			= """\u0020|\u0009|\u000D|\u000A"""
+    
+  lazy val WS = rep ( WS_STR.r 
+		  			| "#" ~ rep(chrExcept(EofCh, '\n') )
+		  			)
 
-  lazy val ANON_STR = "\\[(" + WS + ")*\\]"  
+  def chrExcept(cs: Char*) = elem("", ch => (cs forall (ch != _)))
+  
+
+  lazy val ANON_STR = "\\[(" + WS_STR + ")*\\]"  
 
   def ANON(bNodeTable: BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
     ANON_STR.r ^^ { _ => bNodeTable.newBNode 
@@ -333,6 +500,8 @@ trait TurtleParser extends Positional with RegexParsers {
  def unscape2(x:String) : String = 
      (unscapeUnicode4 _ andThen unscapeUnicode6 andThen unscapeCtrl)(x)
  //------------------------------------
+     
+ 
 }
  
 object TurtleParser extends TurtleParser 
