@@ -22,14 +22,15 @@ trait TurtleParser extends Positional with RegexParsers {
 
   def turtleDoc(implicit s: ParserState) : 
 	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],ParserState)] = 
-    repState(s,statement) ^^ { case (lss,s) => (lss.flatten,s)
+     repState(s,statement) ^^ { case (lss,s) => (lss.flatten,s)
     }
   
   def statement(s:ParserState): 
 	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],ParserState)] = 
-    ( directive(s) ^^ { case s1 => (List(),s1) }
-    | triples(s) <~ token(".") 
-    ) 
+    opt(WS) ~> 
+     ( directive(s) ^^ { case s1 => (List(),s1) }
+     | triples(s) <~ token(".") 
+     ) 
 
   def directive (s:ParserState) : Parser[ParserState] = 
     prefixDirective(s) // | baseDirective(s)
@@ -103,7 +104,8 @@ trait TurtleParser extends Positional with RegexParsers {
   
   def repState[T,S](s: S, 
 		  			p: S => Parser[(T,S)]
-		  		   ): Parser[(List[T],S)] = rep1State(s,p) | success((List(),s))
+		  		   ): Parser[(List[T],S)] = 
+	  rep1State(s,p) | success((List(),s))
   
   def rep1sepOptState[T,S](s : S, 
 		  				p : S => Parser[(T,S)], 

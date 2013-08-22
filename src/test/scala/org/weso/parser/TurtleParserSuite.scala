@@ -27,9 +27,12 @@ class TurtleParserSuite extends TurtleParser with FunSpec with ShouldMatchers {
      val a02 = (BNodeId(0),RDFNode.rdftype,BNodeId(2))
      val abc = (IRI("a"),IRI("b"),IRI("c"))
      
+     shouldParseRDF(p," _:0 a _:1,_:2 .",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1,_:2 .",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1; a _:2 .",List(a01,a02))
      shouldParseRDF(p,"<a> <b> <c> .",List(abc))
+     shouldParseRDF(p,"# Example \n <a> <b> <c> .",List(abc))
+     shouldParseRDF(p,"# No triples ",List())
    }
 
    
@@ -457,7 +460,7 @@ class TurtleParserSuite extends TurtleParser with FunSpec with ShouldMatchers {
    describe("PN_CHARS_BASE") {
      val p = parser.PN_CHARS_BASE_Parser
 	 shouldParseGeneric(p,"x",'x')
-	 shouldParseGeneric(p,"ñ",'ñ')
+	 shouldParseGeneric(p,"�",'�')
    }
 
    describe("ECHAR") {
@@ -528,7 +531,7 @@ class TurtleParserSuite extends TurtleParser with FunSpec with ShouldMatchers {
 	 shouldParse(p,"A")
 	 shouldParse(p,"a.o")
 	 shouldParse(p,"a..o")
-	 shouldParse(p,"a.ñ.o")
+	 shouldParse(p,"a.�o")
 	 shouldParse(p,"a.x.o")
 //	 shouldParse(p,"a-1")
 //	 shouldParse(p,"a--1")
@@ -541,13 +544,13 @@ class TurtleParserSuite extends TurtleParser with FunSpec with ShouldMatchers {
    
    describe("PN_LOCAL") {
      val p = PN_LOCAL.r
-	 shouldParse(p,"Año")
+	 shouldParse(p,"A�o")
 	 shouldParse(p,":a")
 	 shouldParse(p,":89")
-	 shouldParse(p,":año_88")
-	 shouldParse(p,":año:88")
-	 shouldNotParse(p,":año88 .")
-	 shouldNotParse(p,":año88,")
+	 shouldParse(p,":a�o_88")
+	 shouldParse(p,":a�o:88")
+	 shouldNotParse(p,":a�88 .")
+	 shouldNotParse(p,":a�88,")
    }
 
    describe("PLX") {
