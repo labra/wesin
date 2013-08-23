@@ -5,6 +5,7 @@ import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input.Positional
 import scala.util.parsing.input._
 import util.parsing.input.CharSequenceReader.EofCh
+import scala.language.postfixOps
 
 import org.weso.rdfNode._
 import org.weso.rdfTriple._

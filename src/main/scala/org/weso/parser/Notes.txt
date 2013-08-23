@@ -1,0 +1,10 @@
+Notes on Turtle Parser
+
+I added the possibility that "triples" return an empty list. 
+However, the grammar productions: 
+
+[2]	statement	::=	directive | triples '.'
+[6]	triples	::=	subject predicateObjectList 
+              | blankNodePropertyList predicateObjectList?
+
+does not seem to allow empty triples...

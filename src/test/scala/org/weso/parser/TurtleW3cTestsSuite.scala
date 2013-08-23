@@ -19,11 +19,13 @@ import com.hp.hpl.jena.rdf.model.Resource
 
 
 class TurtleW3cTestsSuite 
-		extends TurtleParser with FunSpec with ShouldMatchers {
+		extends TurtleParser 
+		with FunSpec 
+		with ShouldMatchers
+		with TestParser {
   
   val conf : Config = ConfigFactory.load()
-  implicit val s : ParserState = ParserState.initial
-  val parser = TurtleParser
+  implicit val s : TurtleParserState = TurtleParserState.initial
   
   val manifestFile = conf.getString("manifestFile")
   val testsDir 	= conf.getString("TurtleTestsDir")
@@ -94,7 +96,7 @@ class TurtleW3cTestsSuite
        action match {
          case Some(node) if node.isURIResource() => {
         	 val contents = scala.io.Source.fromURL(node.asResource().getURI()).mkString ;
-        	 shouldParseGen(name,parser.turtleDoc(s),contents)
+        	 shouldParseNamed(name,turtleDoc(s),contents)
          }
          case _ => println("Cannot retrieve action for resource " + r)	 
        }
@@ -127,50 +129,5 @@ class TurtleW3cTestsSuite
      shouldParseGen(p,input)
    } */
    
-   def shouldParse(p:TurtleParser.Parser[String], s : String) {
-     shouldParseGeneric(p,s,s)
-   }
-
-   // Only checks if parser succeeds
-   def shouldParseGen[A](testName: String, 
-		   				 p:TurtleParser.Parser[A], 
-		   				 s : String) {
-    it("Should parse " + testName) {
-      val result = parser.parseAll(p,s) match {
-        case parser.Success(x,_) => true 
-        case parser.NoSuccess(msg,_) => fail(msg + "\n" + s + "\n-----------------\n")
-      }
-    }
-   }
-
-    def shouldParseGeneric[A](p:TurtleParser.Parser[A], s : String, a : A) {
-    it("Should parse \"" + s + "\"" + " and return " + a.toString) {
-      val result = parser.parseAll(p,s) match {
-        case parser.Success(x,_) => x 
-        case parser.NoSuccess(msg,_) => fail(msg)
-      }
-      result should be(a)
-    }
-   }
- 
-    def shouldParseRDF[A](p:TurtleParser.Parser[A], s : String, a : A) {
-    it("Should parse \"" + s + "\"" + " and return " + a.toString) {
-      val result = parser.parseAll(p,s) match {
-        case parser.Success((x,_),_) => x 
-        case parser.NoSuccess(msg,_) => fail(msg)
-      }
-      result should be(a)
-    }
-   }
- 
-    def shouldNotParse[A](p:TurtleParser.Parser[A], s : String) {
-    it("Should not parse \"" + s + "\"") {
-      val result = parser.parseAll(p,s) match {
-        case parser.Success(x,_) => fail("Should not parse " + s + ", but parsed value " + x) 
-        case parser.NoSuccess(msg,_) => success(msg)
-      }
-    }
-   }
-  
   }
 }
