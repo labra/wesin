@@ -16,8 +16,6 @@ import com.hp.hpl.jena.vocabulary.RDF
 import com.hp.hpl.jena.rdf.model.Model
 import com.hp.hpl.jena.rdf.model.Resource
 
-
-
 class TurtleW3cTestsSuite 
 		extends TurtleParser 
 		with FunSpec 

@@ -24,9 +24,9 @@ class TurtleParserSuite
      implicit val s = TurtleParserState.initial
      val p = turtleDoc
      
-     val a01 = (BNodeId(0),RDFNode.rdftype,BNodeId(1))
-     val a02 = (BNodeId(0),RDFNode.rdftype,BNodeId(2))
-     val abc = (IRI("a"),IRI("b"),IRI("c"))
+     val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
+     val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
+     val abc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
      
      shouldParseRDF(p," _:0 a _:1,_:2 .",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1,_:2 .",List(a01,a02))
@@ -47,7 +47,9 @@ class TurtleParserSuite
          """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             |@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
             |<s> <p> "123"^^xsd:string .""".stripMargin,
-            List((IRI("s"),IRI("p"),DatatypeLiteral("123",IRI("http://www.w3.org/2001/XMLSchema#string"))
+            List(RDFTriple(IRI("s"),
+            			   IRI("p"),
+            			   DatatypeLiteral("123",IRI("http://www.w3.org/2001/XMLSchema#string"))
                  ))
      )
    }
@@ -85,8 +87,8 @@ class TurtleParserSuite
      	     addCurPredicate(IRI("a")).
      	     addCurSubject(IRI("a"))
      val p = triples(state)
-     val a01 = (BNodeId(0),RDFNode.rdftype,BNodeId(1))
-     val a02 = (BNodeId(0),RDFNode.rdftype,BNodeId(2))
+     val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
+     val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
 
      shouldParseRDF(p," ",List())
      shouldParseRDF(p,"_:0 a _:1,_:2",List(a01,a02))

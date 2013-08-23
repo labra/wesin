@@ -58,10 +58,7 @@ trait W3cTokens
   def PNAME_LN (prefixMap: PrefixMap): Parser[IRI]	= {
    PNAME_NS(prefixMap) ~ PN_LOCAL.r ^^
   		{ case prefix ~ local => 
-  		  	{
-  		  	  println("Prefix: " + prefix + ". Local: " + local)
-  		  	  RDFNode.qNameIRI(prefix, unscapeReservedChars(local))
-  		  	}
+  		  	RDFNode.qNameIRI(prefix, unscapeReservedChars(local))
   		}
   }
   

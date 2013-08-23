@@ -22,6 +22,12 @@ case class RDFTriple(subj : RDFNode, pred : IRI, obj : RDFNode) {
 }
 
 object RDFTriple {
+  
+  /**
+   *  Constructor of RDFTriples from triples
+   */ 
+  def apply(triple:(RDFNode,IRI,RDFNode)) 
+  	= new RDFTriple(triple._1,triple._2,triple._3)
 
 /**
  * collects BNodes in a set of triples
@@ -31,7 +37,11 @@ def collectBNodes (triples : Set[RDFTriple]) : Set[BNodeId] = {
     										set ++ triple.bNodes)
 }	
 
-def showTriples( triples : Set[RDFTriple]) : String = {
+  /**
+   * Shows a set of triples
+   * TODO: Consider removing this method
+   */
+  def showTriples( triples : Set[RDFTriple]) : String = {
   var str = new StringBuilder
   for { t <- triples} { str ++= (t + "\n") 
   }

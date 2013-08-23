@@ -23,14 +23,14 @@ trait TurtleParser
 	with W3cTokens {
 
   def turtleDoc(implicit s: TurtleParserState) : 
-	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],TurtleParserState)] = 
+	  		Parser[(List[RDFTriple],TurtleParserState)] = 
      opt(WS) ~> repState(s,statement) ^^ 
      	{ case (lss,s) => (lss.flatten,s) }
      
     
   
   def statement(s:TurtleParserState): 
-	  		Parser[(List[(RDFNode,RDFNode,RDFNode)],TurtleParserState)] = 
+	  		Parser[(List[RDFTriple],TurtleParserState)] = 
      ( directive(s) <~ opt(WS) ^^ { case s1 => (List(),s1) }
      | triples(s) <~ token(".")
      ) 
@@ -57,31 +57,31 @@ trait TurtleParser
   }
 
   def triples(s:TurtleParserState) : 
-	  Parser[(List[(RDFNode,RDFNode,RDFNode)],TurtleParserState)] = 
+	  Parser[(List[RDFTriple],TurtleParserState)] = 
   ( subjPredicatesObjectList(s) ^^ { 
-    case (ns,s) => (toTriples(ns),s)
+    case (ns,s) => (toTriples(ns).map(t => RDFTriple(t)),s)
    }
   // TODO: | blankNodePropertyList predicateObjectList
   | opt(WS) ^^^ { (List(),s)}
   )
   
-  def toTriples[A](ns : (A,List[(A,List[A])])) : List[(A,A,A)] = {
+  def toTriples[A,B,C](ns : (A,List[(B,List[C])])) : List[(A,B,C)] = {
     for (ps <- ns._2; y <- ps._2 ) yield (ns._1,ps._1,y)
   } 
 
   def subjPredicatesObjectList(s:TurtleParserState) :
-      Parser[((RDFNode,List[(RDFNode,List[RDFNode])]),TurtleParserState)] = {
+      Parser[((RDFNode,List[(IRI,List[RDFNode])]),TurtleParserState)] = {
     seqState(subject, predicateObjectList)(s) ^^ {
       case (n ~ ls, s) => ((n,ls),s)
     }
   } 
 
   def predicateObjectList(s: TurtleParserState) : 
-	  Parser[(List[(RDFNode,List[RDFNode])],TurtleParserState)] = 
+	  Parser[(List[(IRI,List[RDFNode])],TurtleParserState)] = 
 	 rep1sepOptState(s,verbObjectList,token(";")) 
 
   def verbObjectList(s: TurtleParserState) : 
-	  Parser[((RDFNode,List[RDFNode]),TurtleParserState)] = 
+	  Parser[((IRI,List[RDFNode]),TurtleParserState)] = 
 	    opt(WS) ~> verb(s.namespaces) ~ objectList(s) ^^ {
     case node ~ objs => ((node,objs._1),objs._2) 
   }
@@ -99,7 +99,7 @@ trait TurtleParser
     | failure (tk + " expected")
     )
   
-  def verb (ns : PrefixMap) : Parser[RDFNode] =
+  def verb (ns : PrefixMap) : Parser[IRI] =
       ( predicate(ns)
       | "a" ^^ { case _ => (RDFNode.rdftype) }
       )
