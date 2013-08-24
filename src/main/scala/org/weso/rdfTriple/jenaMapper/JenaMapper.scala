@@ -26,6 +26,7 @@ trait JenaMapper {
     }
     m
   }
+
   def createResource(m:JenaModel,node:RDFNode) : Resource = {
     node match {
       case BNodeId(id) => m.createResource(new AnonId(id.toString))
@@ -36,21 +37,25 @@ trait JenaMapper {
 
   def createRDFNode(m:JenaModel,node:RDFNode) : JenaRDFNode = {
    node match {
-     case BNodeId(id) 						 => m.createResource(new AnonId(id.toString))
-     case IRI(str) 							 => m.createResource(str)
-     case StringLiteral(str) 				 => m.createLiteral(str,false)
-     case DatatypeLiteral(str,IRI(datatype)) => m.createTypedLiteral(str,new BaseDatatype(datatype))
-     case DecimalLiteral(d) 		=> m.createTypedLiteral(d)
-     case IntegerLiteral(i) 		=> m.createTypedLiteral(i)
+     case BNodeId(id) 						 => 
+       	m.createResource(new AnonId(id.toString))
+     case IRI(str) 							 => 
+       	m.createResource(str)
+     case StringLiteral(str) 				 => 
+       	m.createLiteral(str,false)
+     case DatatypeLiteral(str,IRI(datatype)) => 
+       	m.createTypedLiteral(str,new BaseDatatype(datatype))
+     case DecimalLiteral(d) 		=> 
+     	m.createTypedLiteral(d.toString,XSDDatatype.XSDdecimal)
+     case IntegerLiteral(i) 		=> 
+       	m.createTypedLiteral(i.toString,XSDDatatype.XSDinteger)
      case LangLiteral(l,Lang(lang)) => m.createLiteral(l,lang)
      case BooleanLiteral(b) => 
-       	// Cannot use: m.createTypedLiteral(b)
-        // "ambiguous reference to overloaded definition"
         m.createTypedLiteral(b.toString,XSDDatatype.XSDboolean)
      case DoubleLiteral(d: Double) => 
-       	// Cannot use: m.createTypedLiteral(d)
-        // "ambiguous reference to overloaded definition"
         m.createTypedLiteral(d.toString,XSDDatatype.XSDdouble)
+     case _ => 
+       throw new Exception("Cannot create a resource from " + node)
    }  
   }
 

@@ -24,8 +24,7 @@ case class BNodeId(id : Int) extends RDFNode {
 
 object InitialBNodeId extends BNodeId(0)
 
-
-trait Literal extends RDFNode {
+sealed trait Literal extends RDFNode {
   def lexicalForm : String
   def dataType : IRI
   

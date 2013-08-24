@@ -6,7 +6,6 @@ import scala.util.parsing.input.Positional
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
-// import org.weso.rdfNode._
 import com.hp.hpl.jena.rdf.model.RDFNode
 import org.weso.rdfTriple._
 import scala.util.parsing.input.CharArrayReader
@@ -15,9 +14,13 @@ import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.vocabulary.RDF
 import com.hp.hpl.jena.rdf.model.Model
 import com.hp.hpl.jena.rdf.model.Resource
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import org.weso.rdfTriple.jenaMapper.JenaMapper
 
 class TurtleW3cTestsSuite 
-		extends TurtleParser 
+		extends TurtleParser
+		with JenaMapper
 		with FunSpec 
 		with ShouldMatchers
 		with TestParser {
@@ -36,6 +39,7 @@ class TurtleW3cTestsSuite
   val rdftype 		= model.createProperty(rdf 	+ "type")
   val turtleEval 	= model.createProperty(rdft + "TestTurtleEval")
   val action 		= model.createProperty(mf 	+ "action")
+  val result 		= model.createProperty(mf 	+ "result")
   val name 			= model.createProperty(mf 	+ "name")
   
 
@@ -59,6 +63,7 @@ class TurtleW3cTestsSuite
        
        val turtleEvalRs = get_resources(model,rdft+"TestTurtleEval")
        show_resources(model,"Turtle Eval",turtleEvalRs)
+       passTurtleEval(model,turtleEvalRs)
 
        val turtleNegativeEvalRs = get_resources(model,rdft+"TestTurtleNegativeEval")
        show_resources(model,"Turtle Negative Eval",turtleNegativeEvalRs)
@@ -87,7 +92,6 @@ class TurtleW3cTestsSuite
    }
    
    def passPositiveSyntax(m:Model,rs:List[Resource]) : Unit = {
-     
      for (r <- rs) {
        val action = getAction(m,r)
        val name   = getName(m,r)
@@ -101,6 +105,27 @@ class TurtleW3cTestsSuite
      }
    }
 
+   def passTurtleEval(m:Model,rs:List[Resource]) : Unit = {
+     for (r <- rs) {
+       val action = getAction(m,r)
+       val result = getResult(m,r)
+       val name   = getName(m,r)
+       (action,result) match {
+         case (Some(a),Some(r)) 
+         if a.isURIResource && r.isURIResource => {
+        	 val strAction = scala.io.Source.fromURL(a.asResource().getURI(),"UTF-8").mkString ;
+        	 val m1JenaParser = str2model(strAction)
+
+        	 val strResult = scala.io.Source.fromURL(r.asResource().getURI(),"UTF-8").mkString ;
+        	 val resultJenaParser = str2model(strResult,"N-TRIPLES")
+        	 shouldBeIsomorphicNamed("Jena Models: " + name + ".\n Action: " + a + ".\n Result: " + r,
+        			 				  m1JenaParser, resultJenaParser)
+        	 shouldPassTurtleEval(name,turtleDoc(s),strAction,resultJenaParser)
+         }
+         case x => println("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
+       }
+     }
+   }
    
    def getAction(m: Model, r:Resource) : Option[RDFNode] = {
      val iter = m.listObjectsOfProperty(r,action)
@@ -110,6 +135,14 @@ class TurtleW3cTestsSuite
      } else None
    }
    
+   def getResult(m: Model, r:Resource) : Option[RDFNode] = {
+     val iter = m.listObjectsOfProperty(r,result)
+     if (iter.hasNext) {
+       val node : RDFNode = iter.next()
+       Some(node)
+     } else None
+   }
+
    def getName(m: Model, r:Resource) : String = {
      val iter = m.listObjectsOfProperty(r,name)
      if (iter.hasNext) {
@@ -119,13 +152,43 @@ class TurtleW3cTestsSuite
      } else "<resource " + r + " with no name>"
    }
    
-   /*   describe("parse test ntriple file") {
-     implicit val s = ParserState.initial
-     val p = parser.turtleDoc
-
-     val input = Source.fromURL(getClass.getResource("/test.nt")).mkString
-     shouldParseGen(p,input)
-   } */
-   
   }
+  
+ def shouldBeIsomorphicNamed(name:String,m1: Model, m2:Model) : Unit = {
+   it("Should be isomorphic: " + name) {
+    val b = m1.isIsomorphicWith(m2)
+    if (!b) {
+     info("Models are not isomorphic: " + name)
+     info("-------------- Model 1:" + m1.toString)
+     info("-------------- Model 2:" + m2.toString)
+     fail("Models are not isomorphic: " + name)
+    }
+  }
+ }
+  
+ def shouldPassTurtleEval[S]
+		 ( name:String, 
+		   p : Parser[(List[RDFTriple],TurtleParserState)],
+		   in : String, 
+		   expected: Model ) : Unit = {
+   it("Should pass turtle eval test: " + name) {
+	   val result = parseAll(p,in) match {
+        case Success((triples,_),_) => {
+          val model = RDFTriples2Model(triples)
+          shouldBeIsomorphicNamed(name,model, expected)
+        }
+        case NoSuccess(msg,_) => 
+          	fail("Cannot parse: " + msg + "\n" + 
+          	     in + "\n-----------------\n")
+      }   
+   }
+ }
+
+ def str2model(s: String,lang:String = "TURTLE") : Model = {
+   val m = ModelFactory.createDefaultModel
+   val in : InputStream = new ByteArrayInputStream(s.getBytes("UTF-8"))
+   m.read(in,"",lang)
+   m
+  }
+
 }
