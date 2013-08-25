@@ -36,15 +36,28 @@ trait JenaMapper {
   }
 
   def createRDFNode(m:JenaModel,node:RDFNode) : JenaRDFNode = {
-   node match {
+    val xsd = "http://www.w3.org/2001/XMLSchema#"
+    val xsdinteger= xsd + "integer"
+    val xsddouble = xsd + "double"
+    val xsddecimal = xsd + "decimal"
+    val xsdboolean = xsd + "boolean"
+
+    node match {
      case BNodeId(id) 						 => 
        	m.createResource(new AnonId(id.toString))
      case IRI(str) 							 => 
        	m.createResource(str)
      case StringLiteral(str) 				 => 
        	m.createLiteral(str,false)
-     case DatatypeLiteral(str,IRI(datatype)) => 
-       	m.createTypedLiteral(str,new BaseDatatype(datatype))
+     case DatatypeLiteral(str,IRI(datatype)) => {
+        datatype match {
+          case `xsdinteger` => m.createTypedLiteral(str,XSDDatatype.XSDinteger) 
+          case `xsddouble` => m.createTypedLiteral(str,XSDDatatype.XSDdouble)
+          case `xsddecimal` => m.createTypedLiteral(str,XSDDatatype.XSDdecimal)
+          case `xsdboolean` => m.createTypedLiteral(str,XSDDatatype.XSDboolean)
+          case _ => m.createTypedLiteral(str,new BaseDatatype(datatype))
+        }
+     }
      case DecimalLiteral(d) 		=> 
      	m.createTypedLiteral(d.toString,XSDDatatype.XSDdecimal)
      case IntegerLiteral(i) 		=> 

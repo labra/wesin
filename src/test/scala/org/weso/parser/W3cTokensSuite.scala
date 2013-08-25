@@ -158,6 +158,7 @@ class W3cTokensSuite
      val p = STRING_LITERAL_SINGLE_QUOTE
 	 shouldParseGeneric(p,"'Hello'","Hello")
 	 shouldParseGeneric(p,"'\\u0123'","\u0123")
+	 shouldParseGeneric(p,"'\\\\'","\\")
 	 shouldNotParse(p,"'Ho'la'")
    }
 
@@ -219,13 +220,14 @@ class W3cTokensSuite
    }
 
    describe("ECHAR") {
-     val p = ECHAR.r
+     val p = ECHAR_STR.r
 	 shouldParse(p,"\\t")
 	 shouldParse(p,"\\b")
 	 shouldParse(p,"\\n")
 	 shouldParse(p,"\\r")
 	 shouldParse(p,"\\f")
 	 shouldParse(p,"\\\"")
+	 shouldParse(p,"\\\\")
 	 shouldNotParse(p,"a")
    }
 

@@ -83,10 +83,10 @@ trait W3cTokens
   
   lazy val EXPONENT		= "[eE][+-]?[0-9]+"
 
-  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR + "|" + UCHAR + ")*\""
-  lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR + "|" + UCHAR + ")*'"
-  lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR + "|" + UCHAR + ")*'''"
-  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR + "|" + UCHAR + ")*\"\"\""
+  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR + ")*\""
+  lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR + ")*'"
+  lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR_STR + "|" + UCHAR + ")*'''"
+  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR_STR + "|" + UCHAR + ")*\"\"\""
   
   
   lazy val STRING_LITERAL_QUOTE : Parser[String] = STRING_LITERAL_QUOTE_STR.r  ^^ {
@@ -107,8 +107,8 @@ trait W3cTokens
 
   lazy val UCHAR 		= "\\\\u" + HEX + HEX + HEX + HEX + "|" + "\\\\U" + HEX + HEX + HEX + HEX + HEX + HEX
   
-  lazy val ECHAR_Parser : Parser[Char] = ECHAR.r ^^ { x => ECHAR2char(x) }
-  lazy val ECHAR 		= "\\\\[tbnrf\"]" 
+  lazy val ECHAR_Parser : Parser[Char] = ECHAR_STR.r ^^ { x => ECHAR2char(x) }
+  lazy val ECHAR_STR	= """\\[tbnrf\\\"\']""" 
   lazy val WS_STR 			= """\u0020|\u0009|\u000D|\u000A"""
     
   lazy val WS = rep ( WS_STR.r 
