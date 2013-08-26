@@ -181,7 +181,7 @@ class TurtleW3cTestsSuite
          case x => info("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
        }
      } catch {
-       case e:Throwable => info("TurtleEval. Exception raised for resource " + r)
+       case e:Throwable => info("TurtleEval. Exception " + e + " raised for resource " + r)
        }
      }
    }

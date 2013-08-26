@@ -75,11 +75,17 @@ trait TurtleParser
   def triples(s:TurtleParserState) : 
 	  Parser[(List[RDFTriple],TurtleParserState)] = 
   ( subjPredicatesObjectList(s) ^^ { 
-    case (ns,s) => (toTriples(ns).map(t => RDFTriple(t,s.baseIRI)),s)
-   }
-  
-  // TODO: | blankNodePropertyList predicateObjectList
-  
+    case (ns,s) => {
+      val (collectedTriples,s1) = s.retrieveTriples
+      (collectedTriples ++ toTriples(ns).map(t => RDFTriple(t,s.baseIRI)),s1)
+     }
+    }
+  | seqState(blankNodePropertyList, predicateObjectList)(s) ^^ {
+     case (bnode ~ ps,s) => {
+       val (collectedTriples,s1) = s.retrieveTriples
+       (collectedTriples ++ toTriples((bnode,ps)).map(t => RDFTriple(t,s.baseIRI)),s1)
+     }
+    }
   // Note: The following production has been added to handle empty triples
   // but it does not appear in Turtle Grammar
   | opt(WS) ^^^ { (List(),s)}
@@ -124,10 +130,13 @@ trait TurtleParser
       | "a" ^^ { case _ => (RDFNode.rdftype) }
       )
       
+  type RDFTriples = List[RDFTriple]
+  
   def subject(s : TurtleParserState) :  
     Parser[(RDFNode,TurtleParserState)] = 
        ( iri(s.namespaces) ^^ { case iri => (iri,s)}
        | BlankNode(s.bNodeLabels) ^^ { case (id,t) => (id,s.newTable(t))} 
+       | collection(s)
        )
 
   def predicate = iri _
@@ -138,6 +147,8 @@ trait TurtleParser
 	opt(WS) ~>
         ( iri(s.namespaces) ^^ { case iri => (iri,s)}
 	    | BlankNode(s.bNodeLabels) ^^ { case (id,table) => (id,s.newTable(table))} 
+	    | collection(s)
+        | blankNodePropertyList(s)
 	    | literal(s.namespaces) ^^ { case l => (l,s) }
 	    ) <~ opt(WS)
   
@@ -148,8 +159,37 @@ trait TurtleParser
     	| RDFLiteral(prefixMap)
     	| BooleanLiteral
     	) 
-  def blankNodePropertyList = ???
-  def collection = ???
+
+  def blankNodePropertyList(s: TurtleParserState) : Parser[(RDFNode,TurtleParserState)]= 
+    "[" ~> predicateObjectList(s) <~ opt(WS) <~ "]" ^^ {
+      case (ps,s1) => {
+        val (bNode,s2) = s1.newBNode
+        val s3 = s2.addTriples(toTriples((bNode,ps)).map(t => RDFTriple(t,s2.baseIRI)))
+        (bNode,s3) 
+      }
+    }
+
+  def collection(s:TurtleParserState): Parser[(RDFNode,TurtleParserState)] = 
+    "(" ~> repState(s,rdf_object) <~ opt(WS) <~ ")" ^^ { 
+       case (ls,s1) => {
+         mkCollection(ls,s1)
+       }
+    }
+   
+  // TODO: Make this method tail recursive
+  // TODO: Consider using a state monad 
+  def mkCollection(ls : List[RDFNode], s: TurtleParserState): (RDFNode,TurtleParserState) = {
+    ls match {
+     case Nil => (RDFNode.rdfnil,s)
+     case obj :: rs => {
+       val (bNodeRs,s1) = mkCollection(rs,s) // Recursive call
+       val (bNode,	s2) = s1.newBNode
+       // Check: We assume that the baseURI for RDF triples generated in collection does not change
+       val s3 = s2.addTriple(RDFTriple((bNode,RDFNode.rdffirst,obj),s2.baseIRI))
+       (bNode, s3.addTriple(RDFTriple((bNode,RDFNode.rdfrest,bNodeRs),s3.baseIRI)))
+     }
+   }
+  }
   
   lazy val NumericLiteral : Parser[Literal] =  
     ( DOUBLE | DECIMAL | INTEGER ) 

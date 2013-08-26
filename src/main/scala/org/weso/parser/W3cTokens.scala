@@ -116,7 +116,6 @@ trait W3cTokens
   lazy val UCHAR_Parser : Parser[Char] = UCHAR_STR.r ^^ { x => UCHAR2char(x) }
 
   lazy val UCHAR_STR    = "\\\\u" + HEX + "{4}" + "|" + "\\\\U" + HEX + "{8}"
-  // lazy val UCHAR_STR    = "\\\\u" + HEX + HEX + HEX + HEX + "|" + "\\\\U" + HEX + HEX + HEX + HEX + HEX + HEX + HEX + HEX 
   
   lazy val ECHAR_Parser : Parser[Char] = ECHAR_STR.r ^^ { x => ECHAR2char(x) }
   lazy val ECHAR_STR	= """\\[tbnrf\\\"\']""" 
@@ -150,7 +149,7 @@ trait W3cTokens
  
  lazy val PLX			= PERCENT + "|" + PN_LOCAL_ESC
  
- lazy val PN_PREFIX     = PN_CHARS_BASE + "((" + PN_CHARS + "|\\.)*" + PN_CHARS + ")?" 
+ lazy val PN_PREFIX     = PN_CHARS_BASE + "((" + PN_CHARS + """|\.)*""" + PN_CHARS + ")?" 
  
  lazy val PN_LOCAL		= "(" + PN_CHARS_U + "|:|[0-9]|" + PLX + ")((" + PN_CHARS + "|\\.|:|" + PLX + ")*(" + PN_CHARS + "|:|" + PLX + "))?"     
  

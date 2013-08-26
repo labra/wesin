@@ -17,45 +17,43 @@ import scala.collection.immutable.Map
 import scala.language.postfixOps
 
 case class TurtleParserState (
-  val curSubjectLs : List[RDFNode],
-  val curPredicateLs : List[IRI],
+  val triples : List[RDFTriple],
   val namespaces : PrefixMap ,
   val bNodeLabels : BNodeTable,
   val baseIRI: IRI
   ) {
 
- def addCurSubject(subj:RDFNode):TurtleParserState = 
-    TurtleParserState(subj :: curSubjectLs, curPredicateLs, namespaces, bNodeLabels,baseIRI)
+  def addTriple (t : RDFTriple) : TurtleParserState = {
+    TurtleParserState(t :: triples, namespaces, bNodeLabels, baseIRI)
+  }
 
- def addCurPredicate(pred:IRI): TurtleParserState =
-    TurtleParserState(curSubjectLs, pred :: curPredicateLs, namespaces, bNodeLabels,baseIRI)
+  def addTriples (ts : List[RDFTriple]) : TurtleParserState = {
+    TurtleParserState(ts ++ triples, namespaces, bNodeLabels, baseIRI)
+  }
 
- def curSubject : RDFNode =
-   curSubjectLs head
-
- def curPredicate : IRI =
-   curPredicateLs head 
+  def retrieveTriples: (List[RDFTriple], TurtleParserState) = {
+   (triples, TurtleParserState(List(), namespaces, bNodeLabels, baseIRI))
+  }
 
  def newTable (table: BNodeTable) : TurtleParserState = 
-   TurtleParserState(curSubjectLs,curPredicateLs,namespaces,table,baseIRI)
+   TurtleParserState(triples,namespaces,table,baseIRI)
    
  def addPrefix(prefix: String, iri: IRI) : TurtleParserState = 
-   TurtleParserState(curSubjectLs,curPredicateLs,namespaces.addPrefix(prefix, iri),bNodeLabels,baseIRI)
+   TurtleParserState(triples,namespaces.addPrefix(prefix, iri),bNodeLabels,baseIRI)
 
  def newBNode : (BNodeId,TurtleParserState) = { 
    val (id,t) = bNodeLabels.newBNode ; 
-   (id,TurtleParserState(curSubjectLs,curPredicateLs,namespaces,t,baseIRI))
+   (id,TurtleParserState(triples,namespaces,t,baseIRI))
  }
  
  def newBase(newIRI:IRI) =
-   TurtleParserState(curSubjectLs,curPredicateLs,namespaces,bNodeLabels,newIRI)
+   TurtleParserState(triples,namespaces,bNodeLabels,newIRI)
 
 }
 
 object TurtleParserState {
   
-  def initial = TurtleParserState(List(),List(),PrefixMap.empty,BNodeTable.empty,IRI(""))
-  
-  def initial(baseIRI : IRI) = TurtleParserState(List(),List(),PrefixMap.empty,BNodeTable.empty,baseIRI)
+  def initial : TurtleParserState = initial(IRI(""))
+  def initial(baseIRI : IRI) = TurtleParserState(List(),PrefixMap.empty,BNodeTable.empty,baseIRI)
   
 }

@@ -103,24 +103,28 @@ class TurtleParserSuite
    describe("triples") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#")).
-     	     addCurPredicate(IRI("a")).
-     	     addCurSubject(IRI("a"))
+     	     addPrefix("a:", IRI("http://example.org/a#"))
      val p = triples(state)
+     val b0 = BNodeId(0)
+     val ap = IRI("http://example.org/a#p")
+     val aq = IRI("http://example.org/a#p")
      val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
      val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
 
      shouldParseRDF(p," ",List())
      shouldParseRDF(p,"_:0 a _:1,_:2",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1; a _:2",List(a01,a02))
+/*     shouldParseRDF(p,"(1) a:p a:q",
+    		 List(RDFTriple(b0,ap,aq),
+    			  RDFTriple(b0,RDFNode.rdffirst,IntegerLiteral(1)),
+    			  RDFTriple(b0,RDFNode.rdfrest,RDFNode.rdfnil)
+    			  )) */
    }
 
    describe("subjPredicateObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#")).
-     	     addCurPredicate(IRI("a")).
-     	     addCurSubject(IRI("a"))
+     	     addPrefix("a:", IRI("http://example.org/a#"))
      val p = subjPredicatesObjectList(state)
      val a12 = (RDFNode.rdftype,List(BNodeId(1),BNodeId(2)))
      val a34 = (RDFNode.rdftype,List(BNodeId(3),BNodeId(4)))
@@ -130,9 +134,8 @@ class TurtleParserSuite
    describe("predicateObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#")).
-     	     addCurPredicate(IRI("a")).
-     	     addCurSubject(IRI("a"))
+     	     addPrefix("a:", IRI("http://example.org/a#"))
+
      val p = predicateObjectList(state)
      val a01 = (RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))
      val a12 = (RDFNode.rdftype,List(IntegerLiteral(1),IntegerLiteral(2)))
@@ -156,9 +159,7 @@ class TurtleParserSuite
    describe("verbObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#")).
-     	     addCurPredicate(IRI("a")).
-     	     addCurSubject(IRI("a"))
+     	     addPrefix("a:", IRI("http://example.org/a#"))
      val p = verbObjectList(state)
      shouldParseRDF(p,"a _:1,_:2",(RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))) 
      shouldParseRDF(p," a _:1, _:2",(RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))) 
@@ -168,9 +169,7 @@ class TurtleParserSuite
    describe("objectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#")).
-     	     addCurPredicate(IRI("a")).
-     	     addCurSubject(IRI("a"))
+     	     addPrefix("a:", IRI("http://example.org/a#"))
      val p = objectList(state)
      shouldParseRDF(p,"_:1,_:2",List(BNodeId(0),BNodeId(1))) 
      shouldParseRDF(p,"_:1,_:2,_:1",List(BNodeId(0),BNodeId(1),BNodeId(0))) 
@@ -219,7 +218,11 @@ class TurtleParserSuite
    }
 
    describe("collection") {
-     
+     val s = TurtleParserState.initial
+     val p = collection(s)
+     shouldParseRDF(p,"( )",RDFNode.rdfnil)
+     shouldParseRDF(p,"( <a> )",BNodeId(0))
+     shouldParseRDF(p,"( <a> <b> )",BNodeId(1))
    }
 
    describe("NumericLiteral") {

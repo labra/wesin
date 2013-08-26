@@ -49,7 +49,23 @@ class W3cTokensSuite
      shouldParse(p,"a:")
 	 shouldParse(p,":")
 	 shouldParse(p,"año:")
+	 shouldParse(p,"a\u00b7a:")
+	 shouldParse(p,"a\u00b7\u0300a:")
+	 shouldParse(p,"a\u00b7\u0300\u2040a:")
+	 shouldParse(p,"a\u00b7\u0300\u002e\u2040a:")
+	 shouldParse(p,"a\u00b7\u0300\u203f\u002e\u2040a:")
+	 shouldParse(p,"b\u0300\u036f\u002e\u2040:")
+	 shouldParse(p,"b\u0300\u036f1:")
+	 shouldParse(p,"b\u036f\u002eb:")
+	 shouldParse(p,"b\u036fb:")
+	 shouldParse(p,"b\u0300\u036f\u203f\u002e\u2040:")
+	 infoUnicodeChars("a·̀ͯ‿.⁀")
+	 shouldParse(p,"a·̀ͯ‿.⁀:")
 	 shouldNotParse(p,"a:b")
+   }
+   
+   def infoUnicodeChars(s : String) : Unit = {
+     info("Chars of " + s + "= \'" + s.toList.map(c => "\\u%04x".format(c.toInt)) + "\'")
    }
 
    describe("PNAME_NS") {
@@ -283,6 +299,7 @@ class W3cTokensSuite
 	 shouldParse(p,"A")
 	 shouldParse(p,"Ñ")
 	 shouldParse(p,"\u2088")
+	 shouldNotParse(p,"\u00b7")
 	 shouldNotParse(p, "\u2001")
    }
 
@@ -292,6 +309,8 @@ class W3cTokensSuite
 	 shouldParse(p,"-")
 	 shouldParse(p,"7")
 	 shouldParse(p,"\u00B7")
+	 shouldParse(p,"\u0300")
+	 shouldParse(p,"\u036f")
 	 shouldNotParse(p, ":")
    }
 
@@ -303,6 +322,7 @@ class W3cTokensSuite
 	 shouldParse(p,"a..o")
 	 shouldParse(p,"a.�o")
 	 shouldParse(p,"a.x.o")
+	 shouldParse(p,"a\u00b7")
 //	 shouldParse(p,"a-1")
 //	 shouldParse(p,"a--1")
 	 shouldParse(p,"año")
