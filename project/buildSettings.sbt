@@ -1,8 +1,6 @@
 // needed for custom scalastyle package
 resolvers += "namin.github.com/maven-repository" at "http://namin.github.com/maven-repository/"
 
-// resolvers += "Spray Repository" at "http://repo.spray.cc/"
-
 resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.2.0")

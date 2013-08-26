@@ -151,6 +151,7 @@ class TurtleW3cTestsSuite
  
    def passTurtleEval(m:Model,rs:List[Resource]) : Unit = {
      for (r <- rs) {
+       try {
        val action = getAction(m,r)
        val result = getResult(m,r)
        val name   = getName(m,r)
@@ -177,7 +178,10 @@ class TurtleW3cTestsSuite
         			 resultJenaParser
              )
          }
-         case x => println("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
+         case x => info("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
+       }
+     } catch {
+       case e:Throwable => info("TurtleEval. Exception raised for resource " + r)
        }
      }
    }
@@ -269,15 +273,19 @@ class TurtleW3cTestsSuite
 		   p : Parser[(List[RDFTriple],TurtleParserState)],
 		   in : String, 
 		   expected: Model ) : Unit = {
-   val result = parseAll(p,in) match {
+   try {
+    val result = parseAll(p,in) match {
     case Success((triples,_),_) => {
           val model = RDFTriples2Model(triples)
           shouldBeIsomorphicNamed(name,model, expected)
     }
     case NoSuccess(msg,_) => 
-          	fail("Cannot parse: " + msg + "\n" + 
+          	fail("Test: " + name + ". Cannot parse: " + msg + "\n" + 
           	     in + "\n-----------------\n")
-   }   
+    }
+   } catch {
+     case e:Throwable => fail("Exception: " + e + " raised in test: " + name)
+   }
  }
 
  /**

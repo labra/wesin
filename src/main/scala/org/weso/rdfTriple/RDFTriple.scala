@@ -29,6 +29,18 @@ object RDFTriple {
   def apply(triple:(RDFNode,IRI,RDFNode)) 
   	= new RDFTriple(triple._1,triple._2,triple._3)
 
+  def apply(triple:(RDFNode,IRI,RDFNode),base: IRI) 
+  	= new RDFTriple(resolve(triple._1,base),
+  					base.resolve(triple._2),
+  					resolve(triple._3,base))
+  
+  def resolve(node: RDFNode, base: IRI) : RDFNode = {
+    node match {
+      case iri : IRI => base.resolve(iri)
+      case x => x
+    }
+  }
+
 /**
  * collects BNodes in a set of triples
  */

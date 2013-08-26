@@ -23,15 +23,25 @@ trait W3cTokens
   override val skipWhitespace = false
   override val whiteSpace = WS_STR.r
 
-  lazy val IRIREF_STR  = "<([^\\u0000-\\u0020<>\\\\\"{}\\|\\^`\\\\]|" + UCHAR + ")*>"
   lazy val IRIREF : Parser[IRI] = 
-    acceptRegex("IRIREF",IRIREF_STR.r) ^^ {
-      case x => val rex = "<(.*)>".r
-                val rex(cleanIRI) = x  // removes < and >
-                IRI(cleanIRI)
-    }
-  
+    acceptRegex("IRIREF",IRIREF_STR.r) ^? 
+      ({ case x => {
+         val rex = "<(.*)>".r
+         val rex(cleanIRI) = x  // removes < and >
+         val scaped = unscapeUchars(cleanIRI)
+         scaped match {
+          case IRI(iri) => iri
+       	 }
+       }
+      },
+      { case x => "Cannot convert " + x + " to IRI"
+      })
 
+  lazy val IRIREF_STR  = "<(" + IRI_INITIAL_STR + "|" + UCHAR_STR + ")*>"
+
+  lazy val IRI_INITIAL_STR = """[^\u0000-\u0020<>\"{}\|\^`\\]"""
+  
+    
   def PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
   
   def acceptRegex(name : String, r : Regex) : Parser[String] = 
@@ -83,10 +93,10 @@ trait W3cTokens
   
   lazy val EXPONENT		= "[eE][+-]?[0-9]+"
 
-  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR + ")*\""
-  lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR + ")*'"
-  lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR_STR + "|" + UCHAR + ")*'''"
-  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR_STR + "|" + UCHAR + ")*\"\"\""
+  lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*\""
+  lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*'"
+  lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR_STR + "|" + UCHAR_STR + ")*'''"
+  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR_STR + "|" + UCHAR_STR + ")*\"\"\""
   
   
   lazy val STRING_LITERAL_QUOTE : Parser[String] = STRING_LITERAL_QUOTE_STR.r  ^^ {
@@ -103,9 +113,10 @@ trait W3cTokens
   
 
   
-  lazy val UCHAR_Parser : Parser[Char] = UCHAR.r ^^ { x => UCHAR2char(x) }
+  lazy val UCHAR_Parser : Parser[Char] = UCHAR_STR.r ^^ { x => UCHAR2char(x) }
 
-  lazy val UCHAR 		= "\\\\u" + HEX + HEX + HEX + HEX + "|" + "\\\\U" + HEX + HEX + HEX + HEX + HEX + HEX
+  lazy val UCHAR_STR    = "\\\\u" + HEX + "{4}" + "|" + "\\\\U" + HEX + "{8}"
+  // lazy val UCHAR_STR    = "\\\\u" + HEX + HEX + HEX + HEX + "|" + "\\\\U" + HEX + HEX + HEX + HEX + HEX + HEX + HEX + HEX 
   
   lazy val ECHAR_Parser : Parser[Char] = ECHAR_STR.r ^^ { x => ECHAR2char(x) }
   lazy val ECHAR_STR	= """\\[tbnrf\\\"\']""" 
@@ -214,7 +225,7 @@ trait W3cTokens
  def unscape(s:String) : String = {
    unscapeList(s.toList).mkString
  }
- 
+
  def unscapeList(s:List[Char]) : List[Char] = {
    s match { 
      case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeList(rs)
@@ -232,13 +243,27 @@ trait W3cTokens
    }
  }
 
+ def unscapeUchars(s:String) : String = {
+   unscapeListUchars(s.toList).mkString
+ }
+
+ def unscapeListUchars(s:List[Char]) : List[Char] = {
+   s match { 
+     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeListUchars(rs)
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: rs => hex2Char(a :: b :: c :: d :: e :: f :: Nil) :: unscapeListUchars(rs)
+     case c :: rs => c :: unscapeListUchars(rs)
+     case Nil => Nil
+   }
+ }
+ 
+
  def unscapeReservedChars(s:String) : String = 
-   unscapeReservedCharsList(s.toList).mkString
+   unscapeListReservedChars(s.toList).mkString
    
- def unscapeReservedCharsList(s:List[Char]) : List[Char] = {
+ def unscapeListReservedChars(s:List[Char]) : List[Char] = {
    s match {
-     case '\\' :: c :: rs if "~.-!$&'()*+,;=/?#@%_".contains(c) => c :: unscapeReservedCharsList(rs)
-     case c :: rs => c :: unscapeReservedCharsList(rs)
+     case '\\' :: c :: rs if "~.-!$&'()*+,;=/?#@%_".contains(c) => c :: unscapeListReservedChars(rs)
+     case c :: rs => c :: unscapeListReservedChars(rs)
      case Nil => Nil
    }
  }

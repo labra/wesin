@@ -1,14 +1,17 @@
 package org.weso.rdfNode
+import java.net.URI
+import java.net.URISyntaxException
 
 case class RDFNodeException(msg : String) extends Exception
 
 sealed class RDFNode {
   def isIRI = this match {
-    case IRI(_) => true
+    case i : IRI => true
     case _ => false
   }
+
   def toIRI = this match {
-    case i@IRI(_) => i
+    case i : IRI => i
     case _ => throw RDFNodeException("Cannot convert RDFNode " + this + " to IRI")
   }
 }
@@ -143,14 +146,46 @@ case class Lang(lang : String) {
   
 }
 
-case class IRI(str : String) extends RDFNode {
+case class IRI(uri : URI) extends RDFNode {
+  
   override def toString = {
-    "<" + str + ">"
+    "<" + uri.toString + ">"
   }
 
   implicit def minOrd = new Ordering[IRI] { 
-    def compare(a: IRI, b: IRI) = b.str compare a.str 
+    def compare(a: IRI, b: IRI) = a.uri.compareTo(b.uri) 
   }
+  
+  def str : String = {
+    uri.toString
+  }
+
+  /**
+   * Resolve an IRI against this IRI (which is taken as the base)
+   * Currently, we employ java.net.URI algorithm to resolve
+   */
+  def resolve(iri: IRI): IRI = {
+     IRI(uri.resolve(iri.uri))
+  }
+  
+  
+  
+}
+
+object IRI {
+  def apply(str:String):IRI = {
+    // Todo: Capture exceptions to provide better error messages?
+    IRI(new URI(str))
+  }
+  
+  def unapply(str:String):Option[IRI] = {
+    try {
+      Some(IRI(new URI(str)))
+    } catch {
+      case _ : URISyntaxException => None
+    }
+  }
+
 }
 
 object RDFNode {

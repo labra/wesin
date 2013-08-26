@@ -308,11 +308,11 @@ object RDFGraph {
     implicit val ord = new Ordering[RDFNode] { 
       def compare(x :RDFNode,y :RDFNode): Int = 
         (x,y) match {
-          case (IRI(a),IRI(b)) => a.compare(b)
-          case (IRI(_),BNodeId(_)) => -1
-          case (IRI(_),l : Literal) => -1
-          case (BNodeId(_),IRI(_)) => 1
-          case (l:Literal,IRI(_)) => 1
+          case (a : IRI, b : IRI) => a.uri.compareTo(b.uri)
+          case (_ : IRI,BNodeId(_)) => -1
+          case (_ : IRI,_ : Literal) => -1
+          case (_ : BNodeId, _ : IRI) => 1
+          case (_ : Literal, _ : IRI) => 1
           case (BNodeId(a),BNodeId(b)) => a.compare(b)
           case (l1:Literal,l2:Literal) => 0 // TODO: Maybe we should compare literals by their lexical form
           case (BNodeId(_),l:Literal) => 1 // TODO: Comparing literals and BNodes could be irrelevant...maybe 0 ?

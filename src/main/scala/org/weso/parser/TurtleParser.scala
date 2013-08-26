@@ -36,8 +36,24 @@ trait TurtleParser
      ) 
 
   def directive (s:TurtleParserState) : Parser[TurtleParserState] = 
-    prefixDirective(s) // | baseDirective(s)
+    ( prefixDirective(s) 
+    | baseDirective(s)
+    )
   
+  def baseDirective (s: TurtleParserState) : Parser[TurtleParserState] = {
+    (SPARQLBase | baseId ) ^^ {
+      case (iri) => s.newBase(iri)
+    }
+  }
+
+  def SPARQLBase : Parser[(IRI)] = 
+    ignoreCaseToken("BASE") ~> (WS ~> IRIREF) 
+  
+
+  def baseId : Parser[IRI] = 
+    token("@base") ~> (WS ~> IRIREF) 
+  
+
   def prefixDirective (s: TurtleParserState) : Parser[TurtleParserState] = {
     (SPARQLPrefix | prefixId ) ^^ {
       case (prefix,iri) => s.addPrefix(prefix, iri)
@@ -59,9 +75,13 @@ trait TurtleParser
   def triples(s:TurtleParserState) : 
 	  Parser[(List[RDFTriple],TurtleParserState)] = 
   ( subjPredicatesObjectList(s) ^^ { 
-    case (ns,s) => (toTriples(ns).map(t => RDFTriple(t)),s)
+    case (ns,s) => (toTriples(ns).map(t => RDFTriple(t,s.baseIRI)),s)
    }
+  
   // TODO: | blankNodePropertyList predicateObjectList
+  
+  // Note: The following production has been added to handle empty triples
+  // but it does not appear in Turtle Grammar
   | opt(WS) ^^^ { (List(),s)}
   )
   
@@ -138,7 +158,7 @@ trait TurtleParser
     string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
     case str ~ None => StringLiteral(str) 
     case str ~ Some(Lang(l)) => LangLiteral(str,Lang(l)) 
-    case str ~ Some(IRI(iri)) => DatatypeLiteral(str,IRI(iri))
+    case str ~ Some(i : IRI) => DatatypeLiteral(str,i)
   }
   
   lazy val BooleanLiteral : Parser[Literal] = 
@@ -170,4 +190,14 @@ trait TurtleParser
   
 }
  
+object TurtleParser extends TurtleParser {
+  
+  def parse(s:String) : Option[List[RDFTriple]] = {
+    parseAll(turtleDoc(TurtleParserState.initial),s) match {
+      case Success((x,_),_) => Some(x)
+      case _ 				=> None
+    }
+  }
+  
+}
 

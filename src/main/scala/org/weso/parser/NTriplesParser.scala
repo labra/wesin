@@ -53,7 +53,10 @@ trait NTriplesParser extends Positional with RegexParsers {
   def pred : Parser[IRI] = uriref
   def obj : Parser[RDFNode] = (uriref | nodeID | literal )
   
-  def uriref : Parser[IRI] = "<" ~> absoluteURI <~ ">" ^^ IRI
+  def uriref : Parser[IRI] = "<" ~> absoluteURI <~ ">" ^^ {
+    case uri => IRI(uri)
+  }
+
   def nodeID : Parser[BNodeId] = "_:" ~> name ^^ 
     {(name) => 
      { bNodesMap.getOrElse(name, 

@@ -20,12 +20,25 @@ class W3cTokensSuite
 
   describe("W3c Tokens") {
 
+   describe("IRIREF") {
+     val p = IRIREF
+     shouldParseGeneric(p,"<>",IRI(""))
+	 shouldParseGeneric(p,"<hi>",IRI("hi"))
+	 shouldParseGeneric(p,"<http://pepe.com>",IRI("http://pepe.com"))
+	 shouldParseGeneric(p,"<urn://kiko-uno>",IRI("urn://kiko-uno"))
+	 shouldParseGeneric(p,"http://a.example/\\U00000073",IRI("http://a.example/s"))
+	 shouldNotParse(p,"<a>.")
+	 shouldNotParse(p,"<a\"b>")
+	 shouldNotParse(p,"<a{a}b>")
+   }
+
    describe("IRIREF_STR") {
      val p = IRIREF_STR.r
      shouldParse(p,"<>")
 	 shouldParse(p,"<hi>")
 	 shouldParse(p,"<http://pepe.com>")
 	 shouldParse(p,"<urn://kiko-uno>")
+	 shouldParse(p,"""http://a.example/\U00000073""")
 	 shouldNotParse(p,"<a>.")
 	 shouldNotParse(p,"<a\"b>")
 	 shouldNotParse(p,"<a{a}b>")
@@ -190,15 +203,15 @@ class W3cTokensSuite
    describe("UCHAR_Parser") {
      val p = UCHAR_Parser
 	 shouldParseGeneric(p,"\\u002e",'.')
-	 shouldParseGeneric(p,"\\U00002e",'.')
+	 shouldParseGeneric(p,"\\U0000002e",'.')
 	 shouldNotParse(p,"\\x00002e")
    }
    
    describe("UCHAR") {
-     val p = UCHAR.r
+     val p = UCHAR_STR.r
 	 shouldParse(p,"\\u0123")
 	 shouldParse(p,"\\u01AF")
-	 shouldParse(p,"\\U0123AD")
+	 shouldParse(p,"\\U0123AD00")
 	 shouldNotParse(p,"\\x0123AD")
 	 shouldNotParse(p,"\\u0123AD")
 	 shouldNotParse(p,"\\U0123")

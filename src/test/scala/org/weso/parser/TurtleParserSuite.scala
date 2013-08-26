@@ -28,6 +28,13 @@ class TurtleParserSuite
      val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
      val abc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
      
+     shouldParseRDF(p,
+         """|@base <http://example.org/>.
+            |<a> <b> <c> .""".stripMargin,
+            List(RDFTriple(IRI("http://example.org/a"),
+                           IRI("http://example.org/b"),
+                           IRI("http://example.org/c")))
+            )
      shouldParseRDF(p," _:0 a _:1,_:2 .",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1,_:2 .",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1; a _:2 .",List(a01,a02))
@@ -54,6 +61,19 @@ class TurtleParserSuite
      )
    }
             
+   describe("baseId") {
+     val p = baseId
+     shouldParseGeneric(p,
+                    "@base <http://example.org/a#>",
+                    IRI("http://example.org/a#"))
+     shouldParseGeneric(p,
+                    "@base <http://example.org/>",
+                    IRI("http://example.org/"))
+     shouldParseGeneric(p,
+                    "@base <http://example.org/año#>",
+                    IRI("http://example.org/año#"))
+   }
+
    describe("prefixId") {
      val p = prefixId
      shouldParseGeneric(p,

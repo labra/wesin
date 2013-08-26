@@ -20,13 +20,15 @@ case class TurtleParserState (
   val curSubjectLs : List[RDFNode],
   val curPredicateLs : List[IRI],
   val namespaces : PrefixMap ,
-  val bNodeLabels : BNodeTable) {
+  val bNodeLabels : BNodeTable,
+  val baseIRI: IRI
+  ) {
 
  def addCurSubject(subj:RDFNode):TurtleParserState = 
-    TurtleParserState(subj :: curSubjectLs, curPredicateLs, namespaces, bNodeLabels)
+    TurtleParserState(subj :: curSubjectLs, curPredicateLs, namespaces, bNodeLabels,baseIRI)
 
  def addCurPredicate(pred:IRI): TurtleParserState =
-    TurtleParserState(curSubjectLs, pred :: curPredicateLs, namespaces, bNodeLabels)
+    TurtleParserState(curSubjectLs, pred :: curPredicateLs, namespaces, bNodeLabels,baseIRI)
 
  def curSubject : RDFNode =
    curSubjectLs head
@@ -35,22 +37,25 @@ case class TurtleParserState (
    curPredicateLs head 
 
  def newTable (table: BNodeTable) : TurtleParserState = 
-   TurtleParserState(curSubjectLs,curPredicateLs,namespaces,table)
+   TurtleParserState(curSubjectLs,curPredicateLs,namespaces,table,baseIRI)
    
  def addPrefix(prefix: String, iri: IRI) : TurtleParserState = 
-   TurtleParserState(curSubjectLs,curPredicateLs,namespaces.addPrefix(prefix, iri),bNodeLabels)
+   TurtleParserState(curSubjectLs,curPredicateLs,namespaces.addPrefix(prefix, iri),bNodeLabels,baseIRI)
 
  def newBNode : (BNodeId,TurtleParserState) = { 
    val (id,t) = bNodeLabels.newBNode ; 
-   (id,TurtleParserState(curSubjectLs,curPredicateLs,namespaces,t))
+   (id,TurtleParserState(curSubjectLs,curPredicateLs,namespaces,t,baseIRI))
  }
  
+ def newBase(newIRI:IRI) =
+   TurtleParserState(curSubjectLs,curPredicateLs,namespaces,bNodeLabels,newIRI)
+
 }
 
 object TurtleParserState {
-  def initial = TurtleParserState(List(),List(),PrefixMap.empty,BNodeTable.empty)
   
-    
-
-    
+  def initial = TurtleParserState(List(),List(),PrefixMap.empty,BNodeTable.empty,IRI(""))
+  
+  def initial(baseIRI : IRI) = TurtleParserState(List(),List(),PrefixMap.empty,BNodeTable.empty,baseIRI)
+  
 }

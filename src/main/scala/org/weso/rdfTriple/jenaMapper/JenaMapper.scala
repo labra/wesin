@@ -30,7 +30,7 @@ trait JenaMapper {
   def createResource(m:JenaModel,node:RDFNode) : Resource = {
     node match {
       case BNodeId(id) => m.createResource(new AnonId(id.toString))
-      case IRI(str) => m.createResource(str)
+      case i : IRI => m.createResource(i.str)
       case _ => throw new Exception("Cannot create a resource from " + node)
     }
   }
@@ -45,17 +45,17 @@ trait JenaMapper {
     node match {
      case BNodeId(id) 						 => 
        	m.createResource(new AnonId(id.toString))
-     case IRI(str) 							 => 
-       	m.createResource(str)
+     case i: IRI 							 => 
+       	m.createResource(i.str)
      case StringLiteral(str) 				 => 
        	m.createLiteral(str,false)
-     case DatatypeLiteral(str,IRI(datatype)) => {
-        datatype match {
+     case DatatypeLiteral(str,i:IRI) => {
+        i.str match {
           case `xsdinteger` => m.createTypedLiteral(str,XSDDatatype.XSDinteger) 
           case `xsddouble` => m.createTypedLiteral(str,XSDDatatype.XSDdouble)
           case `xsddecimal` => m.createTypedLiteral(str,XSDDatatype.XSDdecimal)
           case `xsdboolean` => m.createTypedLiteral(str,XSDDatatype.XSDboolean)
-          case _ => m.createTypedLiteral(str,new BaseDatatype(datatype))
+          case _ => m.createTypedLiteral(str,new BaseDatatype(i.str))
         }
      }
      case DecimalLiteral(d) 		=> 
