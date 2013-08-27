@@ -19,6 +19,7 @@ import java.io.InputStream
 import org.weso.rdfTriple.jenaMapper.JenaMapper
 import scala.io.Source._
 import com.hp.hpl.jena.rdf.model.Literal
+import org.weso.rdfNode.IRI
 
 class TurtleW3cTestsSuite 
 		extends TurtleParser
@@ -35,7 +36,7 @@ class TurtleW3cTestsSuite
   val rdf  		= "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   val rdft 		= "http://www.w3.org/ns/rdftest#"
   val mf 		= "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#"
-  val w2cTestsURL = "http://www.w3.org/2013/TurtleTests/"
+  val w3cTestsURL = "http://www.w3.org/2013/TurtleTests/"
     
   val model = ModelFactory.createDefaultModel
 
@@ -126,12 +127,12 @@ class TurtleW3cTestsSuite
         	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
         	 val m1JenaParser = 
         			 str2model(strAction,
-        					   w2cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
+        					   w3cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
         					   "TURTLE")
 
         	 val strResult = 
         	   fromURL(r.asResource().getURI(),"UTF-8").mkString ;
-        	 val resultJenaParser = str2model(strResult,w2cTestsURL,"N-TRIPLES")
+        	 val resultJenaParser = str2model(strResult,w3cTestsURL,"N-TRIPLES")
         	 
         	 // The following tests check that models read with Jena are isomorphic
         	 shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
@@ -155,25 +156,20 @@ class TurtleW3cTestsSuite
        val action = getAction(m,r)
        val result = getResult(m,r)
        val name   = getName(m,r)
+       val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
        (action,result) match {
          case (Some(a),Some(r)) 
          if a.isURIResource && r.isURIResource => {
         	 val strAction = 
         	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
-        	 val m1JenaParser = 
-        			 str2model(strAction,
-        					   w2cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
-        					   "TURTLE")
-
-        	 val strResult = 
-        	   fromURL(r.asResource().getURI(),"UTF-8").mkString ;
-        	 val resultJenaParser = str2model(strResult,w2cTestsURL,"N-TRIPLES")
+        	 val m1JenaParser = str2model(strAction, baseIRI, "TURTLE")
+        	 val strResult = fromURL(r.asResource().getURI(),"UTF-8").mkString 
+        	 val resultJenaParser = str2model(strResult,baseIRI,"N-TRIPLES")
         	 
         	 // The following tests check that models read with Jena are isomorphic
         	 // shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
-        	 
         	 shouldPassTurtleEval(name,
-        			 turtleDoc(s),
+        			 turtleDoc(s.newBase(IRI(baseIRI))),
         			 strAction,
         			 resultJenaParser
              )

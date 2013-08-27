@@ -108,12 +108,15 @@ class TurtleParserSuite
      val b0 = BNodeId(0)
      val ap = IRI("http://example.org/a#p")
      val aq = IRI("http://example.org/a#p")
+     val ab = IRI("http://example.org/a#b")
      val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
      val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
 
      shouldParseRDF(p," ",List())
      shouldParseRDF(p,"_:0 a _:1,_:2",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1; a _:2",List(a01,a02))
+     shouldParseRDF(p,"[a:p a:b ]",
+         List(RDFTriple(BNodeId(0),ap,ab)))
 /*     shouldParseRDF(p,"(1) a:p a:q",
     		 List(RDFTriple(b0,ap,aq),
     			  RDFTriple(b0,RDFNode.rdffirst,IntegerLiteral(1)),

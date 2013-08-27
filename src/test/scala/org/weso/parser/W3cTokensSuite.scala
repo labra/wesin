@@ -44,25 +44,25 @@ class W3cTokensSuite
 	 shouldNotParse(p,"<a{a}b>")
    }
 
-   describe("PNAME_NS_STR") {
-     val p = PNAME_NS_STR.r
-     shouldParse(p,"a:")
-	 shouldParse(p,":")
-	 shouldParse(p,"año:")
-	 shouldParse(p,"a\u00b7a:")
-	 shouldParse(p,"a\u00b7\u0300a:")
-	 shouldParse(p,"a\u00b7\u0300\u2040a:")
-	 shouldParse(p,"a\u00b7\u0300\u002e\u2040a:")
-	 shouldParse(p,"a\u00b7\u0300\u203f\u002e\u2040a:")
-	 shouldParse(p,"b\u0300\u036f\u002e\u2040:")
-	 shouldParse(p,"b\u0300\u036f1:")
-	 shouldParse(p,"b\u036f\u002eb:")
-	 shouldParse(p,"b\u036fb:")
-	 shouldParse(p,"b\u0300\u036f\u203f\u002e\u2040:")
-	 infoUnicodeChars("a·̀ͯ‿.⁀")
-	 shouldParse(p,"a·̀ͯ‿.⁀:")
+   describe("PNAME_NS_Parser") {
+     val p = PNAME_NS_Parser
+     shouldParseGeneric(p,"a:","a")
+	 shouldParseGeneric(p,":","")
+	 shouldParseGeneric(p,"año:","año")
+	 shouldParseGeneric(p,"a\u00b7a:","a\u00b7a")
+	 shouldParseGeneric(p,"a\u00b7\u0300a:","a\u00b7\u0300a")
+	 shouldParseGeneric(p,"a\u00b7\u0300\u2040a:","a\u00b7\u0300\u2040a")
+	 shouldParseGeneric(p,"a\u00b7\u0300\u002e\u2040a:","a\u00b7\u0300\u002e\u2040a")
+	 shouldParseGeneric(p,"a\u00b7\u0300\u203f\u002e\u2040a:","a\u00b7\u0300\u203f\u002e\u2040a")
+	 shouldParseGeneric(p,"b\u0300\u036f\u002e\u2040:","b\u0300\u036f\u002e\u2040")
+	 shouldParseGeneric(p,"b\u0300\u036f1:","b\u0300\u036f1")
+	 shouldParseGeneric(p,"b\u036f\u002eb:","b\u036f\u002eb")
+	 shouldParseGeneric(p,"b\u036fb:","b\u036fb")
+	 shouldParseGeneric(p,"b\u0300\u036f\u203f\u002e\u2040:","b\u0300\u036f\u203f\u002e\u2040")
+//	 infoUnicodeChars("a·̀ͯ‿.⁀")
+	 shouldParseGeneric(p,"a·̀ͯ‿.⁀:","a·̀ͯ‿.⁀")
 	 shouldNotParse(p,"a:b")
-   }
+   } 
    
    def infoUnicodeChars(s : String) : Unit = {
      info("Chars of " + s + "= \'" + s.toList.map(c => "\\u%04x".format(c.toInt)) + "\'")
@@ -70,22 +70,23 @@ class W3cTokensSuite
 
    describe("PNAME_NS") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = PNAME_NS(prefixMap)
      shouldParseGeneric(p,"a:",IRI("http://example.org/a#"))
 	 shouldParseGeneric(p,":",IRI("http://example.org#"))
 	 shouldParseGeneric(p,"año:",IRI("http://example.org/año#"))
 	 shouldNotParse(p,"a:b")
+	 shouldNotParse(p,"x:")
    }
 
    describe("PNAME_LN") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = PNAME_LN(prefixMap)
      shouldParseGeneric(p,"a:b",IRI("http://example.org/a#b"))
@@ -187,10 +188,23 @@ class W3cTokensSuite
      val p = STRING_LITERAL_SINGLE_QUOTE
 	 shouldParseGeneric(p,"'Hello'","Hello")
 	 shouldParseGeneric(p,"'\\u0123'","\u0123")
+	 shouldParseGeneric(p,"'\\U0000006F'","o")
 	 shouldParseGeneric(p,"'\\\\'","\\")
 	 shouldNotParse(p,"'Ho'la'")
    }
 
+   describe("unscape") {
+     it("should unscape a list with normal chars") {
+       unscape("Hola") should be("Hola")
+     }
+     it("should unscape a list with small unicode chars") {
+       unscape("H\\u006Fla") should be("Hola")
+     }
+     it("should unscape a list with long Unicode") {
+       unscape("H\\U0000006Fla") should be("Hola")
+     }
+   }
+   
    describe("STRING_LITERAL_LONG_SINGLE_QUOTE") {
      val p = STRING_LITERAL_LONG_SINGLE_QUOTE
 	 shouldParseGeneric(p,"'''Hello'''","Hello")
@@ -212,6 +226,8 @@ class W3cTokensSuite
 	 shouldParseGeneric(p,"\"\"\"Hi \"John\" . \"\"\"","Hi \"John\" . ")
 	 shouldParseGeneric(p,"\"\"\"Hi \'John\' . \"\"\"","Hi \'John\' . ")
 	 shouldParseGeneric(p,"\"\"\"Hi \"\"John\"\" . \"\"\"","Hi \"\"John\"\" . ")
+	 shouldParseGeneric(p,"\"\"\"John said: \"Hello World!\\\"\"\"\"","John said: \"Hello World!\"")
+	 shouldParseGeneric(p,"""\nthis \ris a \U00012451long\t\nliteral\uABCD""","\nthis \ris a \x{12451}long\t\nliteral\uABCD\n")
 	 shouldNotParse(p,"\"\"\"Hi \"\"\"John\"\" . \"\"\"")
 	 
    }
@@ -220,6 +236,7 @@ class W3cTokensSuite
      val p = UCHAR_Parser
 	 shouldParseGeneric(p,"\\u002e",'.')
 	 shouldParseGeneric(p,"\\U0000002e",'.')
+	 shouldParseGeneric(p,"\\U0000006F",'o')
 	 shouldNotParse(p,"\\x00002e")
    }
    
@@ -304,7 +321,7 @@ class W3cTokensSuite
    }
 
    describe("PN_CHARS") {
-     val p = PN_CHARS.r
+     val p = PN_CHARS
 	 shouldParse(p,"A")
 	 shouldParse(p,"-")
 	 shouldParse(p,"7")
@@ -314,15 +331,17 @@ class W3cTokensSuite
 	 shouldNotParse(p, ":")
    }
 
-
    describe("PN_PREFIX") {
-     val p = PN_PREFIX.r
+     val p = PN_PREFIX
 	 shouldParse(p,"A")
 	 shouldParse(p,"a.o")
 	 shouldParse(p,"a..o")
 	 shouldParse(p,"a.�o")
 	 shouldParse(p,"a.x.o")
 	 shouldParse(p,"a\u00b7")
+	 shouldParse(p,"b\u0300\u036f1")
+	 shouldParse(p,"b\u03001")
+	 shouldParse(p,"b\u0300")
 //	 shouldParse(p,"a-1")
 //	 shouldParse(p,"a--1")
 	 shouldParse(p,"año")

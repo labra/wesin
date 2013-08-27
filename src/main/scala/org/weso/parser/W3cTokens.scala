@@ -42,12 +42,19 @@ trait W3cTokens
   lazy val IRI_INITIAL_STR = """[^\u0000-\u0020<>\"{}\|\^`\\]"""
   
     
-  def PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
+//  def PNAME_NS_STR	= "(" + PN_PREFIX + ")?:"
   
   def acceptRegex(name : String, r : Regex) : Parser[String] = 
     ( r | failure(name + " expected with regular expression " + r))
 
-  def PNAME_NS_Parser : Parser[String] = acceptRegex("PNAME_NS",PNAME_NS_STR.r) 
+  def PNAME_NS_Parser : Parser[String] = 
+//    acceptRegex("PNAME_NS",PNAME_NS_STR.r) 
+    ( opt(PN_PREFIX) <~ ":" ^^ {
+       case None => ""
+       case Some(str) => str
+      }
+    | failure("Expected prefix name")
+    )
 
   def PNAME_NS(prefixMap: PrefixMap): Parser[IRI] = {
    PNAME_NS_Parser ^? 
@@ -63,7 +70,7 @@ trait W3cTokens
   		 })
   }
   
-  lazy val PNAME_LN_STR = PNAME_NS_STR + PN_LOCAL
+ // lazy val PNAME_LN_STR = PNAME_NS_STR + PN_LOCAL
   
   def PNAME_LN (prefixMap: PrefixMap): Parser[IRI]	= {
    PNAME_NS(prefixMap) ~ PN_LOCAL.r ^^
@@ -72,7 +79,7 @@ trait W3cTokens
   		}
   }
   
-  lazy val BLANK_NODE_LABEL_STR = "_:(" + PN_CHARS_U + "|[0-9])(("+ PN_CHARS + "|\\.)*" + PN_CHARS + ")?"
+  lazy val BLANK_NODE_LABEL_STR = "_:(" + PN_CHARS_U + "|[0-9])(("+ PN_CHARS_STR + "|\\.)*" + PN_CHARS_STR + ")?"
   
   def BLANK_NODE_LABEL(bNodeTable:BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
     	BLANK_NODE_LABEL_STR.r ^^ { 
@@ -96,7 +103,7 @@ trait W3cTokens
   lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*\""
   lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*'"
   lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR_STR + "|" + UCHAR_STR + ")*'''"
-  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"((\"|\"\")?[^\"]|" + ECHAR_STR + "|" + UCHAR_STR + ")*\"\"\""
+  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"(((\"|\"\")?[^\"])|" + ECHAR_STR + "|" + UCHAR_STR + ")*\"\"\""
   
   
   lazy val STRING_LITERAL_QUOTE : Parser[String] = STRING_LITERAL_QUOTE_STR.r  ^^ {
@@ -145,13 +152,33 @@ trait W3cTokens
 
  lazy val PN_CHARS_U    = PN_CHARS_BASE + "|_"
  
- lazy val PN_CHARS		= PN_CHARS_U + """|\-|[0-9]|\u00B7|[\u0300-\u036F]|[\u203F-\u2040]""" 
+ lazy val PN_CHARS_STR	= PN_CHARS_U + """|\-|[0-9]|\u00B7|[\u0300-\u036F]|[\u203F-\u2040]""" 
+
+ lazy val PN_CHARS		= acceptRegex("PN_CHARS", PN_CHARS_STR.r)
  
  lazy val PLX			= PERCENT + "|" + PN_LOCAL_ESC
  
- lazy val PN_PREFIX     = PN_CHARS_BASE + "((" + PN_CHARS + """|\.)*""" + PN_CHARS + ")?" 
+ def startMiddleAltRep_STR(start: String, middleAlt : String, repEnd : String) : String = {
+    "(" + start + "(((" + repEnd + "|" + middleAlt + ")*(" + repEnd + "))?)" + ")"
+  }
+  
+ def startMiddleAltRep(start:String,middleAlt:String,repEnd:String) : Parser[String] =
+   startMiddleAltRep_STR(start,middleAlt,repEnd).r
+
+   
+ def PN_PREFIX_STR = startMiddleAltRep_STR(PN_CHARS_BASE,"\\.",PN_CHARS_STR)
+
+ def PN_PREFIX = acceptRegex("PN_PREFIX",PN_PREFIX_STR.r)
+  
+//  lazy val PN_PREFIX_STR = PN_CHARS_BASE + "((" + PN_CHARS + """|\.)*""" + PN_CHARS + ")?" 
+ /* lazy val PN_PREFIX = 
+   PN_CHARS_BASE.r ~ opt(rep(PN_CHARS_DOT) ~ PN_CHARS) ^^ {
+    case c ~ None => c
+    case c ~ Some(cs ~ d) => c + cs.flatten + d
+  }
+ lazy val PN_CHARS_DOT = "." | PN_CHARS */
  
- lazy val PN_LOCAL		= "(" + PN_CHARS_U + "|:|[0-9]|" + PLX + ")((" + PN_CHARS + "|\\.|:|" + PLX + ")*(" + PN_CHARS + "|:|" + PLX + "))?"     
+ lazy val PN_LOCAL		= "(" + PN_CHARS_U + "|:|[0-9]|" + PLX + ")((" + PN_CHARS_STR + "|\\.|:|" + PLX + ")*(" + PN_CHARS_STR + "|:|" + PLX + "))?"     
  
  lazy val PERCENT 		= "%" + HEX + HEX 
  
@@ -228,7 +255,7 @@ trait W3cTokens
  def unscapeList(s:List[Char]) : List[Char] = {
    s match { 
      case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeList(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: rs => hex2Char(a :: b :: c :: d :: e :: f :: Nil) :: unscapeList(rs)
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2Char(a :: b :: c :: d :: e :: f :: g :: h :: Nil) :: unscapeList(rs)
      case '\\' :: 't' :: rs => '\t' :: unscapeList(rs)
      case '\\' :: 'b' :: rs => '\b' :: unscapeList(rs)
      case '\\' :: 'n' :: rs => '\n' :: unscapeList(rs)
@@ -249,7 +276,7 @@ trait W3cTokens
  def unscapeListUchars(s:List[Char]) : List[Char] = {
    s match { 
      case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeListUchars(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: rs => hex2Char(a :: b :: c :: d :: e :: f :: Nil) :: unscapeListUchars(rs)
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2Char(a :: b :: c :: d :: e :: f :: g :: h :: Nil) :: unscapeListUchars(rs)
      case c :: rs => c :: unscapeListUchars(rs)
      case Nil => Nil
    }
@@ -276,8 +303,8 @@ trait W3cTokens
     rex.replaceAllIn(s, m => Regex quoteReplacement hex2str(m group 1))
  }
  
- def unscapeUnicode6(s: String): String = {
-    val rex = """\\U(\p{XDigit}{6})""".r
+ def unscapeUnicode8(s: String): String = {
+    val rex = """\\U(\p{XDigit}{8})""".r
     rex.replaceAllIn(s, m => Regex quoteReplacement hex2str(m group 1))
  }
 
@@ -301,7 +328,7 @@ trait W3cTokens
  }
 
  def unscape2(x:String) : String = 
-     (unscapeUnicode4 _ andThen unscapeUnicode6 andThen unscapeCtrl)(x)
+     (unscapeUnicode4 _ andThen unscapeUnicode8 andThen unscapeCtrl)(x)
  //------------------------------------
 
 }

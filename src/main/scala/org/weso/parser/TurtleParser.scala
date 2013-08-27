@@ -42,7 +42,7 @@ trait TurtleParser
   
   def baseDirective (s: TurtleParserState) : Parser[TurtleParserState] = {
     (SPARQLBase | baseId ) ^^ {
-      case (iri) => s.newBase(iri)
+      case (iri) => s.newBase(s.baseIRI.resolve(iri))
     }
   }
 
@@ -75,20 +75,26 @@ trait TurtleParser
   def triples(s:TurtleParserState) : 
 	  Parser[(List[RDFTriple],TurtleParserState)] = 
   ( subjPredicatesObjectList(s) ^^ { 
-    case (ns,s) => {
-      val (collectedTriples,s1) = s.retrieveTriples
-      (collectedTriples ++ toTriples(ns).map(t => RDFTriple(t,s.baseIRI)),s1)
+    case (ns,s1) => {
+      val (collectedTriples,s2) = s1.retrieveTriples
+      (collectedTriples ++ toTriples(ns).map(t => RDFTriple(t,s.baseIRI)),s2)
      }
     }
-  | seqState(blankNodePropertyList, predicateObjectList)(s) ^^ {
-     case (bnode ~ ps,s) => {
-       val (collectedTriples,s1) = s.retrieveTriples
-       (collectedTriples ++ toTriples((bnode,ps)).map(t => RDFTriple(t,s.baseIRI)),s1)
+  | seqState(blankNodePropertyList, optState(predicateObjectList))(s) ^^ {
+    case ((bnode ~ None),s1) => {
+      s1.retrieveTriples
+    }
+    case (bnode ~ Some(ps),s1) => {
+       val (collectedTriples,s2) = s1.retrieveTriples
+       (collectedTriples ++ toTriples((bnode,ps)).map(t => RDFTriple(t,s.baseIRI)),s2)
      }
     }
   // Note: The following production has been added to handle empty triples
   // but it does not appear in Turtle Grammar
-  | opt(WS) ^^^ { (List(),s)}
+  | opt(WS) ^^^ { 
+     // TODO...check if it is necessary to retrieveTriples
+    (List(),s)
+  }
   )
   
   def toTriples[A,B,C](ns : (A,List[(B,List[C])])) : List[(A,B,C)] = {

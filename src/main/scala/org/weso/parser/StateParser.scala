@@ -31,6 +31,11 @@ def repState[T,S](s: S,
        case (ls,s2) => (s1._1::ls,s2)} 
   }
 
+  def optState[T,S](p:S => Parser[(T,S)])(s:S): Parser[(Option[T],S)] =
+   ( p(s) ^^ ( x  => (Some(x._1),x._2))  
+   | success((None,s)) 
+   )
+
   def seqState[T,U,S](p:S => Parser[(T,S)],
 		  			  q:S => Parser[(U,S)])(s:S) : Parser[(T ~ U,S)] = {
     p(s) >> { s1 => q(s1._2) ^^ { case (u,s2) => (new ~(s1._1,u), s2)} }
