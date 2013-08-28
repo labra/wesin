@@ -79,10 +79,10 @@ trait W3cTokens
   		}
   }
   
-  lazy val BLANK_NODE_LABEL_STR = "_:(" + PN_CHARS_U + "|[0-9])(("+ PN_CHARS_STR + "|\\.)*" + PN_CHARS_STR + ")?"
+  lazy val BLANK_NODE_LABEL_STR = "_:(" + PN_CHARS_U + "|[0-9])(("+ PN_CHARS_STR + "|\\.)*(" + PN_CHARS_STR + "))?"
   
   def BLANK_NODE_LABEL(bNodeTable:BNodeTable) : Parser[(BNodeId,BNodeTable)] = 
-    	BLANK_NODE_LABEL_STR.r ^^ { 
+    	acceptRegex("BLANK_NODE_LABEL",BLANK_NODE_LABEL_STR.r) ^^ { 
     	  s => bNodeTable.getOrAddBNode(removeBNodePrefix(s)) 
       	}
   
@@ -103,8 +103,9 @@ trait W3cTokens
   lazy val STRING_LITERAL_QUOTE_STR : String    = "\"([^\\u0022\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*\""
   lazy val STRING_LITERAL_SINGLE_QUOTE_STR      = "'([^\\u0027\\u005C\\u000A\\u000D]|" + ECHAR_STR + "|" + UCHAR_STR + ")*'"
   lazy val STRING_LITERAL_LONG_SINGLE_QUOTE_STR = "'''(('|'')?[^']|" + ECHAR_STR + "|" + UCHAR_STR + ")*'''"
-  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"(((\"|\"\")?[^\"])|" + ECHAR_STR + "|" + UCHAR_STR + ")*\"\"\""
-  
+  lazy val STRING_LITERAL_LONG_QUOTE_STR		= "\"\"\"(" + NO_TRIPLE_QUOTE + "|" + ECHAR_STR + "|" + UCHAR_STR + ")*\"\"\""
+
+  lazy val NO_TRIPLE_QUOTE = """((\"|\"\")?[^\"\\])"""
   
   lazy val STRING_LITERAL_QUOTE : Parser[String] = STRING_LITERAL_QUOTE_STR.r  ^^ {
    x => removeQuotes(unscape(x),"\"",1)
@@ -119,15 +120,15 @@ trait W3cTokens
     { x => removeQuotes(unscape(x),"\"",3) }
   
 
-  
-  lazy val UCHAR_Parser : Parser[Char] = UCHAR_STR.r ^^ { x => UCHAR2char(x) }
-
   lazy val UCHAR_STR    = "\\\\u" + HEX + "{4}" + "|" + "\\\\U" + HEX + "{8}"
-  
-  lazy val ECHAR_Parser : Parser[Char] = ECHAR_STR.r ^^ { x => ECHAR2char(x) }
+  lazy val UCHAR_Parser : Parser[Char] = 
+    acceptRegex("UCHAR",UCHAR_STR.r) ^^ { x => UCHAR2char(x) }
+
   lazy val ECHAR_STR	= """\\[tbnrf\\\"\']""" 
+  lazy val ECHAR_Parser : Parser[Char] = 
+    	acceptRegex("ECHAR",ECHAR_STR.r) ^^ { x => ECHAR2char(x) }
+
   lazy val WS_STR 			= """\u0020|\u0009|\u000D|\u000A"""
-    
   lazy val WS = rep ( WS_STR.r 
 		  			| "#" ~ rep(chrExcept(EofCh, '\n') )
 		  			)
@@ -238,9 +239,9 @@ trait W3cTokens
     str.charAt(0)
  }
 
- def hex2Char (s : List[Char]) : Char= {
+ def hex2String (s : List[Char]) : String = {
    try {
-      Integer.parseInt(s.mkString,16).toChar
+      Character.toChars(Integer.parseInt(s.mkString,16)).mkString
    } catch {
      case e : Throwable => throw new 
     		 Exception("Internal Error 'hex2Char': cannot convert from unicode chars. Value: " + 
@@ -249,23 +250,23 @@ trait W3cTokens
  }
 
  def unscape(s:String) : String = {
-   unscapeList(s.toList).mkString
+   unscapeList(s.toList)
  }
 
- def unscapeList(s:List[Char]) : List[Char] = {
+ def unscapeList(s:List[Char]) : String = {
    s match { 
-     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeList(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2Char(a :: b :: c :: d :: e :: f :: g :: h :: Nil) :: unscapeList(rs)
-     case '\\' :: 't' :: rs => '\t' :: unscapeList(rs)
-     case '\\' :: 'b' :: rs => '\b' :: unscapeList(rs)
-     case '\\' :: 'n' :: rs => '\n' :: unscapeList(rs)
-     case '\\' :: 'r' :: rs => '\r' :: unscapeList(rs)
-     case '\\' :: 'f' :: rs => '\f' :: unscapeList(rs)
-     case '\\' :: '\"' :: rs => '\"' :: unscapeList(rs)
-     case '\\' :: '\'' :: rs => '\'' :: unscapeList(rs)
-     case '\\' :: '\\' :: rs => '\\' :: unscapeList(rs)
-     case c :: rs => c :: unscapeList(rs)
-     case Nil => Nil
+     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2String(a :: b :: c :: d :: Nil) + unscapeList(rs)
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil) + unscapeList(rs)
+     case '\\' :: 't' :: rs => "\t" + unscapeList(rs)
+     case '\\' :: 'b' :: rs => "\b" + unscapeList(rs)
+     case '\\' :: 'n' :: rs => "\n" + unscapeList(rs)
+     case '\\' :: 'r' :: rs => "\r" + unscapeList(rs)
+     case '\\' :: 'f' :: rs => "\f" + unscapeList(rs)
+     case '\\' :: '\"' :: rs => "\"" + unscapeList(rs)
+     case '\\' :: '\'' :: rs => "\'" + unscapeList(rs)
+     case '\\' :: '\\' :: rs => "\\" + unscapeList(rs)
+     case c :: rs => c.toString + unscapeList(rs)
+     case Nil => ""
    }
  }
 
@@ -273,12 +274,12 @@ trait W3cTokens
    unscapeListUchars(s.toList).mkString
  }
 
- def unscapeListUchars(s:List[Char]) : List[Char] = {
+ def unscapeListUchars(s:List[Char]) : String = {
    s match { 
-     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2Char(a :: b :: c :: d :: Nil) :: unscapeListUchars(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2Char(a :: b :: c :: d :: e :: f :: g :: h :: Nil) :: unscapeListUchars(rs)
-     case c :: rs => c :: unscapeListUchars(rs)
-     case Nil => Nil
+     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2String(a :: b :: c :: d :: Nil) + unscapeListUchars(rs)
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil) + unscapeListUchars(rs)
+     case c :: rs => c.toString + unscapeListUchars(rs)
+     case Nil => ""
    }
  }
  

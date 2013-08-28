@@ -22,15 +22,22 @@ trait TurtleParser
 	with StateParser 
 	with W3cTokens {
 
+  case class ResultParser[A,S](val t: A, val s: S) extends Positional
+  
+  def turtleDocParser(implicit s: TurtleParserState) : 
+	  		Parser[ResultParser[RDFTriples,TurtleParserState]] = 
+     positioned ( opt(WS) ~> repState(s,statement) ^^ 
+     	{ case (lss,s) => ResultParser(lss.flatten,s) }
+     )
+  
   def turtleDoc(implicit s: TurtleParserState) : 
-	  		Parser[(List[RDFTriple],TurtleParserState)] = 
+	  		Parser[(RDFTriples,TurtleParserState)] = 
      opt(WS) ~> repState(s,statement) ^^ 
      	{ case (lss,s) => (lss.flatten,s) }
      
-    
-  
+     
   def statement(s:TurtleParserState): 
-	  		Parser[(List[RDFTriple],TurtleParserState)] = 
+	  		Parser[(RDFTriples,TurtleParserState)] = 
      ( directive(s) <~ opt(WS) ^^ { case s1 => (List(),s1) }
      | triples(s) <~ token(".")
      ) 
@@ -51,7 +58,7 @@ trait TurtleParser
   
 
   def baseId : Parser[IRI] = 
-    token("@base") ~> (WS ~> IRIREF) 
+    token("@base") ~> (WS ~> IRIREF) <~ token(".")
   
 
   def prefixDirective (s: TurtleParserState) : Parser[TurtleParserState] = {
@@ -67,7 +74,7 @@ trait TurtleParser
   }
   
   def prefixId : Parser[(String,IRI)] = {
-    token("@prefix") ~> PNAME_NS_Parser ~ (WS ~> IRIREF) ^^ {
+    token("@prefix") ~> PNAME_NS_Parser ~ (WS ~> IRIREF) <~ token(".") ^^ {
       case s ~ iri => (s,iri)
     }
   }
@@ -89,12 +96,7 @@ trait TurtleParser
        (collectedTriples ++ toTriples((bnode,ps)).map(t => RDFTriple(t,s.baseIRI)),s2)
      }
     }
-  // Note: The following production has been added to handle empty triples
-  // but it does not appear in Turtle Grammar
-  | opt(WS) ^^^ { 
-     // TODO...check if it is necessary to retrieveTriples
-    (List(),s)
-  }
+  | failure("Expected triple")
   )
   
   def toTriples[A,B,C](ns : (A,List[(B,List[C])])) : List[(A,B,C)] = {
@@ -238,12 +240,23 @@ trait TurtleParser
  
 object TurtleParser extends TurtleParser {
   
-  def parse(s:String) : Option[List[RDFTriple]] = {
-    parseAll(turtleDoc(TurtleParserState.initial),s) match {
-      case Success((x,_),_) => Some(x)
-      case _ 				=> None
+  /**
+   * Parse a string with a base IRI
+   * @param s: input string
+   * @param baseIRI: Iniitial Base IRI
+   * @return Left(rs) = list of triples successfully parsed
+   *         Right(msg) = Error msg
+   */
+  def parse(s:String, baseIRI: IRI = IRI("")) : Either[List[RDFTriple],String] = {
+    try {
+     parseAll(turtleDocParser(TurtleParserState.initial.newBase(baseIRI)),s) match {
+      case Success(ResultParser(x,_),_) => Left(x)
+      case NoSuccess(msg,_) 		    => Right(msg)
+     }
+    } catch {
+      case e: Throwable => Right("Exception during parsing: " + e)
     }
   }
-  
+
 }
 

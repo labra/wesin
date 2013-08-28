@@ -54,28 +54,18 @@ class TurtleW3cTestsSuite
       model.read(manifestFile, testsDir,"TURTLE")
 
       val turtlePositiveSyntaxRs = get_resources(model,rdft+"TestTurtlePositiveSyntax")
-      //  show_resources(model,"Turtle Positive Syntax",turtlePositiveSyntaxRs)
-      // passPositiveSyntax(model,turtlePositiveSyntaxRs)
-       
-       val turtleNegativeSyntaxRs = get_resources(model,rdft+"TestTurtleNegativeSyntax")
-       // show_resources(model,"Turtle Negative Syntax",turtleNegativeSyntaxRs)
-       
-       val turtleEvalRs = get_resources(model,rdft+"TestTurtleEval")
-       // show_resources(model,"Turtle Eval",turtleEvalRs)
-       passTurtleEval(model,turtleEvalRs)
-       // passTurtleEvalSingle(model,"IRIREF_datatype")
+      val turtleNegativeSyntaxRs = get_resources(model,rdft+"TestTurtleNegativeSyntax")
+      val turtleEvalRs = get_resources(model,rdft+"TestTurtleEval")
+      val turtleNegativeEvalRs = get_resources(model,rdft+"TestTurtleNegativeEval")
+      
+      passPositiveSyntax(model,turtlePositiveSyntaxRs)
+      passNegativeSyntax(model,turtleNegativeSyntaxRs)
+      passTurtleEval(model,turtleEvalRs)
+      passNegativeTurtleEval(model,turtleNegativeEvalRs)
+      
+      // passTurtleEvalSingle(model,"IRIREF_datatype")
 
-       val turtleNegativeEvalRs = get_resources(model,rdft+"TestTurtleNegativeEval")
-       // show_resources(model,"Turtle Negative Eval",turtleNegativeEvalRs)
-
-       /*
-       val ntriplesPositiveSyntaxRs = get_resources(model,rdft+"TestNTriplesPositiveSyntax")
-       // show_resources(model,"NTriples Positive Syntax",ntriplesPositiveSyntaxRs)
-
-       val ntriplesNegativeSyntaxRs = get_resources(model,rdft+"TestNTriplesNegativeSyntax ")
-       // show_resources(model,"NTriples Negative Syntax",ntriplesNegativeSyntaxRs)
-       */
-    }
+     }
   }
 
    def show_resources(m: Model, msg: String, rs: List[Resource]) : Unit = {
@@ -94,64 +84,36 @@ class TurtleW3cTestsSuite
    }
    
    def passPositiveSyntax(m:Model,rs:List[Resource]) : Unit = {
-     for (r <- rs) {
+     for ((r,n) <- rs zip (1 to rs.length)) {
        val action = getAction(m,r)
        val name   = getName(m,r)
        action match {
          case Some(node) if node.isURIResource() => {
         	 val contents = fromURL(node.asResource().getURI()).mkString ;
-        	 shouldParseNamed(name,turtleDoc(s),contents)
+        	 shouldParseNamed("(" + n + ") " + name,turtleDoc(s),contents)
          }
          case _ => println("Cannot retrieve action for resource " + r)	 
        }
      }
    }
-   
-   def getResourceWithName(name: String, m: Model) : Option[Resource] = {
-     val iter = m.listSubjectsWithProperty(mfname,name)
-     if (iter.hasNext) {
-       val node : Resource = iter.next()
-       Some(node)
-     } else None
-   }
- 
-   def passTurtleEvalSingle(m:Model, name:String) : Unit = {
-     getResourceWithName(name,m) match {
-       case Some(r) => {
-         val action = getAction(m,r)
-         val result = getResult(m,r)
-         (action,result) match {
-         	case (Some(a),Some(r)) 
-         	if a.isURIResource && r.isURIResource => {
-        	 val strAction = 
-        	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
-        	 val m1JenaParser = 
-        			 str2model(strAction,
-        					   w3cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
-        					   "TURTLE")
 
-        	 val strResult = 
-        	   fromURL(r.asResource().getURI(),"UTF-8").mkString ;
-        	 val resultJenaParser = str2model(strResult,w3cTestsURL,"N-TRIPLES")
-        	 
-        	 // The following tests check that models read with Jena are isomorphic
-        	 shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
-        	 
-        	 shouldPassTurtleEval(name,
-        			 turtleDoc(s),
-        			 strAction,
-        			 resultJenaParser
-             )
-          }
-         case x => println("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
+   def passNegativeSyntax(m:Model,rs:List[Resource]) : Unit = {
+     for ((r,n) <- rs zip (1 to rs.length)) {
+       val action = getAction(m,r)
+       val name   = getName(m,r)
+       action match {
+         case Some(node) if node.isURIResource() => {
+        	 val contents = fromURL(node.asResource().getURI()).mkString ;
+        	 shouldNotParseNamed("(" + n + ") " + name,turtleDoc(s),contents)
+         }
+         case _ => println("Cannot retrieve action for resource " + r)	 
        }
-      }
-      case None => println("No resource found with action " + name)
      }
    }
+
  
    def passTurtleEval(m:Model,rs:List[Resource]) : Unit = {
-     for (r <- rs) {
+     for ((r,n) <- rs zip (1 to rs.length)) {
        try {
        val action = getAction(m,r)
        val result = getResult(m,r)
@@ -160,19 +122,12 @@ class TurtleW3cTestsSuite
        (action,result) match {
          case (Some(a),Some(r)) 
          if a.isURIResource && r.isURIResource => {
-        	 val strAction = 
-        	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
-        	 val m1JenaParser = str2model(strAction, baseIRI, "TURTLE")
+        	 val strAction = fromURL(a.asResource().getURI(),"UTF-8").mkString 
+        	 
         	 val strResult = fromURL(r.asResource().getURI(),"UTF-8").mkString 
         	 val resultJenaParser = str2model(strResult,baseIRI,"N-TRIPLES")
         	 
-        	 // The following tests check that models read with Jena are isomorphic
-        	 // shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
-        	 shouldPassTurtleEval(name,
-        			 turtleDoc(s.newBase(IRI(baseIRI))),
-        			 strAction,
-        			 resultJenaParser
-             )
+        	 shouldPassTurtleEval("(" + n + ") " + name,IRI(baseIRI),strAction,resultJenaParser)
          }
          case x => info("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
        }
@@ -181,7 +136,26 @@ class TurtleW3cTestsSuite
        }
      }
    }
-   
+
+   def passNegativeTurtleEval(m:Model,rs:List[Resource]) : Unit = {
+     for ((r,n) <- rs zip (1 to rs.length)) {
+       try {
+       val action = getAction(m,r)
+       val name   = getName(m,r)
+       val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
+       action match {
+         case Some(node) if node.isURIResource() => {
+        	 val contents = fromURL(node.asResource().getURI()).mkString ;
+        	 shouldNotPassTurtleEval("(" + n + ") " + name,IRI(baseIRI),contents)
+         }
+         case x => info("Cannot retrieve action for resource " + r + ". Obtained: " + x)	 
+       }
+      } catch {
+       case e:Throwable => info("TurtleEval. Exception " + e + " raised for resource " + r)
+       }
+     }
+   }
+
    def getAction(m: Model, r:Resource) : Option[RDFNode] = {
      val iter = m.listObjectsOfProperty(r,action)
      if (iter.hasNext) {
@@ -217,9 +191,6 @@ class TurtleW3cTestsSuite
      info("-------------- Isomorphism m1 m2:" + m1.isIsomorphicWith(m2))
      infoModel("Model 1", m1)
      infoModel("Model 2", m2)
-//     compareFirstStatements(m1,m2)
-//     info("----Union of m1 and m2:" + m1.union(m2))
-//     info("----Intersection of m1 and m2:" + m1.intersection(m2))
      fail("Models are not isomorphic: " + name) 
     }
   }
@@ -265,23 +236,45 @@ class TurtleW3cTestsSuite
  }
 
  def shouldPassTurtleEval[S]
-		 ( name:String, 
-		   p : Parser[(List[RDFTriple],TurtleParserState)],
+		 ( name:String,
+		   baseIRI: IRI,
 		   in : String, 
 		   expected: Model ) : Unit = {
    try {
-    val result = parseAll(p,in) match {
-    case Success((triples,_),_) => {
+    val result = TurtleParser.parse(in,baseIRI) match {
+    case Left(triples) => {
           val model = RDFTriples2Model(triples)
           shouldBeIsomorphicNamed(name,model, expected)
     }
-    case NoSuccess(msg,_) => 
+    case Right(msg) => 
           	fail("Test: " + name + ". Cannot parse: " + msg + "\n" + 
           	     in + "\n-----------------\n")
     }
    } catch {
      case e:Throwable => fail("Exception: " + e + " raised in test: " + name)
    }
+ }
+
+ def shouldNotPassTurtleEval[S]
+		 ( name:String, 
+		   baseIRI: IRI,
+		   in : String ) : Unit = {
+  it("Should not pass turtle eval: " + name) {
+   try {
+     info("...trying " + name)
+    val result = TurtleParser.parse(in,baseIRI) match {
+    case Left(triples) => {
+          info("Parser succeeded with triples " + triples)
+//          val model = RDFTriples2Model(triples)
+//          fail("Model parsed: " + model)
+    }
+    case Right(msg) => 
+          	info("Test: " + name + " could not parse: " + msg)
+    }
+   } catch {
+     case e:Throwable => info("Exception: " + e + " raised in test: " + name)
+   }
+  }
  }
 
  /**
@@ -298,5 +291,49 @@ class TurtleW3cTestsSuite
    m.read(in,base,lang)
    m
  }
+
+ /**
+  * TODO: This method could be removed or refactored
+  */
+ def passTurtleEvalSingle(m:Model, name:String) : Unit = {
+     getResourceWithName(name,m) match {
+       case Some(r) => {
+         val action = getAction(m,r)
+         val result = getResult(m,r)
+         val baseIRI = w3cTestsURL + name + ".ttl"
+         (action,result) match {
+         	case (Some(a),Some(r)) 
+         	if a.isURIResource && r.isURIResource => {
+        	 val strAction = 
+        	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
+        	 val m1JenaParser = 
+        			 str2model(strAction,
+        					   w3cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
+        					   "TURTLE")
+
+        	 val strResult = 
+        	   fromURL(r.asResource().getURI(),"UTF-8").mkString ;
+        	 val resultJenaParser = str2model(strResult,w3cTestsURL,"N-TRIPLES")
+        	 
+        	 // The following tests check that models read with Jena are isomorphic
+        	 shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
+        	 
+        	 shouldPassTurtleEval(name,IRI(baseIRI),strAction,resultJenaParser)
+          }
+         case x => println("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
+       }
+      }
+      case None => println("No resource found with action " + name)
+     }
+   }
+
+ def getResourceWithName(name: String, m: Model) : Option[Resource] = {
+     val iter = m.listSubjectsWithProperty(mfname,name)
+     if (iter.hasNext) {
+       val node : Resource = iter.next()
+       Some(node)
+     } else None
+   }
+ 
 
 }

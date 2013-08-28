@@ -37,6 +37,25 @@ class StateParserSuite
     
   } 
 
+  describe("Grammar DTs (similar to turtleDoc)") {
+    val s = SimpleState.initial
+    val D = newS("D")_
+    val Ts = (s: SimpleState) => repState(s,newS("T"))
+    val Stmt = (s: SimpleState) => D(s) | (Ts(s) <~ ".")
+    val Doc = (s: SimpleState) => repState(s, Stmt)
+    shouldParseGeneric(Doc(s),"DD",(List(0,1),SimpleState(2)))
+    shouldParseGeneric(Doc(s),"D",(List(0),SimpleState(1)))
+    shouldParseGeneric(Doc(s),"T.",(List(List(0)),SimpleState(1)))
+    shouldParseGeneric(Doc(s),"DT.",(List(0,List(1)),SimpleState(2)))
+    shouldParseGeneric(Doc(s),"DTT.",(List(0,List(1,2)),SimpleState(3)))
+    shouldParseGeneric(Doc(s),"DTTT.",(List(0,List(1,2,3)),SimpleState(4)))
+    shouldParseGeneric(Doc(s),"DT.T.",(List(0,List(1),List(2)),SimpleState(3)))
+    shouldParseGeneric(Doc(s),"D.T.",(List(0,List(),List(1)),SimpleState(2)))
+    shouldParseGeneric(Doc(s),"",(List(),SimpleState(0)))
+    shouldNotParse(Doc(s),"A")
+    shouldNotParse(Doc(s),"DA")
+    shouldNotParse(Doc(s),"DT.A")
+  } 
 
 
 	

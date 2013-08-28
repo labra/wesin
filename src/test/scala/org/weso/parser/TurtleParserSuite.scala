@@ -59,51 +59,56 @@ class TurtleParserSuite
             			   DatatypeLiteral("123",IRI("http://www.w3.org/2001/XMLSchema#string"))
                  ))
      )
+     shouldNotParse(p,"""|# Bad IRI : good escape, bad charcater
+        |<http://www.w3.org/2013/TurtleTests/\u0020> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .""".stripMargin)
+        shouldNotParse(p,"<a{b}> <b> <c> .")
+     shouldNotParse(p,"<a\u0020> <b> <c> .")
+     shouldNotParse(p,"<a> = <b> .")
    }
             
    describe("baseId") {
      val p = baseId
      shouldParseGeneric(p,
-                    "@base <http://example.org/a#>",
+                    "@base <http://example.org/a#> .",
                     IRI("http://example.org/a#"))
      shouldParseGeneric(p,
-                    "@base <http://example.org/>",
+                    "@base <http://example.org/>.",
                     IRI("http://example.org/"))
      shouldParseGeneric(p,
-                    "@base <http://example.org/año#>",
+                    "@base <http://example.org/año#>  .",
                     IRI("http://example.org/año#"))
    }
 
    describe("prefixId") {
      val p = prefixId
      shouldParseGeneric(p,
-                    "@prefix a: <http://example.org/a#>",
-                   ("a:",IRI("http://example.org/a#")))
+                    "@prefix a: <http://example.org/a#> .",
+                   ("a",IRI("http://example.org/a#")))
      shouldParseGeneric(p,
-                    "@prefix : <http://example.org/a#>",
-                   (":",IRI("http://example.org/a#")))
+                    "@prefix : <http://example.org/a#>.",
+                   ("",IRI("http://example.org/a#")))
      shouldParseGeneric(p,
-                    "@prefix año: <http://example.org/a#>",
-                   ("año:",IRI("http://example.org/a#")))
+                    "@prefix año: <http://example.org/a#> \n.",
+                   ("año",IRI("http://example.org/a#")))
    }
     
    describe("SPARQLPrefix") {
      val p = SPARQLPrefix
      shouldParseGeneric(p,
                     "prefix a: <http://example.org/a#>",
-                   ("a:",IRI("http://example.org/a#")))
+                   ("a",IRI("http://example.org/a#")))
      shouldParseGeneric(p,
                     "PREFIX : <http://example.org/a#>",
-                   (":",IRI("http://example.org/a#")))
+                   ("",IRI("http://example.org/a#")))
      shouldParseGeneric(p,
                     "Prefix año: <http://example.org/a#>",
-                   ("año:",IRI("http://example.org/a#")))
+                   ("año",IRI("http://example.org/a#")))
    }
 
    describe("triples") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#"))
+     	     addPrefix("a", IRI("http://example.org/a#"))
      val p = triples(state)
      val b0 = BNodeId(0)
      val ap = IRI("http://example.org/a#p")
@@ -112,22 +117,18 @@ class TurtleParserSuite
      val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
      val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
 
-     shouldParseRDF(p," ",List())
      shouldParseRDF(p,"_:0 a _:1,_:2",List(a01,a02))
      shouldParseRDF(p,"_:0 a _:1; a _:2",List(a01,a02))
-     shouldParseRDF(p,"[a:p a:b ]",
-         List(RDFTriple(BNodeId(0),ap,ab)))
-/*     shouldParseRDF(p,"(1) a:p a:q",
-    		 List(RDFTriple(b0,ap,aq),
-    			  RDFTriple(b0,RDFNode.rdffirst,IntegerLiteral(1)),
-    			  RDFTriple(b0,RDFNode.rdfrest,RDFNode.rdfnil)
-    			  )) */
+     shouldParseRDF(p,"[a:p a:b ]",List(RDFTriple(BNodeId(0),ap,ab)))
+     shouldParseRDF(p,"_:b.0 a _:1",List(a01))
+     shouldNotParse(p,"<a> = <b>")
+     shouldNotParse(p," ")
    }
 
    describe("subjPredicateObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#"))
+     	     addPrefix("a", IRI("http://example.org/a#"))
      val p = subjPredicatesObjectList(state)
      val a12 = (RDFNode.rdftype,List(BNodeId(1),BNodeId(2)))
      val a34 = (RDFNode.rdftype,List(BNodeId(3),BNodeId(4)))
@@ -137,7 +138,7 @@ class TurtleParserSuite
    describe("predicateObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#"))
+     	     addPrefix("a", IRI("http://example.org/a#"))
 
      val p = predicateObjectList(state)
      val a01 = (RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))
@@ -162,7 +163,7 @@ class TurtleParserSuite
    describe("verbObjectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#"))
+     	     addPrefix("a", IRI("http://example.org/a#"))
      val p = verbObjectList(state)
      shouldParseRDF(p,"a _:1,_:2",(RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))) 
      shouldParseRDF(p," a _:1, _:2",(RDFNode.rdftype,List(BNodeId(0),BNodeId(1)))) 
@@ -172,7 +173,7 @@ class TurtleParserSuite
    describe("objectList") {
      val state =
      	   TurtleParserState.initial.
-     	     addPrefix("a:", IRI("http://example.org/a#"))
+     	     addPrefix("a", IRI("http://example.org/a#"))
      val p = objectList(state)
      shouldParseRDF(p,"_:1,_:2",List(BNodeId(0),BNodeId(1))) 
      shouldParseRDF(p,"_:1,_:2,_:1",List(BNodeId(0),BNodeId(1),BNodeId(0))) 
@@ -187,7 +188,7 @@ class TurtleParserSuite
      
    describe("rdf_object") {
      val state =
-     	   TurtleParserState.initial.addPrefix("a:", IRI("http://example.org/a#"))
+     	   TurtleParserState.initial.addPrefix("a", IRI("http://example.org/a#"))
      val p = rdf_object(state)
      shouldParseRDF(p,"\"Hi\"",StringLiteral("Hi")) 
      shouldParseRDF(p,"2",IntegerLiteral(2)) 
@@ -198,13 +199,14 @@ class TurtleParserSuite
      shouldParseRDF(p,"<http://example.org/a#b>",IRI("http://example.org/a#b")) 
      shouldParseRDF(p,"_:1",BNodeId(0)) 
      shouldParseRDF(p,"[]",BNodeId(0)) 
+	 shouldNotParse(p,"<http://www.w3.org/2013/TurtleTests/{abc}>")
     }
    
    describe("literal") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = literal(prefixMap)
      shouldParseGeneric(p,"1.2",DecimalLiteral(1.2))
@@ -238,9 +240,9 @@ class TurtleParserSuite
 
    describe("RDFLiteral") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = RDFLiteral(prefixMap)
 	 shouldParseGeneric(p,"\"123\"^^a:integer",DatatypeLiteral("123",IRI("http://example.org/a#integer")))
@@ -273,9 +275,9 @@ class TurtleParserSuite
 
    describe("iri") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))
      val p = iri(prefixMap)
      shouldParseGeneric(p,":a",IRI("http://example.org#a"))
@@ -283,13 +285,14 @@ class TurtleParserSuite
 	 shouldParseGeneric(p,"a:",IRI("http://example.org/a#"))
 	 shouldParseGeneric(p,"<http://a.com>",IRI("http://a.com"))
 	 shouldNotParse(p,"3.2")
+	 shouldNotParse(p,"<http://www.w3.org/2013/TurtleTests/{abc}>")
    }
 
    describe("PrefixedName") {
      val prefixMap =
-           PrefixMap.addPrefix("a:",IRI("http://example.org/a#"))(
-     	   PrefixMap.addPrefix(":",IRI("http://example.org#"))(
-     	   PrefixMap.addPrefix("año:",IRI("http://example.org/año#"))(
+           PrefixMap.addPrefix("a",IRI("http://example.org/a#"))(
+     	   PrefixMap.addPrefix("",IRI("http://example.org#"))(
+     	   PrefixMap.addPrefix("año",IRI("http://example.org/año#"))(
      	   PrefixMap.empty)))     
      val p = PrefixedName(prefixMap)
      shouldParseGeneric(p,":a",IRI("http://example.org#a"))

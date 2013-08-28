@@ -26,7 +26,7 @@ class W3cTokensSuite
 	 shouldParseGeneric(p,"<hi>",IRI("hi"))
 	 shouldParseGeneric(p,"<http://pepe.com>",IRI("http://pepe.com"))
 	 shouldParseGeneric(p,"<urn://kiko-uno>",IRI("urn://kiko-uno"))
-	 shouldParseGeneric(p,"http://a.example/\\U00000073",IRI("http://a.example/s"))
+	 shouldParseGeneric(p,"<http://a.example/\\U00000073>",IRI("http://a.example/s"))
 	 shouldNotParse(p,"<a>.")
 	 shouldNotParse(p,"<a\"b>")
 	 shouldNotParse(p,"<a{a}b>")
@@ -38,7 +38,7 @@ class W3cTokensSuite
 	 shouldParse(p,"<hi>")
 	 shouldParse(p,"<http://pepe.com>")
 	 shouldParse(p,"<urn://kiko-uno>")
-	 shouldParse(p,"""http://a.example/\U00000073""")
+	 shouldParse(p,"""<http://a.example/\U00000073>""")
 	 shouldNotParse(p,"<a>.")
 	 shouldNotParse(p,"<a\"b>")
 	 shouldNotParse(p,"<a{a}b>")
@@ -116,6 +116,7 @@ class W3cTokensSuite
 // fails?	 shouldParse(p,"_:1.2")
 	 shouldParse(p,"_:1.2a")
 	 shouldParse(p,"_:1.a")
+	 shouldParse(p,"_:b.0")
 	 shouldNotParse(p,"_:1 a .")
    }
 
@@ -181,6 +182,7 @@ class W3cTokensSuite
      val p = STRING_LITERAL_QUOTE
 	 shouldParseGeneric(p,"\"Hello\"","Hello")
 	 shouldParseGeneric(p,"\"\\u0123\\t\\u00AF\"","\u0123\t\u00AF")
+	 shouldParseGeneric(p,"\"\\U00012451\"","\uD809\uDC51")
 	 shouldNotParse(p,"\"Ho\"la\"")
    }
 
@@ -227,7 +229,7 @@ class W3cTokensSuite
 	 shouldParseGeneric(p,"\"\"\"Hi \'John\' . \"\"\"","Hi \'John\' . ")
 	 shouldParseGeneric(p,"\"\"\"Hi \"\"John\"\" . \"\"\"","Hi \"\"John\"\" . ")
 	 shouldParseGeneric(p,"\"\"\"John said: \"Hello World!\\\"\"\"\"","John said: \"Hello World!\"")
-	 shouldParseGeneric(p,"""\nthis \ris a \U00012451long\t\nliteral\uABCD""","\nthis \ris a \x{12451}long\t\nliteral\uABCD\n")
+	 shouldParseGeneric(p,"\"\"\"\\\"\"\"\"","\"")
 	 shouldNotParse(p,"\"\"\"Hi \"\"\"John\"\" . \"\"\"")
 	 
    }
@@ -255,6 +257,7 @@ class W3cTokensSuite
      val p = ECHAR_Parser
 	 shouldParseGeneric(p,"\\t",'\t')
 	 shouldParseGeneric(p,"\\n",'\n')
+	 shouldParseGeneric(p,"\\\"",'\"')
 	 shouldNotParse(p,"\\a")
 	 shouldNotParse(p,"a")
    }
