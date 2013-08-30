@@ -90,17 +90,17 @@ object RunTurtleW3cTests
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
         		 	case Left(_) => 
-        		 	  currentReport.addTestReport(true, name, testType, "Parsed OK")
+        		 	  currentReport.addTestReport(true, name, r.getLocalName, testType, "Parsed OK")
         		 	case Right(msg) => 
-        		 	  currentReport.addTestReport(false,name,testType, "Parsing failed with message: " + msg)
+        		 	  currentReport.addTestReport(false,name, r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
         	  case e:Throwable => 
-       		      currentReport.addTestReport(false,name,testType,"Exception raised when parsing: " + e)
+       		      currentReport.addTestReport(false,name, r.getLocalName, testType,"Exception raised when parsing: " + e)
         	 }
           }
           case _ => 
-            currentReport.addTestReport(false, name, testType, "Cannot retrieve action for resource " + r)
+            currentReport.addTestReport(false, name, r.getLocalName, testType, "Cannot retrieve action for resource " + r)
        }
    }
 
@@ -115,27 +115,27 @@ object RunTurtleW3cTests
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
         		 	case Left(_) => 
-        		 	  currentReport.addTestReport(false, name, testType, "Parsed OK when expected to fail parsing")
+        		 	  currentReport.addTestReport(false, name, r.getLocalName, testType, "Parsed OK when expected to fail parsing")
         		 	case Right(msg) => 
-        		 	  currentReport.addTestReport(true,name,testType, "Parsing failed with message: " + msg)
+        		 	  currentReport.addTestReport(true,name, r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
         	  case e:Throwable => 
-       		      currentReport.addTestReport(false,name,testType,"Exception raised when parsing: " + e)
+       		      currentReport.addTestReport(false,name, r.getLocalName, testType,"Exception raised when parsing: " + e)
         	 }
           }
           case _ => 
-            currentReport.addTestReport(false, name, testType, "Cannot retrieve action for resource " + r)
+            currentReport.addTestReport(false, name, r.getLocalName, testType, "Cannot retrieve action for resource " + r)
        }
    }
   
    def reportPositiveTurtleEval(m:Model,rs:List[Resource]) : Report =
      rs.foldLeft(Report.initial)(positiveTurtleEval(m))
      
-   def positiveTurtleEval(m:Model)(currentReport : Report,r: Resource): Report = {
-       val action = getAction(m,r)
-       val result = getResult(m,r)
-       val name   = getName(m,r)
+   def positiveTurtleEval(m:Model)(currentReport : Report,res: Resource): Report = {
+       val action = getAction(m,res)
+       val result = getResult(m,res)
+       val name   = getName(m,res)
        val testType = "PositiveTurtleEval"
        val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
        (action,result) match {
@@ -146,12 +146,12 @@ object RunTurtleW3cTests
         	 val resultJenaParser = str2model(strResult,baseIRI,"N-TRIPLES")
 
         	 passTurtleEval(name,IRI(baseIRI),strAction,resultJenaParser) match {
-        	   case Left(_) => currentReport.addTestReport(true,name,testType,"Models are isomorphic")
-        	   case Right(msg) => currentReport.addTestReport(false, name, testType, msg)
+        	   case Left(_) => currentReport.addTestReport(true,name,res.getLocalName, testType,"Models are isomorphic")
+        	   case Right(msg) => currentReport.addTestReport(false, name, res.getLocalName, testType, msg)
         	 }
          }
          case x => 
-           currentReport.addTestReport(false, name, testType, "Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)
+           currentReport.addTestReport(false, name, res.getLocalName, testType, "Cannot retrieve (action,result) for resource " + res + ". Obtained: " + x)
        }
    }
 
@@ -172,39 +172,19 @@ object RunTurtleW3cTests
         	   TurtleParser.parse(strAction,IRI(baseIRI)) match {
         		 	case Left(triples) => 
         		 	  val model = RDFTriples2Model(triples)
-        		 	  currentReport.addTestReport(false, name, testType, "Parsed and model built when expected to fail parsing")
+        		 	  currentReport.addTestReport(false, name, r.getLocalName, testType, "Parsed and model built when expected to fail parsing")
         		 	case Right(msg) => 
-        		 	  currentReport.addTestReport(true,name,testType, "Parsing failed with message: " + msg)
+        		 	  currentReport.addTestReport(true,name,r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
         	  case e:Throwable => 
-       		      currentReport.addTestReport(true,name,testType,"Exception raised when parsing: " + e)
+       		      currentReport.addTestReport(true,name,r.getLocalName, testType,"Exception raised when parsing: " + e)
         	 }
          }
          case x => 
-           currentReport.addTestReport(false, name, testType, "Cannot retrieve action for resource " + r)
+           currentReport.addTestReport(false, name, r.getLocalName, testType, "Cannot retrieve action for resource " + r)
        }
    }
-   /*
-   def passNegativeTurtleEval(m:Model,rs:List[Resource]) : Unit = {
-     for ((r,n) <- rs zip (1 to rs.length)) {
-       try {
-       val action = getAction(m,r)
-       val name   = getName(m,r)
-       val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
-       action match {
-         case Some(node) if node.isURIResource() => {
-        	 val contents = fromURL(node.asResource().getURI()).mkString ;
-        	 shouldNotPassTurtleEval("(" + n + ") " + name,IRI(baseIRI),contents)
-         }
-         case x => info("Cannot retrieve action for resource " + r + ". Obtained: " + x)	 
-       }
-      } catch {
-       case e:Throwable => info("TurtleEval. Exception " + e + " raised for resource " + r)
-       }
-     }
-   }
-*/
    
    def getAction(m: Model, r:Resource) : Option[RDFNode] = {
      val iter = m.listObjectsOfProperty(r,action)
@@ -242,7 +222,7 @@ object RunTurtleW3cTests
           if (model.isIsomorphicWith(expected)) 
         	  Left(model)
           else 
-        	  Right("Models are not isomorphic. ")
+        	  Right("Models are not isomorphic. \nModel    = " + model + "\nExpected = " + expected)
      }
      case Right(msg) => 
           	  Right("Test: " + name + ". Cannot parse: " + msg + "\n" + 
@@ -255,47 +235,6 @@ object RunTurtleW3cTests
    
   }
 
- /*
-   
- def shouldBeIsomorphicNamed(name:String,m1: Model, m2:Model) : Unit = {
-   it("Should be isomorphic: " + name) {
-    val b = m1.isIsomorphicWith(m2)
-    if (!b) {
-     info("Models to compare in test: " + name)
-     info("-------------- Model 1:" + m1.toString)
-     info("-------------- Model 2:" + m2.toString)
-     info("-------------- Isomorphism m1 m2:" + m1.isIsomorphicWith(m2))
-     infoModel("Model 1", m1)
-     infoModel("Model 2", m2)
-     fail("Models are not isomorphic: " + name) 
-    }
-  }
- } */
-
-/*
-
- def shouldNotPassTurtleEval[S]
-		 ( name:String, 
-		   baseIRI: IRI,
-		   in : String ) : Unit = {
-  it("Should not pass turtle eval: " + name) {
-   try {
-     info("...trying " + name)
-    val result = TurtleParser.parse(in,baseIRI) match {
-    case Left(triples) => {
-          info("Parser succeeded with triples " + triples)
-//          val model = RDFTriples2Model(triples)
-//          fail("Model parsed: " + model)
-    }
-    case Right(msg) => 
-          	info("Test: " + name + " could not parse: " + msg)
-    }
-   } catch {
-     case e:Throwable => info("Exception: " + e + " raised in test: " + name)
-   }
-  }
- }
-*/
  /**
   * Convert a String to a Model
   * @param s String
@@ -311,48 +250,12 @@ object RunTurtleW3cTests
    m
  }
 
- /*
- /**
-  * TODO: This method could be removed or refactored
-  */
- def passTurtleEvalSingle(m:Model, name:String) : Unit = {
-     getResourceWithName(name,m) match {
-       case Some(r) => {
-         val action = getAction(m,r)
-         val result = getResult(m,r)
-         val baseIRI = w3cTestsURL + name + ".ttl"
-         (action,result) match {
-         	case (Some(a),Some(r)) 
-         	if a.isURIResource && r.isURIResource => {
-        	 val strAction = 
-        	   fromURL(a.asResource().getURI(),"UTF-8").mkString ;
-        	 val m1JenaParser = 
-        			 str2model(strAction,
-        					   w3cTestsURL + name + ".ttl", // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
-        					   "TURTLE")
-
-        	 val strResult = 
-        	   fromURL(r.asResource().getURI(),"UTF-8").mkString ;
-        	 val resultJenaParser = str2model(strResult,w3cTestsURL,"N-TRIPLES")
-        	 
-        	 // The following tests check that models read with Jena are isomorphic
-        	 shouldBeIsomorphicNamed("Jena Models: " + name + ". Action: " + a + ". Result: " + r, m1JenaParser, resultJenaParser)
-        	 
-        	 shouldPassTurtleEval(name,IRI(baseIRI),strAction,resultJenaParser)
-          }
-         case x => println("Cannot retrieve (action,result) for resource " + r + ". Obtained: " + x)	 
-       }
-      }
-      case None => println("No resource found with action " + name)
-     }
-   }
-
  def getResourceWithName(name: String, m: Model) : Option[Resource] = {
      val iter = m.listSubjectsWithProperty(mfname,name)
      if (iter.hasNext) {
        val node : Resource = iter.next()
        Some(node)
      } else None
-   } */
+   } 
 }
 

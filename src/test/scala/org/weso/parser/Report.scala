@@ -33,8 +33,8 @@ case class Report(val items: List[SingleTestReport]) {
     Report(r :: items)
   }
   
-  def addTestReport(passed:Boolean,name:String,testType: String, msg:String) : Report = {
-    Report(SingleTestReport(passed,name,testType,msg) :: items)
+  def addTestReport(passed:Boolean,name:String,uriTest:String,testType: String, msg:String) : Report = {
+    Report(SingleTestReport(passed,name,uriTest,testType,msg) :: items)
   }
   
   def concat(other: Report) : Report = {
@@ -104,7 +104,7 @@ case class Report(val items: List[SingleTestReport]) {
     val earl_assertedBy			= model.createProperty(earl+"assertedBy")
     val earl_subject			= model.createProperty(earl+"subject")
     val earl_test				= model.createProperty(earl+"test")
-    val earl_result				= model.createProperty(earl+"test")
+    val earl_result				= model.createProperty(earl+"result")
     val earl_mode				= model.createProperty(earl+"mode")
     val earl_outcome			= model.createProperty(earl+"outcome")
     val earl_passed				= model.createProperty(earl+"passed")
@@ -148,12 +148,14 @@ case class Report(val items: List[SingleTestReport]) {
     model.add(release,doap_created,
     			model.createTypedLiteral("2013-08-28",XSDDatatype.XSDdate))
     model.add(release,rdf_type,doapVersion)
-    
+
+    // Information about a test item 
     for (r <- items) {
       val t = model.createResource() 
       val result = model.createResource()
       model.add(t,rdf_type,earlAssertion)
-      model.add(t,earl_test,model.createResource(turtleTests + r.name) )
+      model.add(t,earl_test,model.createResource(turtleTests + r.uriTest) )
+      model.add(t,foaf_name,r.name) 
       model.add(t,earl_assertedBy,labra)
       model.add(t,earl_mode,earl_automatic)
       model.add(t,earl_subject,wesin)
@@ -176,11 +178,15 @@ object Report {
 case class SingleTestReport(
 		val passed: Boolean, 	// True if test passed
 		val name: String,    	// Name of test
+		val uriTest: String,	// URI of test
 		val testType: String, 	// Type of test 
 		val moreInfo: String 	// Info about what happened
 		) {
+
   override def toString : String = 
-    if (passed) testType + ". OK " + name + ", " + moreInfo 
-    else testType + ". Failed " + name + ", " + moreInfo  
+    if (passed) testType + ". OK " + name + 
+                ", uri: " + uriTest + ". " + moreInfo 
+    else testType + ". Failed " + name + 
+                ", uri: " + uriTest + ". " + moreInfo  
 }
 

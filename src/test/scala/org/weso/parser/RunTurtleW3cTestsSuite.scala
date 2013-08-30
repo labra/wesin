@@ -26,11 +26,11 @@ class RunTurtleW3cTestsSuite extends FunSpec {
  val report = RunTurtleW3cTests.createReport
  
  describe("W3c tests report") {
-/*   for ((r,n) <- report.items zip (1 to report.items.length))
+   for ((r,n) <- report.items zip (1 to report.items.length))
    it("Should pass test " + n + ": " + r.name) {
      if (r.passed) info("Info: " + r)
      else fail("Test did not pass" + r)
-   } */
+   } 
  }
  
   describe("Generate W3c EARL report") {

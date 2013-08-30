@@ -113,7 +113,7 @@ class W3cTokensSuite
      shouldParse(p,"_:1")
 	 shouldParse(p,"_:aa")
 	 shouldParse(p,"_:año")
-// fails?	 shouldParse(p,"_:1.2")
+     shouldParse(p,"_:1.2")
 	 shouldParse(p,"_:1.2a")
 	 shouldParse(p,"_:1.a")
 	 shouldParse(p,"_:b.0")
