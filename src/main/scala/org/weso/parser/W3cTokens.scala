@@ -243,7 +243,7 @@ trait W3cTokens
    try {
       Character.toChars(Integer.parseInt(s.mkString,16)).mkString
    } catch {
-     case e : Throwable => throw new 
+     case e : Exception => throw new 
     		 Exception("Internal Error 'hex2Char': cannot convert from unicode chars. Value: " + 
     				 s.mkString + "\n " + "Exception raised: " + e.toString)
    }

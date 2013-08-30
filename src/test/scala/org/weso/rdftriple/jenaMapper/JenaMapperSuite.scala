@@ -19,7 +19,7 @@ class JenaMapperSuite
   
  describe("Jena Mapper") {
   it("Should compare one triple with 2 different bNodes") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(1)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(1)))
    val s = """[] <http://example.org#p> [] ."""
    val model1 = RDFTriples2Model(ts)
    val model2 = str2model(s)
@@ -27,7 +27,7 @@ class JenaMapperSuite
   }
 
   it("Should compare one triple with a shared bNode") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(0)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(0)))
    val s = """_:a <http://example.org#p> _:a ."""
    val model1 = RDFTriples2Model(ts)
    val model2 = str2model(s)
@@ -35,7 +35,7 @@ class JenaMapperSuite
   }
  
   it("Should compare one triple with a prefix decl") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(0)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(0)))
    val s = """|@prefix : <http://example.org#> . 
               |_:a :p _:a .""".stripMargin
    val model1 = RDFTriples2Model(ts)
@@ -44,7 +44,7 @@ class JenaMapperSuite
   }
 
   it("Should compare one triple with an integer literal") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),IntegerLiteral(1)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),IntegerLiteral(1)))
    val s = """|@prefix : <http://example.org#> . 
               |_:a :p 1 .""".stripMargin
    val model1 = RDFTriples2Model(ts)
@@ -53,7 +53,7 @@ class JenaMapperSuite
   }
 
   it("Should compare one triple with a decimal literal") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),DecimalLiteral(1.2)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),DecimalLiteral(1.2)))
    val s = """|@prefix : <http://example.org#> . 
               |_:a :p 1.2 .""".stripMargin
    val model1 = RDFTriples2Model(ts)
@@ -62,7 +62,7 @@ class JenaMapperSuite
   }
 
   it("Should compare one triple with a boolean literal") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BooleanLiteral(true)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),BooleanLiteral(true)))
    val s = """|@prefix : <http://example.org#> . 
               |_:a :p true .""".stripMargin
    val model1 = RDFTriples2Model(ts)
@@ -72,7 +72,7 @@ class JenaMapperSuite
 
   // The following test fails probably for Double comparison
   ignore("Should compare one triple with a double literal") {
-   val ts = List(RDFTriple(BNodeId(0),IRI("http://example.org#p"),DoubleLiteral(1.2e3)))
+   val ts = Set(RDFTriple(BNodeId(0),IRI("http://example.org#p"),DoubleLiteral(1.2e3)))
    val s = """|@prefix : <http://example.org#> . 
               |_:a :p 1.2e3 .""".stripMargin
    val model1 = RDFTriples2Model(ts)
@@ -81,7 +81,7 @@ class JenaMapperSuite
   }
 
   it("Should convert three triples") {
-   val ts = List(
+   val ts = Set(
 		   RDFTriple(BNodeId(0),IRI("http://example.org#p"),BNodeId(0)),
 		   RDFTriple(BNodeId(0),IRI("http://example.org#p"),IntegerLiteral(4)),
 		   RDFTriple(BNodeId(0),IRI("http://example.org#p"),LangLiteral("pepe",Lang("es")))

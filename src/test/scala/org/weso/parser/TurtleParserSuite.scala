@@ -22,48 +22,48 @@ class TurtleParserSuite
 
    describe("turtleDoc") {
      implicit val s = TurtleParserState.initial
-     val p = turtleDoc
-     
      val a01 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(1))
      val a02 = RDFTriple(BNodeId(0),RDFNode.rdftype,BNodeId(2))
      val abc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
-     
-     shouldParseRDF(p,
+     val baseIRI = IRI("")
+     shouldParseTurtle(
          """|@base <http://example.org/>.
             |<a> <b> <c> .""".stripMargin,
-            List(RDFTriple(IRI("http://example.org/a"),
-                           IRI("http://example.org/b"),
-                           IRI("http://example.org/c")))
+            baseIRI,
+            Set(RDFTriple(IRI("http://example.org/a"),
+                          IRI("http://example.org/b"),
+                          IRI("http://example.org/c")))
             )
-     shouldParseRDF(p," _:0 a _:1,_:2 .",List(a01,a02))
-     shouldParseRDF(p,"_:0 a _:1,_:2 .",List(a01,a02))
-     shouldParseRDF(p,"_:0 a _:1; a _:2 .",List(a01,a02))
-     shouldParseRDF(p,"<a> <b> <c> .",List(abc))
-     shouldParseRDF(p,"# Example \n <a> <b> <c> .",List(abc))
-     shouldParseRDF(p,"# No triples ",List())
-     shouldParseRDF(p,
+     shouldParseTurtle(" _:0 a _:1,_:2 .",baseIRI,Set(a01,a02))
+     shouldParseTurtle("_:0 a _:1,_:2 .",baseIRI,Set(a01,a02))
+     shouldParseTurtle("_:0 a _:1; a _:2 .",baseIRI,Set(a01,a02))
+     shouldParseTurtle("<a> <b> <c> .",baseIRI,Set(abc))
+     shouldParseTurtle("# Example \n <a> <b> <c> .",baseIRI,Set(abc))
+     shouldParseTurtle("# No triples ",baseIRI,Set())
+     shouldParseTurtle(
          """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.""".stripMargin,
-            List()
-            )
-     shouldParseRDF(p,
+         baseIRI,
+         Set())
+     shouldParseTurtle(
          """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             |""".stripMargin,
-            List()
+            baseIRI, Set()
             )
-     shouldParseRDF(p,
+     shouldParseTurtle(
          """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             |@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
             |<s> <p> "123"^^xsd:string .""".stripMargin,
-            List(RDFTriple(IRI("s"),
-            			   IRI("p"),
-            			   DatatypeLiteral("123",IRI("http://www.w3.org/2001/XMLSchema#string"))
+            baseIRI, Set(RDFTriple(IRI("s"),
+            		      IRI("p"),
+            			  DatatypeLiteral("123",IRI("http://www.w3.org/2001/XMLSchema#string"))
                  ))
      )
-     shouldNotParse(p,"""|# Bad IRI : good escape, bad charcater
+     shouldNotParseTurtle("""|# Bad IRI : good escape, bad charcater
         |<http://www.w3.org/2013/TurtleTests/\u0020> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .""".stripMargin)
-        shouldNotParse(p,"<a{b}> <b> <c> .")
-     shouldNotParse(p,"<a\u0020> <b> <c> .")
-     shouldNotParse(p,"<a> = <b> .")
+     
+     shouldNotParseTurtle("<a{b}> <b> <c> .")
+     shouldNotParseTurtle("<a\u0020> <b> <c> .")
+     shouldNotParseTurtle("<a> = <b> .")
    }
             
    describe("baseId") {
@@ -327,5 +327,25 @@ class TurtleParserSuite
     }
    }
 
- }
+    def shouldParseTurtle(s : String, 
+    		baseIRI: IRI = IRI(""), 
+    		triples: Set[RDFTriple]) {
+    it("Should parse \"" + s + "\"" + " and return " + triples) {
+      val result = TurtleParser.parse(s,baseIRI) match {
+        case Left(x) => x 
+        case Right(msg) => fail(msg)
+      }
+      result should be(triples)
+    }
+   }
+
+    def shouldNotParseTurtle(s : String) {
+    it("Should not parse \"" + s + "\"") {
+      TurtleParser.parse(s) match {
+        case Left(x) => fail("Parsed: " + x + " but it should not parse")
+        case Right(msg) => info("Not parsed with message: " + msg)
+      }
+    }
+   }
+}
 }

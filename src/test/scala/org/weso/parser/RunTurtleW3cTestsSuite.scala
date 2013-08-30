@@ -21,8 +21,11 @@ import scala.io.Source._
 import com.hp.hpl.jena.rdf.model.Literal
 import org.weso.rdfNode.IRI
 import java.io.FileOutputStream
+import java.io.FileInputStream
+import scala.collection.JavaConverters._
 
-class RunTurtleW3cTestsSuite extends FunSpec {
+
+class RunTurtleW3cTestsSuite extends FunSpec with ShouldMatchers {
  val report = RunTurtleW3cTests.createReport
  
  describe("W3c tests report") {
@@ -34,13 +37,21 @@ class RunTurtleW3cTestsSuite extends FunSpec {
  }
  
   describe("Generate W3c EARL report") {
-    it("Should Generate EARL report") {
+    val passedCount = 291 // Number of tests that have to be passed
+    it("Should Generate EARL report with " + passedCount + " passed values") {
       val earlModel = report.generateEARL
       val conf : Config = ConfigFactory.load()
       val outFile = conf.getString("EarlReportFile")
 
-      earlModel.write(System.out,"TURTLE")
       earlModel.write(new FileOutputStream(outFile),"TURTLE")
+
+      val readModel = ModelFactory.createDefaultModel()
+      readModel.read(new FileInputStream(outFile),"","TURTLE")
+      val earl		= "http://www.w3.org/ns/earl#"
+      val earl_outcome = readModel.createProperty(earl + "outcome")
+      val earl_passed  = readModel.createResource(earl + "passed")
+      val passed = readModel.listResourcesWithProperty(earl_outcome, earl_passed).toList.asScala
+      passed.length should be(passedCount)
    }
  }
 

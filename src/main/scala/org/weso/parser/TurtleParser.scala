@@ -24,17 +24,17 @@ trait TurtleParser
 
   case class ResultParser[A,S](val t: A, val s: S) extends Positional
   
-  def turtleDocParser(implicit s: TurtleParserState) : 
-	  		Parser[ResultParser[RDFTriples,TurtleParserState]] = 
+  def turtleDoc(implicit s: TurtleParserState) : 
+	  		Parser[ResultParser[Set[RDFTriple],TurtleParserState]] = 
      positioned ( opt(WS) ~> repState(s,statement) ^^ 
-     	{ case (lss,s) => ResultParser(lss.flatten,s) }
+     	{ case (lss,s) => ResultParser(lss.flatten.toSet,s) }
      )
   
-  def turtleDoc(implicit s: TurtleParserState) : 
-	  		Parser[(RDFTriples,TurtleParserState)] = 
+/*  def turtleDoc(implicit s: TurtleParserState) : 
+	  		Parser[(Set[RDFTriple],TurtleParserState)] = 
      opt(WS) ~> repState(s,statement) ^^ 
-     	{ case (lss,s) => (lss.flatten,s) }
-     
+     	{ case (lss,s) => (lss.flatten.toSet,s) }
+*/     
      
   def statement(s:TurtleParserState): 
 	  		Parser[(RDFTriples,TurtleParserState)] = 
@@ -247,14 +247,14 @@ object TurtleParser extends TurtleParser {
    * @return Left(rs) = list of triples successfully parsed
    *         Right(msg) = Error msg
    */
-  def parse(s:String, baseIRI: IRI = IRI("")) : Either[List[RDFTriple],String] = {
+  def parse(s:String, baseIRI: IRI = IRI("")) : Either[Set[RDFTriple],String] = {
     try {
-     parseAll(turtleDocParser(TurtleParserState.initial.newBase(baseIRI)),s) match {
+     parseAll(turtleDoc(TurtleParserState.initial.newBase(baseIRI)),s) match {
       case Success(ResultParser(x,_),_) => Left(x)
       case NoSuccess(msg,_) 		    => Right(msg)
      }
     } catch {
-      case e: Throwable => Right("Exception during parsing: " + e)
+      case e: Exception => Right("Exception during parsing: " + e)
     }
   }
 

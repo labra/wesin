@@ -15,7 +15,7 @@ import com.hp.hpl.jena.rdf.model.Model
 
 trait JenaMapper {
 
-  def RDFTriples2Model(triples: List[RDFTriple]) : JenaModel = {
+  def RDFTriples2Model(triples: Set[RDFTriple]) : JenaModel = {
     val m = ModelFactory.createDefaultModel()
     for (t <- triples) {
      val subj = createResource(m,t.subj)
