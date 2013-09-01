@@ -62,7 +62,8 @@ def repState[T,S](s: S,
     			(in: Input): ParseResult[(List[T],S)] = {
       val p0 = p    // avoid repeatedly re-evaluating by-name parser
 
-      @tailrec def applyp(s0:S)(in0: Input): 
+      @tailrec 
+      def applyp(s0:S)(in0: Input): 
     	  			ParseResult[(List[T],S)] = p0(s0)(in0) match 
     	  			{
         case Success(x, rest) => elems += x._1 ; applyp(x._2)(rest)

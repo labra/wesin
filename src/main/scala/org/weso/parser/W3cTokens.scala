@@ -15,6 +15,7 @@ import scala.io.Codec
 import scala.util.matching.Regex
 import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
+import scala.collection.immutable.LinearSeq
 
 trait W3cTokens
 	extends Positional 
@@ -250,50 +251,65 @@ trait W3cTokens
  }
 
  def unscape(s:String) : String = {
-   unscapeList(s.toList)
- }
 
- def unscapeList(s:List[Char]) : String = {
+  @tailrec 
+  def unscapeHelper(s:List[Char], tmp: StringBuilder) : StringBuilder = {
    s match { 
-     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2String(a :: b :: c :: d :: Nil) + unscapeList(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil) + unscapeList(rs)
-     case '\\' :: 't' :: rs => "\t" + unscapeList(rs)
-     case '\\' :: 'b' :: rs => "\b" + unscapeList(rs)
-     case '\\' :: 'n' :: rs => "\n" + unscapeList(rs)
-     case '\\' :: 'r' :: rs => "\r" + unscapeList(rs)
-     case '\\' :: 'f' :: rs => "\f" + unscapeList(rs)
-     case '\\' :: '\"' :: rs => "\"" + unscapeList(rs)
-     case '\\' :: '\'' :: rs => "\'" + unscapeList(rs)
-     case '\\' :: '\\' :: rs => "\\" + unscapeList(rs)
-     case c :: rs => c.toString + unscapeList(rs)
-     case Nil => ""
+     case '\\' :: 'u' :: a :: b :: c :: d :: rs => 
+       	unscapeHelper(rs, tmp append hex2String(a :: b :: c :: d :: Nil)) 
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => 
+        unscapeHelper(rs,tmp append hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
+     case '\\' :: 't' :: rs => unscapeHelper(rs, tmp + '\t' )
+     case '\\' :: 'b' :: rs => unscapeHelper(rs, tmp + '\b' )
+     case '\\' :: 'n' :: rs => unscapeHelper(rs, tmp + '\n' )
+     case '\\' :: 'r' :: rs => unscapeHelper(rs, tmp + '\r' )
+     case '\\' :: 'f' :: rs => unscapeHelper(rs, tmp + '\f' )
+     case '\\' :: '\"' :: rs => unscapeHelper(rs, tmp + '\"' )
+     case '\\' :: '\'' :: rs => unscapeHelper(rs, tmp + '\'' )
+     case '\\' :: '\\' :: rs => unscapeHelper(rs, tmp + '\\' )
+     case c :: rs => unscapeHelper(rs, tmp + c)
+     case Nil => tmp
    }
  }
+   unscapeHelper(s.toList, new StringBuilder).mkString
+ }
+
 
  def unscapeUchars(s:String) : String = {
-   unscapeListUchars(s.toList).mkString
- }
-
- def unscapeListUchars(s:List[Char]) : String = {
-   s match { 
-     case '\\' :: 'u' :: a :: b :: c :: d :: rs => hex2String(a :: b :: c :: d :: Nil) + unscapeListUchars(rs)
-     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil) + unscapeListUchars(rs)
-     case c :: rs => c.toString + unscapeListUchars(rs)
-     case Nil => ""
-   }
- }
  
-
- def unscapeReservedChars(s:String) : String = 
-   unscapeListReservedChars(s.toList).mkString
-   
- def unscapeListReservedChars(s:List[Char]) : List[Char] = {
-   s match {
-     case '\\' :: c :: rs if "~.-!$&'()*+,;=/?#@%_".contains(c) => c :: unscapeListReservedChars(rs)
-     case c :: rs => c :: unscapeListReservedChars(rs)
-     case Nil => Nil
+  @tailrec 
+  def unscapeUcharsHelper(s:LinearSeq[Char],tmp: StringBuilder) : StringBuilder = {
+   s match { 
+     case '\\' :: 'u' :: a :: b :: c :: d :: rs => 
+       	   unscapeUcharsHelper(rs, tmp append hex2String(a :: b :: c :: d :: Nil) )
+     case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => 
+           unscapeUcharsHelper(rs,tmp append hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
+     case c :: rs => unscapeUcharsHelper(rs,tmp + c)
+     case Nil => tmp
    }
  }
+
+   unscapeUcharsHelper(s.toList,new StringBuilder).mkString
+ }
+
+ def unscapeReservedChars(s:String) : String = {
+
+  @tailrec 
+  def unscapeReservedCharsHelper(s:List[Char],tmp: StringBuilder) : StringBuilder = {
+   s match {
+     case '\\' :: c :: rs if "~.-!$&'()*+,;=/?#@%_".contains(c) => 
+       	unscapeReservedCharsHelper(rs, tmp + c)
+     case c :: rs => 
+       unscapeReservedCharsHelper(rs, tmp + c)
+     case Nil => tmp
+   }
+  }
+
+  unscapeReservedCharsHelper(s.toList, new StringBuilder).mkString
+ }
+   
+   
+
  // Alternative way to unscape using regular expressions....
  def hex2str(s : String) : String = {
    Integer.parseInt(s.mkString,16).toChar.toString
