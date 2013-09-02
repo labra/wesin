@@ -253,59 +253,59 @@ trait W3cTokens
  def unscape(s:String) : String = {
 
   @tailrec 
-  def unscapeHelper(s:List[Char], tmp: StringBuilder) : StringBuilder = {
+  def unscapeHelper(s:List[Char], tmp: StringBuilder) : String = {
    s match { 
      case '\\' :: 'u' :: a :: b :: c :: d :: rs => 
-       	unscapeHelper(rs, tmp append hex2String(a :: b :: c :: d :: Nil)) 
+       	unscapeHelper(rs, tmp++= hex2String(a :: b :: c :: d :: Nil)) 
      case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => 
-        unscapeHelper(rs,tmp append hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
-     case '\\' :: 't' :: rs => unscapeHelper(rs, tmp + '\t' )
-     case '\\' :: 'b' :: rs => unscapeHelper(rs, tmp + '\b' )
-     case '\\' :: 'n' :: rs => unscapeHelper(rs, tmp + '\n' )
-     case '\\' :: 'r' :: rs => unscapeHelper(rs, tmp + '\r' )
-     case '\\' :: 'f' :: rs => unscapeHelper(rs, tmp + '\f' )
-     case '\\' :: '\"' :: rs => unscapeHelper(rs, tmp + '\"' )
-     case '\\' :: '\'' :: rs => unscapeHelper(rs, tmp + '\'' )
-     case '\\' :: '\\' :: rs => unscapeHelper(rs, tmp + '\\' )
-     case c :: rs => unscapeHelper(rs, tmp + c)
-     case Nil => tmp
+        unscapeHelper(rs,tmp++= hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
+     case '\\' :: 't' :: rs => unscapeHelper(rs, tmp+= '\t' )
+     case '\\' :: 'b' :: rs => unscapeHelper(rs, tmp+= '\b' )
+     case '\\' :: 'n' :: rs => unscapeHelper(rs, tmp+= '\n' )
+     case '\\' :: 'r' :: rs => unscapeHelper(rs, tmp+= '\r' )
+     case '\\' :: 'f' :: rs => unscapeHelper(rs, tmp+= '\f' )
+     case '\\' :: '\"' :: rs => unscapeHelper(rs, tmp+= '\"' )
+     case '\\' :: '\'' :: rs => unscapeHelper(rs, tmp+= '\'' )
+     case '\\' :: '\\' :: rs => unscapeHelper(rs, tmp+= '\\' )
+     case c :: rs => unscapeHelper(rs, tmp += c)
+     case Nil => tmp.mkString
    }
  }
-   unscapeHelper(s.toList, new StringBuilder).mkString
+   unscapeHelper(s.toList, new StringBuilder)
  }
 
 
  def unscapeUchars(s:String) : String = {
  
   @tailrec 
-  def unscapeUcharsHelper(s:LinearSeq[Char],tmp: StringBuilder) : StringBuilder = {
+  def unscapeUcharsHelper(s:LinearSeq[Char],tmp: StringBuilder) : String = {
    s match { 
      case '\\' :: 'u' :: a :: b :: c :: d :: rs => 
-       	   unscapeUcharsHelper(rs, tmp append hex2String(a :: b :: c :: d :: Nil) )
+       	   unscapeUcharsHelper(rs, tmp++= hex2String(a :: b :: c :: d :: Nil) )
      case '\\' :: 'U' :: a :: b :: c :: d :: e :: f :: g :: h :: rs => 
-           unscapeUcharsHelper(rs,tmp append hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
-     case c :: rs => unscapeUcharsHelper(rs,tmp + c)
-     case Nil => tmp
+           unscapeUcharsHelper(rs,tmp++= hex2String(a :: b :: c :: d :: e :: f :: g :: h :: Nil)) 
+     case c :: rs => unscapeUcharsHelper(rs,tmp += c)
+     case Nil => tmp.mkString
    }
  }
 
-   unscapeUcharsHelper(s.toList,new StringBuilder).mkString
+   unscapeUcharsHelper(s.toList,new StringBuilder)
  }
 
  def unscapeReservedChars(s:String) : String = {
 
   @tailrec 
-  def unscapeReservedCharsHelper(s:List[Char],tmp: StringBuilder) : StringBuilder = {
+  def unscapeReservedCharsHelper(s:List[Char],tmp: StringBuilder) : String = {
    s match {
      case '\\' :: c :: rs if "~.-!$&'()*+,;=/?#@%_".contains(c) => 
-       	unscapeReservedCharsHelper(rs, tmp + c)
+       	unscapeReservedCharsHelper(rs, tmp += c)
      case c :: rs => 
-       unscapeReservedCharsHelper(rs, tmp + c)
-     case Nil => tmp
+       unscapeReservedCharsHelper(rs, tmp += c)
+     case Nil => tmp.mkString
    }
   }
 
-  unscapeReservedCharsHelper(s.toList, new StringBuilder).mkString
+  unscapeReservedCharsHelper(s.toList, new StringBuilder)
  }
    
    
