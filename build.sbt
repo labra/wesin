@@ -15,6 +15,6 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-compiler" % "2.10.2" ,
   "com.assembla.scala-incubator" % "graph-core_2.10" % "1.6.2",
   "org.apache.jena" % "jena-arq" % "2.10.1" ,
-  "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test", 
+  "org.scalatest" % "scalatest_2.10" % "2.0.1-SNAP" % "test",
   "junit" % "junit" % "4.10" % "test")
 
