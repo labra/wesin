@@ -243,7 +243,7 @@ object TurtleParser extends TurtleParser {
   /**
    * Parse a string with a base IRI
    * @param s: input string
-   * @param baseIRI: Iniitial Base IRI
+   * @param baseIRI: Initial Base IRI
    * @return Left(rs) = list of triples successfully parsed
    *         Right(msg) = Error msg
    */
