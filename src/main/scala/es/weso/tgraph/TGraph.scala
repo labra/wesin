@@ -1,6 +1,12 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import scala.collection.immutable.Set
+import scalax.collection.immutable.Graph
+import scalax.collection.GraphPredef._
+import scalax.collection.GraphEdge._
+import scalax.collection.edge.LDiEdge
+import scalax.collection.edge.Implicits._
+import scalax.collection.edge.LBase.LEdgeImplicits
 
 /*
  * Generic graphs 
@@ -28,13 +34,13 @@ trait TGraph[A] {
    * Decompose a graph
    * @param node to insert
    */
-  def decomp (node : A) : Option[(Context[A],TGraph[A])]
+  def decomp (node : A) : Option[(TContext[A],TGraph[A])]
   
   /*
    * Extend a graph with a new context. 
    * @param context to add
    */
-  def extend (ctx : Context[A]) : TGraph[A]
+  def extend (ctx : TContext[A]) : TGraph[A]
 
   /*
    * Add a node to a graph
@@ -65,7 +71,7 @@ trait TGraph[A] {
    	 { (ctx,r) => ctx.triples ++ r }  
   }
   
-  def foldTGraph[B](e:B)(f:(Context[A],B) => B): B = {
+  def foldTGraph[B](e:B)(f:(TContext[A],B) => B): B = {
    if (this.isEmpty) e 
    else {
     decomp(nodes.head) match {
@@ -75,7 +81,7 @@ trait TGraph[A] {
     }
   }
   
-  def foldTGraphOrd[B](e:B)(f:(Context[A],B) => B)(implicit ord: Ordering[A]) : B = {
+  def foldTGraphOrd[B](e:B)(f:(TContext[A],B) => B)(implicit ord: Ordering[A]) : B = {
    if (this.isEmpty) e 
    else {
     decomp(nodes.min) match {
@@ -90,4 +96,14 @@ trait TGraph[A] {
 }
 
 object TGraph {
+  
+  def empty [A : Manifest]: TGraph[A] =
+    TGraphImpl(Graph[A,Triple]()).asInstanceOf[TGraph[A]]
+    
+  def fromTriple[A: Manifest] (triple: (A,A,A)): TGraph[A] = {
+    TGraph.empty.addTriple(triple)
+    //val e : TGraph[A] = TGraph.empty.asInstanceOf[TGraph[A]]
+    // e.addTriple(triple)    
+  }
+    
 }

@@ -1,16 +1,17 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import es.weso.graph.TGraph._
-import es.weso.graph.TGraphImpl._
 
+import es.weso.tgraph._
+import es.weso.tgraph.TGraphImpl._
 import scalax.collection.immutable.Graph
 import scalax.collection.GraphEdge._
 
+
 @RunWith(classOf[JUnitRunner])
-class GraphSuite extends FunSuite {
+class TGraphSuite extends FunSuite {
 
   test("empty graph") {
     val g = new TGraphImpl(Graph[Int,Triple]())
@@ -132,7 +133,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of succ") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',e,Set(('b','c'),('b','d')),e)
+    val ctx = TContext('a',e,Set(('b','c'),('b','d')),e)
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('a','b','c'),('a','b','d')))
   }
@@ -140,7 +141,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of pred") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',Set(('b','c'),('b','d')),e,e)
+    val ctx = TContext('a',Set(('b','c'),('b','d')),e,e)
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('b','c','a'),('b','d','a')))
   }
@@ -148,7 +149,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of rels") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',e,e,Set(('b','c'),('b','d')))
+    val ctx = TContext('a',e,e,Set(('b','c'),('b','d')))
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('b','a','c'),('b','a','d')))
   }
@@ -156,7 +157,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with succ, rels and pred") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('x',
+    val ctx = TContext('x',
     		Set(('a','b'),('c','d')),
     		Set(('e','f'),('g','h')),
     		Set(('i','j'),('k','l'))

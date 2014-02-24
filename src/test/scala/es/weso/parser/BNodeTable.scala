@@ -3,21 +3,15 @@ package es.weso.parser
 import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input.Positional
-
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
-
 import scala.io.Source
-
 import es.weso.rdfNode._
 import es.weso.rdfTriple._
-
-import es.weso.parser.BNodeTable;
 import scala.util.parsing.input.CharArrayReader
+import org.scalatest.Matchers
 
-
-
-class BNodeTableSuite extends FunSpec with ShouldMatchers {
+class BNodeTableSuite extends FunSpec with Matchers {
 
   describe("BNode Table") {
 

@@ -1,4 +1,4 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import scalax.collection.GraphPredef.EdgeIn
 import scalax.collection.GraphEdge.DiHyperEdge

@@ -2,11 +2,10 @@ package es.weso.rdfGraph
 
 import es.weso.rdfNode._
 import es.weso.rdfTriple._
-import es.weso.graph._
-import es.weso.graph.TGraph
-import es.weso.graph.TGraphImpl
+import es.weso.tgraph._
+import es.weso.tgraph.TGraph
+import es.weso.tgraph.TGraphImpl
 
-import es.weso.rdfGraph.RDFGraph;
 import scala.collection.Set
 import scala.collection.immutable.Map
 import scalax.collection.immutable.Graph
@@ -77,19 +76,19 @@ abstract class RDFGraph {
  
   def foldRDFGraph[A] 
 		(e: A, 
-		 f: (Context[RDFNode],A) => A)
+		 f: (TContext[RDFNode],A) => A)
   		(implicit seed : BNodeId) : A = {
     foldRDFGraphSeed(e,f,seed)
   }
 
   def foldRDFGraphSeed[A] (
 		  e: A, 
-		  fn: (Context[RDFNode],A) => A, 
+		  fn: (TContext[RDFNode],A) => A, 
 		  seed : BNodeId) : A 
 
  def foldRDFGraphOrd[A] 
 		 (e: A, 
-		  f: (Context[RDFNode],A) => A)
+		  f: (TContext[RDFNode],A) => A)
          (implicit ord : Ordering[RDFNode], 
         		   seed : BNodeId) : A = {
     foldRDFGraphSeedOrd(e,f,seed)(ord)
@@ -97,7 +96,7 @@ abstract class RDFGraph {
 
   def foldRDFGraphSeedOrd[A] (
 		  e: A, 
-		  fn: (Context[RDFNode],A) => A,
+		  fn: (TContext[RDFNode],A) => A,
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A 
   
@@ -190,20 +189,20 @@ case class Ground(val graph : TGraph[RDFNode])
    * 
    * @author labra
    */
-  def decomp (node : IRI) : Option[(Context[RDFNode],RDFGraph)] = {
+  def decomp (node : IRI) : Option[(TContext[RDFNode],RDFGraph)] = {
     graph.decomp(node) match {
       case None => None
       case Some((ctx,g)) => Some((ctx,Ground(g)))
     }
   }
   
-  override def foldRDFGraphSeed[A] (e: A, f:(Context[RDFNode],A) => A, seed : BNodeId) : A = {
+  override def foldRDFGraphSeed[A] (e: A, f:(TContext[RDFNode],A) => A, seed : BNodeId) : A = {
     graph.foldTGraph(e)(f)
   }
 
   def foldRDFGraphSeedOrd[A] (
 		  e: A, 
-		  f: (Context[RDFNode],A) => A,
+		  f: (TContext[RDFNode],A) => A,
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A = {
     graph.foldTGraphOrd(e)(f)(ord)
@@ -257,13 +256,13 @@ case class Exists(fn : BNodeId => RDFGraph)
     "Exists " + seed.id + " ( " + (fn(seed)).show(seed.newBNodeId) + ")"
   }
   
-  override def foldRDFGraphSeed[A] (e: A, f: (Context[RDFNode],A) => A, seed: BNodeId) : A = {
+  override def foldRDFGraphSeed[A] (e: A, f: (TContext[RDFNode],A) => A, seed: BNodeId) : A = {
     (fn(seed)).foldRDFGraphSeed(e,f,seed.newBNodeId)
   }
 
   def foldRDFGraphSeedOrd[A] (
 		  e: A, 
-		  f: (Context[RDFNode],A) => A,
+		  f: (TContext[RDFNode],A) => A,
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A = {
     (fn(seed)).foldRDFGraphSeedOrd(e,f,seed.newBNodeId)(ord)
@@ -296,7 +295,7 @@ object RDFGraph {
   def showFolds (g : RDFGraph) : String = {
     g.foldRDFGraph(
          "\n", 
-         ((ctx : Context[RDFNode],r : String) => "ctx: " + ctx + "\n" + r )
+         ((ctx : TContext[RDFNode],r : String) => "ctx: " + ctx + "\n" + r )
          )
   }
 
@@ -320,7 +319,7 @@ object RDFGraph {
           case _ => throw new RDFNodeException("Unexpected values " + (x,y) + " comparing RDFNodes")
        }
    	}
-   	g.foldRDFGraphOrd("", ((ctx : Context[RDFNode],r : String) => "ctx: " + ctx + "\n" + r ))
+   	g.foldRDFGraphOrd("", ((ctx : TContext[RDFNode],r : String) => "ctx: " + ctx + "\n" + r ))
   }
 
 

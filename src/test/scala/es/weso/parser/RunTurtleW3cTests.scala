@@ -30,8 +30,6 @@ import scala.io.Source._
 
 import com.hp.hpl.jena.rdf.model.Literal
 
-import es.weso.parser.TurtleParser;
-
 import es.weso.rdfNode.IRI
 
 object RunTurtleW3cTests
