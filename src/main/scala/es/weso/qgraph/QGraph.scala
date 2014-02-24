@@ -1,6 +1,7 @@
 package es.weso.qgraph
 
 import es.weso.tgraph._
+import scala.collection.immutable.HashMap
 
 /*
  * Generic quad graphs
@@ -19,6 +20,8 @@ trait QGraph[A,B] {
    **/
   def empty() : QGraph[A,B]
   
+  def isEmpty : Boolean
+  
   /** Adds a graph to the quad-graph structure. 
    *  If the index is None, it changes the default graph
    **/ 
@@ -35,7 +38,19 @@ trait QGraph[A,B] {
    * Adds a triple to a quad-graph
    * If the index is None it adds the triple to the default graph
    */
-   def addTriple(triple: (A,A,A), index: Option[B]): QGraph[A,B]
+   def addTriple(triple: (A,A,A), index: Option[B]): QGraph[A,B] 
+  
+  def getGraph(index:B): Option[TGraph[A]] 
 
 }
 
+object QGraph {
+
+  def empty[A, B : Ordering] : QGraph[A,B] = {
+
+    // TODO: Can I simplify this declaration?
+	QGraphImpl(TGraph.empty.asInstanceOf[TGraph[A]], 
+			   HashMap[B,TGraph[A]]())
+  }
+  
+}

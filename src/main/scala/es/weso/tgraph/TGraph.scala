@@ -1,6 +1,12 @@
 package es.weso.tgraph
 
 import scala.collection.immutable.Set
+import scalax.collection.immutable.Graph
+import scalax.collection.GraphPredef._
+import scalax.collection.GraphEdge._
+import scalax.collection.edge.LDiEdge
+import scalax.collection.edge.Implicits._
+import scalax.collection.edge.LBase.LEdgeImplicits
 
 /*
  * Generic graphs 
@@ -90,4 +96,14 @@ trait TGraph[A] {
 }
 
 object TGraph {
+  
+  def empty [A : Manifest]: TGraph[A] =
+    TGraphImpl(Graph[A,Triple]()).asInstanceOf[TGraph[A]]
+    
+  def fromTriple[A: Manifest] (triple: (A,A,A)): TGraph[A] = {
+    TGraph.empty.addTriple(triple)
+    //val e : TGraph[A] = TGraph.empty.asInstanceOf[TGraph[A]]
+    // e.addTriple(triple)    
+  }
+    
 }
