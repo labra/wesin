@@ -23,9 +23,10 @@ import es.weso.rdfNode.IRI
 import java.io.FileOutputStream
 import java.io.FileInputStream
 import scala.collection.JavaConverters._
+import org.scalatest.Matchers
 
 
-class RunTurtleW3cTestsSuite extends FunSpec with ShouldMatchers {
+class RunTurtleW3cTestsSuite extends FunSpec with Matchers {
  val report = RunTurtleW3cTests.createReport
  
  describe("W3c tests report") {

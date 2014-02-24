@@ -13,7 +13,6 @@ import scala.io.Source
 import es.weso.rdfNode._
 import es.weso.rdfTriple._
 
-import es.weso.parser.NTriplesParser;
 import scala.util.parsing.input.CharArrayReader
 
 @RunWith(classOf[JUnitRunner])

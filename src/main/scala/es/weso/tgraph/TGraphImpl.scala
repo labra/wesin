@@ -1,4 +1,4 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import scalax.collection.immutable.Graph
 import scalax.collection.GraphPredef._

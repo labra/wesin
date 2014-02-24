@@ -1,4 +1,4 @@
-package es.weso.graph
+package es.weso.qgraph
 
 import scalax.collection.immutable.Graph
 import scalax.collection.GraphPredef._
@@ -8,7 +8,7 @@ import scalax.collection.edge.Implicits._
 import scalax.collection.edge.LBase.LEdgeImplicits
 import scala.collection.immutable.Set
 import scala.collection.immutable.HashMap
-
+import es.weso.tgraph._
 
 
 case class QGraphImpl[A,B](

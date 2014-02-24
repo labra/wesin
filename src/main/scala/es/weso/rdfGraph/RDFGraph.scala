@@ -2,11 +2,10 @@ package es.weso.rdfGraph
 
 import es.weso.rdfNode._
 import es.weso.rdfTriple._
-import es.weso.graph._
-import es.weso.graph.TGraph
-import es.weso.graph.TGraphImpl
+import es.weso.tgraph._
+import es.weso.tgraph.TGraph
+import es.weso.tgraph.TGraphImpl
 
-import es.weso.rdfGraph.RDFGraph;
 import scala.collection.Set
 import scala.collection.immutable.Map
 import scalax.collection.immutable.Graph

@@ -1,6 +1,6 @@
-package es.weso.graph
+package es.weso.qgraph
 
-import scala.collection.immutable.Set
+import es.weso.tgraph._
 
 /*
  * Generic quad graphs

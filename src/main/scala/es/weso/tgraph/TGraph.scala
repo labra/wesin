@@ -1,4 +1,4 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import scala.collection.immutable.Set
 

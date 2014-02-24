@@ -1,16 +1,17 @@
-package es.weso.graph
+package es.weso.tgraph
 
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import es.weso.graph.TGraph._
-import es.weso.graph.TGraphImpl._
 
+import es.weso.tgraph._
+import es.weso.tgraph.TGraphImpl._
 import scalax.collection.immutable.Graph
 import scalax.collection.GraphEdge._
 
+
 @RunWith(classOf[JUnitRunner])
-class GraphSuite extends FunSuite {
+class TGraphSuite extends FunSuite {
 
   test("empty graph") {
     val g = new TGraphImpl(Graph[Int,Triple]())

@@ -1,4 +1,4 @@
-package es.weso.graph
+package es.weso.tgraph
 
 case class TContext[A](
 		node : A, 
