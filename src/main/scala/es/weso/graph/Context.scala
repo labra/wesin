@@ -1,6 +1,6 @@
 package es.weso.graph
 
-case class Context[A](
+case class TContext[A](
 		node : A, 
 		pred: Set[(A,A)], 
 		succ: Set[(A,A)], 
@@ -14,8 +14,8 @@ case class Context[A](
     rels.foldLeft(emptyTriples) { (r,p) => Set((p._1,node,p._2)) ++ r }
    }
   
-  def map[B](f : A => B): Context[B] = {
-    Context(f(node),mapPairs(f,pred),mapPairs(f,succ),mapPairs(f,rels))
+  def map[B](f : A => B): TContext[B] = {
+    TContext(f(node),mapPairs(f,pred),mapPairs(f,succ),mapPairs(f,rels))
   }
   
   def mapPairs[A,B](f: A => B, ls : Set[(A,A)]): Set[(B,B)] = {

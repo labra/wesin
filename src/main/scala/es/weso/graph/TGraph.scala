@@ -28,13 +28,13 @@ trait TGraph[A] {
    * Decompose a graph
    * @param node to insert
    */
-  def decomp (node : A) : Option[(Context[A],TGraph[A])]
+  def decomp (node : A) : Option[(TContext[A],TGraph[A])]
   
   /*
    * Extend a graph with a new context. 
    * @param context to add
    */
-  def extend (ctx : Context[A]) : TGraph[A]
+  def extend (ctx : TContext[A]) : TGraph[A]
 
   /*
    * Add a node to a graph
@@ -65,7 +65,7 @@ trait TGraph[A] {
    	 { (ctx,r) => ctx.triples ++ r }  
   }
   
-  def foldTGraph[B](e:B)(f:(Context[A],B) => B): B = {
+  def foldTGraph[B](e:B)(f:(TContext[A],B) => B): B = {
    if (this.isEmpty) e 
    else {
     decomp(nodes.head) match {
@@ -75,7 +75,7 @@ trait TGraph[A] {
     }
   }
   
-  def foldTGraphOrd[B](e:B)(f:(Context[A],B) => B)(implicit ord: Ordering[A]) : B = {
+  def foldTGraphOrd[B](e:B)(f:(TContext[A],B) => B)(implicit ord: Ordering[A]) : B = {
    if (this.isEmpty) e 
    else {
     decomp(nodes.min) match {

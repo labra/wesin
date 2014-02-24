@@ -132,7 +132,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of succ") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',e,Set(('b','c'),('b','d')),e)
+    val ctx = TContext('a',e,Set(('b','c'),('b','d')),e)
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('a','b','c'),('a','b','d')))
   }
@@ -140,7 +140,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of pred") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',Set(('b','c'),('b','d')),e,e)
+    val ctx = TContext('a',Set(('b','c'),('b','d')),e,e)
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('b','c','a'),('b','d','a')))
   }
@@ -148,7 +148,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with a list of rels") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('a',e,e,Set(('b','c'),('b','d')))
+    val ctx = TContext('a',e,e,Set(('b','c'),('b','d')))
     val g1 = g0.extend(ctx)
     assert(g1.triples === Set(('b','a','c'),('b','a','d')))
   }
@@ -156,7 +156,7 @@ class GraphSuite extends FunSuite {
   test("extend empty with succ, rels and pred") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val e = Set[(Char,Char)]()
-    val ctx = Context('x',
+    val ctx = TContext('x',
     		Set(('a','b'),('c','d')),
     		Set(('e','f'),('g','h')),
     		Set(('i','j'),('k','l'))

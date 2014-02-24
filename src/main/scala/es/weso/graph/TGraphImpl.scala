@@ -22,16 +22,16 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
       p <- pred(node)
       s <- succ(node)
       r <- rels(node)
-     } yield (Context(node,p,s,r),this.remove(node))  
+     } yield (TContext(node,p,s,r),this.remove(node))  
   }
 
-  def decompAny : Option[(Context[A],TGraph[A])] = {
+  def decompAny : Option[(TContext[A],TGraph[A])] = {
     if (graph.isEmpty) None 
     else 
       decomp(nodes.head)
   }
 
-  def extend(ctx : Context[A]) = {
+  def extend(ctx : TContext[A]) = {
     TGraphImpl( 
          ((((graph + ctx.node) 
          /: ctx.succ) { (g,p) => g + Triple(ctx.node,p._1,p._2) }

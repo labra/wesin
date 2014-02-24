@@ -7,7 +7,7 @@ import es.weso.rdfGraph.RDFGraph
 import es.weso.rdfTriple.RDFTriple
 import es.weso.rdfNode.BNodeId
 import es.weso.rdfNode.IRI
-import es.weso.graph.Context
+import es.weso.graph.TContext
 import es.weso.rdfNode.RDFNode
 
 @RunWith(classOf[JUnitRunner])
@@ -167,14 +167,14 @@ class RDFGraphSuite extends FunSuite {
   test("foldRDFGraph_1_triple") {
     val tabc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
     val g1 = RDFGraph.empty.addTriples(Set(tabc))
-    assert(g1.foldRDFGraph(0,(ctx : Context[RDFNode],n : Int)=>1+n) === 3)
+    assert(g1.foldRDFGraph(0,(ctx : TContext[RDFNode],n : Int)=>1+n) === 3)
   }
   
   test("foldRDFGraph_cycle") {
     val tabc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
     val tcba = RDFTriple(IRI("c"),IRI("b"),IRI("a"))
     val g1 = RDFGraph.empty.addTriples(Set(tabc,tcba))
-    assert(g1.foldRDFGraph(0,(ctx : Context[RDFNode],n : Int)=>1+n) === 3)
+    assert(g1.foldRDFGraph(0,(ctx : TContext[RDFNode],n : Int)=>1+n) === 3)
   }
   
   test("foldRDF_4triples") {
@@ -183,7 +183,7 @@ class RDFGraphSuite extends FunSuite {
     val tcba = RDFTriple(IRI("c"),IRI("b"),IRI("a"))
     val tbcd = RDFTriple(IRI("b"),IRI("c"),IRI("d"))
     val g1 = RDFGraph.empty.addTriples(Set(tabc,tcba,tbcb,tbcd))
-    assert(g1.foldRDFGraph(0,(ctx : Context[RDFNode],n : Int)=>1+n) === 4)
+    assert(g1.foldRDFGraph(0,(ctx : TContext[RDFNode],n : Int)=>1+n) === 4)
   }
 
   test("foldRDF_cycle") {
@@ -191,16 +191,16 @@ class RDFGraphSuite extends FunSuite {
     val tcba = RDFTriple(IRI("c"),IRI("b"),IRI("a"))
     val g1 = RDFGraph.empty.addTriples(Set(tabc,tcba))
     def empty : Set[RDFNode] = Set()
-    def add (ctx: Context[RDFNode], set: Set[RDFNode]) : Set[RDFNode] = set + ctx.node 
+    def add (ctx: TContext[RDFNode], set: Set[RDFNode]) : Set[RDFNode] = set + ctx.node 
     assert(g1.foldRDFGraph(Set(): Set[RDFNode],
-               (ctx: Context[RDFNode],set: Set[RDFNode]) => set + ctx.node) 
+               (ctx: TContext[RDFNode],set: Set[RDFNode]) => set + ctx.node) 
                     === Set(IRI("a"),IRI("b"),IRI("c")))
   }
 
   test("foldRDF_4triples_toSet") {
     
     def empty : Set[RDFNode] = Set()
-    def add (ctx: Context[RDFNode], set: Set[RDFNode]) : Set[RDFNode] = set + ctx.node 
+    def add (ctx: TContext[RDFNode], set: Set[RDFNode]) : Set[RDFNode] = set + ctx.node 
 
     val tabc = RDFTriple(IRI("a"),IRI("b"),IRI("c"))
     val tbcb = RDFTriple(IRI("b"),IRI("c"),IRI("b"))
