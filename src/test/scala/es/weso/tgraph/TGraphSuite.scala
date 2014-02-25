@@ -15,7 +15,7 @@ class TGraphSuite extends FunSuite {
 
   test("empty graph") {
     val g = new TGraphImpl(Graph[Int,Triple]())
-    assert(g.isEmpty,true)
+    assert(g.isEmpty)
   }
   
   test("simple triple contains origin") {

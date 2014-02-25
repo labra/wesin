@@ -11,6 +11,6 @@ libraryDependencies += "com.assembla.scala-incubator" % "graph-core_2.10" % "1.7
 
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.1"
 
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.1.0-RC2")
+// addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.1.0-RC2")
 
 scalacOptions ++= Seq("-deprecation")
