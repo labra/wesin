@@ -14,7 +14,7 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
 
   def empty = TGraphImpl(graph.empty)
 
-  def nodes = graph.nodes.map(_.value).toSet
+  def nodes = graph.nodes.map(_.value).toSet[A]
 
   def decomp (node : A) = {
     if (graph.isEmpty) None 
@@ -63,7 +63,7 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
     	_.edges.
     	filter(_._1 == node).
     	map((e) => (e._2.value,e.last.value)).
-    	toSet
+    	toSet[(A,A)]
     }
   }
   
@@ -76,7 +76,7 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
        _.edges.
        filter( _.last == node) . 
        map((e) => (e._1.value,e._2.value)).
-       toSet
+       toSet[(A,A)]
     }
   }
 
@@ -89,7 +89,7 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
       _.edges.
       filter(_._2 == node).
       map((e) => (e._1.value,e.last.value)).
-      toSet
+      toSet[(A,A)]
     }
   }
 

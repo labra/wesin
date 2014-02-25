@@ -1,27 +1,12 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
 import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
-import com.hp.hpl.jena.rdf.model.RDFNode
-import scala.util.parsing.input.CharArrayReader
 import com.typesafe.config._
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.vocabulary.RDF
-import com.hp.hpl.jena.rdf.model.Model
-import com.hp.hpl.jena.rdf.model.Resource
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import scala.io.Source._
-import com.hp.hpl.jena.rdf.model.Literal
 import java.io.FileOutputStream
 import java.io.FileInputStream
 import scala.collection.JavaConverters._
 import org.scalatest.Matchers
-import es.weso.jena.JenaMapper
 
 
 class RunTurtleW3cTestsSuite extends FunSpec with Matchers {

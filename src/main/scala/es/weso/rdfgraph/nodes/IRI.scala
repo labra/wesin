@@ -3,7 +3,6 @@ package es.weso.rdfgraph.nodes
 import java.net.{URISyntaxException, URI}
 
 
-
 case class IRI(uri : URI) extends RDFNode {
 
   override def toString = {
@@ -25,8 +24,6 @@ case class IRI(uri : URI) extends RDFNode {
   def resolve(iri: IRI): IRI = {
     IRI(uri.resolve(iri.uri))
   }
-
-
 
 }
 

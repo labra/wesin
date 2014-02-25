@@ -57,7 +57,7 @@ def collectBNodes (triples : Set[RDFTriple]) : Set[BNodeId] = {
   var str = new StringBuilder
   for { t <- triples} { str ++= (t + "\n") 
   }
-  str.toString
+  str.toString()
 }
 
 }

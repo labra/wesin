@@ -2,14 +2,9 @@ package es.weso.tgraph
 
 import scala.collection.immutable.Set
 import scalax.collection.immutable.Graph
-import scalax.collection.GraphPredef._
-import scalax.collection.GraphEdge._
-import scalax.collection.edge.LDiEdge
-import scalax.collection.edge.Implicits._
-import scalax.collection.edge.LBase.LEdgeImplicits
 
 /*
- * Generic graphs 
+ * Generic triple graphs
  */
 trait TGraph[A] {
   

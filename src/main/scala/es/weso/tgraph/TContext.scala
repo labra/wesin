@@ -1,5 +1,8 @@
 package es.weso.tgraph
 
+/*
+triple context, part of inductive graph approach, useful for graph folding
+ */
 case class TContext[A](
 		node : A, 
 		pred: Set[(A,A)], 

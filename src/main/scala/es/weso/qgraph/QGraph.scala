@@ -49,6 +49,7 @@ object QGraph {
   def empty[A, B : Ordering] : QGraph[A,B] = {
 
     // TODO: Can I simplify this declaration?
+    //Anton: what is the reason for having HashMap?
 	QGraphImpl(TGraph.empty.asInstanceOf[TGraph[A]], 
 			   HashMap[B,TGraph[A]]())
   }
