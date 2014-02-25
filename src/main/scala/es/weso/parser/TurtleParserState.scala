@@ -1,27 +1,10 @@
 package es.weso.parser
 
-import util.parsing.combinator.JavaTokenParsers
-import scala.util.parsing.combinator.{Parsers, RegexParsers}
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
-import scala.util.parsing.input._
-import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
-import scala.util.parsing.combinator.PackratParsers
-import scala.util.parsing.combinator.lexical.StdLexical
-import scala.util.parsing.combinator.syntactical.StdTokenParsers
-import scala.io.Codec
-import scala.util.matching.Regex
-import scala.collection.immutable.Map
+import es.weso.rdfgraph.nodes._
 import scala.language.postfixOps
+import es.weso.rdfgraph.statements.RDFTriple
 
-case class TurtleParserState (
-  val triples : List[RDFTriple],
-  val namespaces : PrefixMap ,
-  val bNodeLabels : BNodeTable,
-  val baseIRI: IRI
-  ) {
+case class TurtleParserState (  triples : List[RDFTriple],  namespaces : PrefixMap ,  bNodeLabels : BNodeTable,  baseIRI: IRI  ) {
 
   def addTriple (t : RDFTriple) : TurtleParserState = {
     TurtleParserState(t :: triples, namespaces, bNodeLabels, baseIRI)

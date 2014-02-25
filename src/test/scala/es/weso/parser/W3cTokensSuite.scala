@@ -1,18 +1,9 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
 import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
-import scala.util.parsing.input.CharArrayReader
-import es.weso.rdfNode.DecimalLiteral
-import es.weso.rdfNode.IntegerLiteral
-import es.weso.rdfNode.DoubleLiteral
+import es.weso.rdfgraph.nodes._
 import org.scalatest.Matchers
-import es.weso.rdfNode.IRI
-import es.weso.rdfNode.Lang
+
 
 class W3cTokensSuite 
 	extends FunSpec 

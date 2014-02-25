@@ -1,18 +1,6 @@
 package es.weso.parser
 
-import util.parsing.combinator.JavaTokenParsers
-import scala.util.parsing.combinator.{Parsers, RegexParsers}
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
-import scala.util.parsing.input._
-import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
-import scala.util.parsing.combinator.PackratParsers
-import scala.util.parsing.combinator.lexical.StdLexical
-import scala.util.parsing.combinator.syntactical.StdTokenParsers
-import scala.io.Codec
-import scala.util.matching.Regex
+import es.weso.rdfgraph.nodes._
 import scala.collection.immutable.Map
 
 

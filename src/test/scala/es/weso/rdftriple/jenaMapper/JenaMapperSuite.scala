@@ -1,22 +1,13 @@
 package es.weso.rdftriple.jenaMapper
 import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import com.typesafe.config._
-import es.weso.rdfNode.BNodeId
-import es.weso.rdfNode.IRI
-import es.weso.rdfTriple.jenaMapper.JenaMapper
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import java.io.ByteArrayInputStream
 import com.hp.hpl.jena.rdf.model.Model
 import java.io.InputStream
 import org.scalatest.Matchers
-import es.weso.rdfTriple.RDFTriple
-import es.weso.rdfNode.LangLiteral
-import es.weso.rdfNode.DecimalLiteral
-import es.weso.rdfNode.IntegerLiteral
-import es.weso.rdfNode.DoubleLiteral
-import es.weso.rdfNode.BooleanLiteral
-import es.weso.rdfNode.Lang
+import es.weso.rdfgraph.nodes._
+import es.weso.jena.JenaMapper
+import es.weso.rdfgraph.statements.RDFTriple
 
 class JenaMapperSuite 
 		extends FunSpec

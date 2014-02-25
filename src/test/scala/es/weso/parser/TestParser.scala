@@ -1,7 +1,6 @@
 package es.weso.parser
 
 import scala.util.parsing.combinator.RegexParsers
-import es.weso.rdfNode.BNodeId
 import org.scalatest.FunSpec
 import org.scalatest.Matchers
 

@@ -1,14 +1,7 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
 import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
-import scala.util.parsing.input.CharArrayReader
+import es.weso.rdfgraph.nodes._
 import org.scalatest.Matchers
 
 class BNodeTableSuite extends FunSpec with Matchers {

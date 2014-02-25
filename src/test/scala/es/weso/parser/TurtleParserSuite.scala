@@ -1,24 +1,8 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
-import scala.util.parsing.input.CharArrayReader
-import es.weso.rdfNode.LangLiteral
-import es.weso.rdfNode.DatatypeLiteral
-import es.weso.rdfNode.DecimalLiteral
-import es.weso.rdfNode.IntegerLiteral
-import es.weso.rdfTriple.RDFTriple
-import es.weso.rdfNode.DoubleLiteral
-import org.scalatest.Matchers
-import es.weso.rdfNode.BNodeId
-import es.weso.rdfNode.IRI
-import es.weso.rdfNode.StringLiteral
-import es.weso.rdfNode.RDFNode
-import es.weso.rdfNode.Lang
+import org.scalatest.{Matchers, FunSpec}
+import es.weso.rdfgraph.nodes._
+import es.weso.rdfgraph.statements.RDFTriple
 
 class TurtleParserSuite 
 	extends FunSpec

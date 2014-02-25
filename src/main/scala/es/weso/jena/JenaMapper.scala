@@ -1,17 +1,16 @@
-package es.weso.rdfTriple.jenaMapper
+package es.weso.jena
 
-import es.weso.rdfTriple.RDFTriple
 import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.{RDFNode => JenaRDFNode}
-import es.weso.rdfNode.RDFNode
 import com.hp.hpl.jena.rdf.model.Property
 import com.hp.hpl.jena.rdf.model.Resource
-import es.weso.rdfNode._
+import es.weso.rdfgraph.nodes._
 import com.hp.hpl.jena.rdf.model.AnonId
 import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
 import com.hp.hpl.jena.rdf.model.Model
+import es.weso.rdfgraph.statements.RDFTriple
 
 trait JenaMapper {
 
@@ -49,17 +48,16 @@ trait JenaMapper {
        	m.createResource(i.str)
      case StringLiteral(str) 				 => 
        	m.createLiteral(str,false)
-     case DatatypeLiteral(str,i:IRI) => {
-        i.str match {
-          case `xsdinteger` => m.createTypedLiteral(str,XSDDatatype.XSDinteger) 
-          case `xsddouble` => m.createTypedLiteral(str,XSDDatatype.XSDdouble)
-          case `xsddecimal` => m.createTypedLiteral(str,XSDDatatype.XSDdecimal)
-          case `xsdboolean` => m.createTypedLiteral(str,XSDDatatype.XSDboolean)
-          case _ => m.createTypedLiteral(str,new BaseDatatype(i.str))
-        }
-     }
+     case DatatypeLiteral(str,i:IRI) =>
+       i.str match {
+         case `xsdinteger` => m.createTypedLiteral(str,XSDDatatype.XSDinteger)
+         case `xsddouble` => m.createTypedLiteral(str,XSDDatatype.XSDdouble)
+         case `xsddecimal` => m.createTypedLiteral(str,XSDDatatype.XSDdecimal)
+         case `xsdboolean` => m.createTypedLiteral(str,XSDDatatype.XSDboolean)
+         case _ => m.createTypedLiteral(str,new BaseDatatype(i.str))
+       }
      case DecimalLiteral(d) 		=> 
-     	m.createTypedLiteral(d.toString,XSDDatatype.XSDdecimal)
+     	m.createTypedLiteral(d.toString(),XSDDatatype.XSDdecimal)
      case IntegerLiteral(i) 		=> 
        	m.createTypedLiteral(i.toString,XSDDatatype.XSDinteger)
      case LangLiteral(l,Lang(lang)) => m.createLiteral(l,lang)
