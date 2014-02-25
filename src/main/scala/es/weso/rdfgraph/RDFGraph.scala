@@ -1,7 +1,5 @@
-package es.weso.rdfGraph
+package es.weso.rdfgraph
 
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
 import es.weso.tgraph._
 import es.weso.tgraph.TGraph
 import es.weso.tgraph.TGraphImpl
@@ -9,12 +7,13 @@ import es.weso.tgraph.TGraphImpl
 import scala.collection.Set
 import scala.collection.immutable.Map
 import scalax.collection.immutable.Graph
-import scalax.collection.GraphEdge._
+import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdfgraph.nodes._
 
 /**
  * Type of exceptions raised
  */
-case class RDFGraphException(val msg: String) extends Exception
+case class RDFGraphException(msg: String) extends Exception
 
 abstract class RDFGraph {
   
@@ -105,7 +104,7 @@ abstract class RDFGraph {
   
 }
 
-case class Ground(val graph : TGraph[RDFNode])
+case class Ground(graph : TGraph[RDFNode])
                  (implicit seed : BNodeId) extends RDFGraph {
 
   override def isEmpty = graph.isEmpty

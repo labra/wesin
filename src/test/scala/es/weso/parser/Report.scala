@@ -1,34 +1,12 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
-import com.hp.hpl.jena.rdf.model.RDFNode
-import es.weso.rdfTriple._
-import scala.util.parsing.input.CharArrayReader
-import com.typesafe.config._
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.vocabulary.RDF
 import com.hp.hpl.jena.rdf.model.Model
-import com.hp.hpl.jena.rdf.model.Resource
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import es.weso.rdfTriple.jenaMapper.JenaMapper
-import scala.io.Source._
-import com.hp.hpl.jena.rdf.model.Literal
-import es.weso.rdfNode.IRI
-import com.hp.hpl.jena.vocabulary._
-import com.hp.hpl.jena.datatypes.RDFDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
-import com.hp.hpl.jena.shared.PrefixMapping
-import com.hp.hpl.jena.datatypes.xsd.XSDDateTime
 import java.util.Calendar
 import java.text.SimpleDateFormat
 
-case class Report(val items: List[SingleTestReport]) {
+case class Report(items: List[SingleTestReport]) {
   def addTestReport(r: SingleTestReport) : Report = {
     Report(r :: items)
   }
@@ -176,11 +154,11 @@ object Report {
 }
 
 case class SingleTestReport(
-		val passed: Boolean, 	// True if test passed
-		val name: String,    	// Name of test
-		val uriTest: String,	// URI of test
-		val testType: String, 	// Type of test 
-		val moreInfo: String 	// Info about what happened
+		passed: Boolean, 	// True if test passed
+		name: String,    	// Name of test
+		uriTest: String,	// URI of test
+		testType: String, 	// Type of test
+		moreInfo: String 	// Info about what happened
 		) {
 
   override def toString : String = 

@@ -6,19 +6,15 @@ import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input.Positional
 import scala.util.parsing.input._
 import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
 import scala.collection.immutable.Map
+import es.weso.rdfgraph.nodes.BNodeId
 
-case class BNodeTable(
-  val bNodeName : Map[BNodeId,Option[String]],
-  val nameBNode : Map[String,BNodeId],
-  val nodes : Int = 0) {
+case class BNodeTable(bNodeName : Map[BNodeId,Option[String]],nameBNode : Map[String,BNodeId],nodes : Int = 0) {
   
   def newBNode : (BNodeId,BNodeTable) = 
     (BNodeId(nodes), BNodeTable(bNodeName,nameBNode,nodes + 1))
@@ -49,7 +45,7 @@ case class BNodeTable(
     nameBNode.clear
   } */
   
-  override def toString(): String = {
+  override def toString: String = {
     "Nodes: " + nodes + ", bNodeName: " + bNodeName.toString + ", nameBNode: " + nameBNode
   }
 

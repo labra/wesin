@@ -7,7 +7,6 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 import scala.io.Source
 import com.hp.hpl.jena.rdf.model.RDFNode
-import es.weso.rdfTriple._
 import scala.util.parsing.input.CharArrayReader
 import com.typesafe.config._
 import com.hp.hpl.jena.rdf.model.ModelFactory
@@ -16,14 +15,13 @@ import com.hp.hpl.jena.rdf.model.Model
 import com.hp.hpl.jena.rdf.model.Resource
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import es.weso.rdfTriple.jenaMapper.JenaMapper
 import scala.io.Source._
 import com.hp.hpl.jena.rdf.model.Literal
-import es.weso.rdfNode.IRI
 import java.io.FileOutputStream
 import java.io.FileInputStream
 import scala.collection.JavaConverters._
 import org.scalatest.Matchers
+import es.weso.jena.JenaMapper
 
 
 class RunTurtleW3cTestsSuite extends FunSpec with Matchers {

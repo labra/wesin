@@ -1,8 +1,5 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
 
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
@@ -10,10 +7,9 @@ import org.scalatest.junit.JUnitRunner
 
 import scala.io.Source
 
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
-
+import es.weso.rdfgraph.nodes._
 import scala.util.parsing.input.CharArrayReader
+import es.weso.rdfgraph.statements.RDFTriple
 
 @RunWith(classOf[JUnitRunner])
 class NTriplesParserSuite extends FunSuite with NTriplesParser {
@@ -93,8 +89,8 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     		   |<a> <b> <d> .""".stripMargin
     
     assertParse(ntripleDoc, ts, 
-    		(Stream(RDFTriple(IRI("a"),IRI("b"),IRI("c")),
-    		        RDFTriple(IRI("a"),IRI("b"),IRI("d")))))
+    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
 
   test("two triples with comment") {
@@ -104,8 +100,8 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     		   |<a> <b> <d> .""".stripMargin
     
     assertParse(ntripleDoc, ts, 
-    		(Stream(RDFTriple(IRI("a"),IRI("b"),IRI("c")),
-    		        RDFTriple(IRI("a"),IRI("b"),IRI("d")))))
+    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
 
   test("two triples with comments") {
@@ -118,24 +114,23 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
                |""".stripMargin
     
     assertParse(ntripleDoc, ts, 
-    		(Stream(RDFTriple(IRI("a"),IRI("b"),IRI("c")),
-    		        RDFTriple(IRI("a"),IRI("b"),IRI("d")))))
+    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
   
   test("Example from file 0") {
     val input = Source.fromURL(getClass.getResource("/test0.nt")).mkString
     assertParse(ntripleDoc, input, 
-    		(Stream(RDFTriple(IRI("http://example.org/a"),IRI("http://example.org/b"),IRI("http://example.org/c")))))
+    		Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c"))))
   }
 
   test("Example from file 1") {
     val input = Source.fromURL(getClass.getResource("/test1.nt")).mkString
     assertParse(
         ntripleDoc, input, 
-    		(Stream(RDFTriple(IRI("http://example.org/a"),IRI("http://example.org/b"),IRI("http://example.org/c")),
-    				RDFTriple(IRI("http://example.org/a"),IRI("http://example.org/b"),IRI("http://example.org/d"))
-    				)
-    		)
+    		Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c")),
+          RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/d"))
+        )
     )
   }
 

@@ -7,8 +7,9 @@ import scala.util.parsing.input._
 import util.parsing.input.CharSequenceReader.EofCh
 import scala.language.postfixOps
 
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
+
+import es.weso.rdfgraph.statements._
+import es.weso.rdfgraph.nodes._
 
 /**
  * NTriples Parser
@@ -66,7 +67,7 @@ trait NTriplesParser extends Positional with RegexParsers {
                       }) 
      }
     }
-  def literal : Parser[Literal] = ( datatypeLiteral | langLiteral )
+  def literal : Parser[Literal] = datatypeLiteral | langLiteral
   
   def langLiteral : Parser[LangLiteral] = string ~ opt("@" ~> language) ^^ 
   		  { case str ~ Some(lang) => LangLiteral(str,lang)

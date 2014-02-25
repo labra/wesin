@@ -1,36 +1,23 @@
 package es.weso.parser
 
-import scala.util.parsing.combinator.Parsers
-import scala.util.parsing.combinator.lexical.Lexical
-import scala.util.parsing.input.Positional
-
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-
-import scala.io.Source
 
 import com.hp.hpl.jena.rdf.model.RDFNode
 
-import es.weso.rdfTriple._
+import es.weso.rdfgraph.nodes._
 
-import scala.util.parsing.input.CharArrayReader
 
 import com.typesafe.config._
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.vocabulary.RDF
 import com.hp.hpl.jena.rdf.model.Model
 import com.hp.hpl.jena.rdf.model.Resource
 
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-import es.weso.rdfTriple.jenaMapper.JenaMapper
 
 import scala.io.Source._
 
-import com.hp.hpl.jena.rdf.model.Literal
-
-import es.weso.rdfNode.IRI
+import es.weso.jena.JenaMapper
 
 object RunTurtleW3cTests
 		extends TurtleParser
@@ -96,8 +83,8 @@ object RunTurtleW3cTests
        val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
        val testType="Positive syntax"
        action match {
-         case Some(node) if node.isURIResource() => {
-        	 val contents = fromURL(node.asResource().getURI()).mkString 
+         case Some(node) if node.isURIResource => {
+        	 val contents = fromURL(node.asResource().getURI).mkString
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
         		 	case Left(_) => 
@@ -121,7 +108,7 @@ object RunTurtleW3cTests
        val baseIRI = w3cTestsURL + name + ".ttl" // Base URI for relative URI resolution. See http://www.w3.org/2013/TurtleTests/
        val testType="Negative syntax"
        action match {
-         case Some(node) if node.isURIResource() => {
+         case Some(node) if node.isURIResource => {
         	 val contents = fromURL(node.asResource().getURI()).mkString 
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
@@ -152,8 +139,8 @@ object RunTurtleW3cTests
        (action,result) match {
          case (Some(a),Some(r)) 
          if a.isURIResource && r.isURIResource => {
-        	 val strAction = fromURL(a.asResource().getURI(),"UTF-8").mkString 
-        	 val strResult = fromURL(r.asResource().getURI(),"UTF-8").mkString 
+        	 val strAction = fromURL(a.asResource().getURI,"UTF-8").mkString
+        	 val strResult = fromURL(r.asResource().getURI,"UTF-8").mkString
         	 val resultJenaParser = str2model(strResult,baseIRI,"N-TRIPLES")
 
         	 passTurtleEval(name,IRI(baseIRI),strAction,resultJenaParser) match {
@@ -177,7 +164,7 @@ object RunTurtleW3cTests
        action match {
          case Some(a) 
          if a.isURIResource => {
-        	 val strAction = fromURL(a.asResource().getURI(),"UTF-8").mkString 
+        	 val strAction = fromURL(a.asResource().getURI,"UTF-8").mkString
 
          	 try { 
         	   TurtleParser.parse(strAction,IRI(baseIRI)) match {
@@ -217,7 +204,7 @@ object RunTurtleW3cTests
      val iter = m.listObjectsOfProperty(r,mfname)
      if (iter.hasNext) {
        val node : RDFNode = iter.next()
-       if (node.isLiteral) node.asLiteral().getLexicalForm()
+       if (node.isLiteral) node.asLiteral().getLexicalForm
        else "<resource " + r + " with no name>"
      } else "<resource " + r + " with no name>"
    }

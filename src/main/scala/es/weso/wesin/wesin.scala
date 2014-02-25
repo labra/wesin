@@ -1,9 +1,9 @@
 package es.weso.wesin
 
-import es.weso.rdfGraph
-import es.weso.rdfGraph._
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
+
+import es.weso.rdfgraph.RDFGraph
+import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdfgraph.nodes._
 
 object Wesin extends App {
 

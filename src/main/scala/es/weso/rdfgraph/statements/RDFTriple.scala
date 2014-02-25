@@ -1,7 +1,7 @@
-package es.weso.rdfTriple
+package es.weso.rdfgraph.statements
 
-import es.weso.rdfNode._
 import scala.collection.Set
+import es.weso.rdfgraph.nodes._
 
 case class RDFTriple(subj : RDFNode, pred : IRI, obj : RDFNode) {
   def extractBNode (node: RDFNode) : Set[BNodeId] = {

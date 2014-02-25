@@ -6,8 +6,8 @@ import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input._
 import scala.util.parsing.input.Positional
 import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfNode._
-import es.weso.rdfTriple._
+import es.weso.rdfgraph.statements._
+import es.weso.rdfgraph.nodes._
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
@@ -15,6 +15,9 @@ import scala.io.Codec
 import scala.util.matching.Regex
 import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
+import es.weso.rdfgraph.statements._
+import es.weso.rdfgraph.nodes._
+
 
 trait TurtleParser 
 	extends Positional 
@@ -22,7 +25,7 @@ trait TurtleParser
 	with StateParser 
 	with W3cTokens {
 
-  case class ResultParser[A,S](val t: A, val s: S) extends Positional
+  case class ResultParser[A,S](t: A, s: S) extends Positional
   
   def turtleDoc(implicit s: TurtleParserState) : 
 	  		Parser[ResultParser[Set[RDFTriple],TurtleParserState]] = 

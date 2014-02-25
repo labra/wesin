@@ -1,17 +1,16 @@
-package es.weso.rdfTriple.jenaMapper
+package es.weso.jena
 
-import es.weso.rdfTriple.RDFTriple
 import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.{RDFNode => JenaRDFNode}
-import es.weso.rdfNode.RDFNode
 import com.hp.hpl.jena.rdf.model.Property
 import com.hp.hpl.jena.rdf.model.Resource
-import es.weso.rdfNode._
+import es.weso.rdfgraph.nodes._
 import com.hp.hpl.jena.rdf.model.AnonId
 import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
 import com.hp.hpl.jena.rdf.model.Model
+import es.weso.rdfgraph.statements.RDFTriple
 
 trait JenaMapper {
 
