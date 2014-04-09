@@ -224,10 +224,11 @@ trait W3cTokens
     newS 
   }
 
+ // from _:xxx to xxx
  def removeBNodePrefix(s : String) : String = {
-   val rex = "\\_:(.*)".r
-   val rex(newS) = s
-   newS
+   s.toList match {
+     case '_' :: ':' :: rs => rs.toString 
+   }
  }
   
  def str2Double(s: String) : Double = s.toDouble 

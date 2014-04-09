@@ -122,7 +122,6 @@ object RDFGraph {
   * @param pred list of predecessors (incoming edges): pairs of (subject,property)
   * 
   */
-		   		    
   def showFolds (g : RDFGraph) : String = {
     g.foldRDFGraph(
          "\n", 
@@ -153,5 +152,8 @@ object RDFGraph {
    	g.foldRDFGraphOrd("", (ctx: TContext[RDFNode], r: String) => "ctx: " + ctx + "\n" + r)
   }
 
+  def fromTriples(triples: Set[RDFTriple]): RDFGraph = {
+    empty.addTriples(triples)
+  }
 
 }

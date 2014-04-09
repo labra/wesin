@@ -2,6 +2,8 @@ package es.weso.rdfgraph.nodes
 
 case class RDFNodeException(msg : String) extends Exception
 
+
+// TODO: Refactor as a sealed class => should include literals in this file
 class RDFNode {
   def isIRI = this match {
     case i : IRI => true

@@ -2,6 +2,11 @@ package es.weso.wesin;
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.ILoop
  
+
+/** REPL for Wesin
+ *  TODO: finnish it
+ * */
+
 object TestConsole extends App {
   val settings = new Settings
 //  settings.usejavacp.value = true

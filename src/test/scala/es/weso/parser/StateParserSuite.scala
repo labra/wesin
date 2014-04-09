@@ -1,7 +1,6 @@
 package es.weso.parser
 
 import scala.util.parsing.combinator.RegexParsers
-import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.FunSpec
 import util.parsing.input.CharSequenceReader.EofCh
 import org.scalatest.Matchers
@@ -14,6 +13,115 @@ class StateParserSuite
 	with W3cTokens
 	with Matchers {
 
+  describe("OR_AND_with_chainl1") {
+    class Expr
+    case class Or(e1: Expr, e2: Expr) extends Expr
+    case class And(e1: Expr, e2: Expr) extends Expr
+    case class B(n: Integer) extends Expr
+
+    def expr = or
+	def or: Parser[Expr] = chainl1(and, "|" ^^^ Or)
+	def and: Parser[Expr] = chainl1(unary, "," ^^^ And)
+	def unary: Parser[Expr] = arc | "(" ~> or <~ ")"
+    def arc : Parser[Expr] = "A" ^^ { case _ => B(0) }
+
+    shouldParseGeneric(expr,"A",B(0))
+    shouldParseGeneric(expr,"A,A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"(A),A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"((A)),A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"((A),A)",And(B(0),B(0)))
+   
+  }
+
+  describe("ORAND_no State") {
+    class Expr
+    case class Or(e1: Expr, e2: Expr) extends Expr
+    case class And(e1: Expr, e2: Expr) extends Expr
+    case class B(n: Integer) extends Expr
+
+    def expr: Parser[Expr] = OrExpr
+    def OrExpr: Parser[Expr] = 
+      AndExpr ~ rep("|" ~> OrExpr) ^^ 
+        { case p => (ls2Expr(Or, p._1, p._2))} 
+
+    
+    def AndExpr: Parser[Expr] =
+      UnaryExpr ~ rep("," ~> AndExpr) ^^ 
+        { case p => (ls2Expr(And, p._1, p._2))}
+
+    def ls2Expr (
+        build:(Expr,Expr) => Expr, 
+        initial: Expr, 
+        ls: Seq[Expr]): Expr =
+       ls.foldLeft(initial)(build)
+    
+    def UnaryExpr: Parser[Expr] = 
+      ( "(" ~> expr <~ ")"
+      | arc
+      )
+      
+    def arc: Parser[Expr] = "A" ^^ { case a => B(0) }
+
+    shouldParseGeneric(expr,"A",B(0))
+    shouldParseGeneric(expr,"A,A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"(A),A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"((A)),A",And(B(0),B(0)))
+    shouldParseGeneric(expr,"((A),A)",And(B(0),B(0)))
+
+  }
+  
+  describe("ORAND") {
+    class Expr
+    case class Or(e1: Expr, e2: Expr) extends Expr
+    case class And(e1: Expr, e2: Expr) extends Expr
+    case class B(n: Integer) extends Expr
+    
+    val s = SimpleState.initial
+    
+    def expr(s: SimpleState): Parser[(Expr,SimpleState)] = 
+      OrExpr(s)
+    
+    def OrExpr(s: SimpleState): Parser[(Expr,SimpleState)] = 
+     // Todo: implement this with chainl1 
+     seqState(AndExpr,repS(arrowState(OrExpr,"|")))(s) ^^ 
+        { case (p,s1) => (ls2Expr(Or, p._1, p._2),s1)} 
+
+    
+    def AndExpr(s: SimpleState): Parser[(Expr,SimpleState)] =
+      seqState(UnaryExpr,repS(arrowState(AndExpr,",")))(s) ^^ 
+        { case (p,s1) => (ls2Expr(And, p._1, p._2),s1)}
+
+    def ls2Expr (
+        build:(Expr,Expr) => Expr, 
+        initial: Expr, 
+        ls: Seq[Expr]): Expr =
+       ls.foldLeft(initial)(build)
+    
+    def UnaryExpr(s: SimpleState): Parser[(Expr,SimpleState)] = 
+      ( arc(s) 
+      | "(" ~> expr(s) <~ ")"
+      )
+      
+    def arc(s:SimpleState): Parser[(Expr,SimpleState)] =
+      newS("A")(s) ^^ { case (a,s1) => (B(a),s1) }
+    
+    shouldParseGeneric(expr(s),"A",(B(0),SimpleState(1)))
+    shouldParseGeneric(expr(s),"A,A",(And(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"(A),A",(And(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"((A)),A",(And(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"((A),A)",(And(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"A,(A)",(And(B(0),B(1)),SimpleState(2)))    
+    shouldParseGeneric(expr(s),"(A,(A))",(And(B(0),B(1)),SimpleState(2)))    
+    shouldParseGeneric(expr(s),"(A)",(B(0),SimpleState(1)))
+    shouldParseGeneric(expr(s),"(A,A)",(And(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"(A|A)",(Or(B(0),B(1)),SimpleState(2)))
+    shouldParseGeneric(expr(s),"(A|A,A)",(Or(B(0),And(B(1),B(2))),SimpleState(3)))
+    shouldParseGeneric(expr(s),"(A|(A,A))",(Or(B(0),And(B(1),B(2))),SimpleState(3)))
+    shouldParseGeneric(expr(s),"((A|A),A)",(And(Or(B(0),B(1)),B(2)),SimpleState(3)))
+    shouldParseGeneric(expr(s),"(A,(A|A))",(And(B(0),Or(B(1),B(2))),SimpleState(3)))
+  }
+  
+  
   describe("repState") {
     val s = SimpleState.initial
     val parserAs = (s : SimpleState) => opt(WS) ~> repState(s,newS("A"))
@@ -80,6 +188,8 @@ class StateParserSuite
 	    ( opt(WS) ~> 
 	      acceptRegex("term("+term+")",term.r)) ^^^ 
 	          { s.newState }
+
+
 }
 
 

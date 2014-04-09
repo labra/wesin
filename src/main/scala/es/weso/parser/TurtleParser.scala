@@ -17,6 +17,7 @@ import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
 import es.weso.rdfgraph.statements._
 import es.weso.rdfgraph.nodes._
+import scala.util.Try
 
 
 trait TurtleParser 
@@ -250,14 +251,14 @@ object TurtleParser extends TurtleParser {
    * @return Left(rs) = list of triples successfully parsed
    *         Right(msg) = Error msg
    */
-  def parse(s:String, baseIRI: IRI = IRI("")) : Either[Set[RDFTriple],String] = {
+  def parse(cs:CharSequence, baseIRI: IRI = IRI("")) : Try[(Set[RDFTriple],PrefixMap)] = {
     try {
-     parseAll(turtleDoc(TurtleParserState.initial.newBase(baseIRI)),s) match {
-      case Success(ResultParser(x,_),_) => Left(x)
-      case NoSuccess(msg,_) 		    => Right(msg)
+     parseAll(turtleDoc(TurtleParserState.initial.newBase(baseIRI)),new CharSequenceReader(cs)) match {
+      case Success(ResultParser(x,s1),_) => util.Success((x,s1.namespaces))
+      case NoSuccess(msg,_) 		    => util.Failure(new Exception(msg))
      }
     } catch {
-      case e: Exception => Right("Exception during parsing: " + e)
+      case e: Exception => util.Failure(e)
     }
   }
 

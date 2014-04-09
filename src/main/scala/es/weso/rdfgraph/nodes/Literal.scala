@@ -1,5 +1,7 @@
 package es.weso.rdfgraph.nodes
 
+
+// TODO: Refactor as a sealed class and include it in RDFNode
 trait Literal extends RDFNode {
   def lexicalForm : String
   def dataType : IRI

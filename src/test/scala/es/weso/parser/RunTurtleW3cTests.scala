@@ -87,9 +87,9 @@ object RunTurtleW3cTests
         	 val contents = fromURL(node.asResource().getURI).mkString
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
-        		 	case Left(_) => 
+        		 	case util.Success(_) => 
         		 	  currentReport.addTestReport(true, name, r.getLocalName, testType, "Parsed OK")
-        		 	case Right(msg) => 
+        		 	case util.Failure(msg) => 
         		 	  currentReport.addTestReport(false,name, r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
@@ -112,9 +112,9 @@ object RunTurtleW3cTests
         	 val contents = fromURL(node.asResource().getURI()).mkString 
         	 try { 
         	   TurtleParser.parse(contents,IRI(baseIRI)) match {
-        		 	case Left(_) => 
+        		 	case util.Success(_) => 
         		 	  currentReport.addTestReport(false, name, r.getLocalName, testType, "Parsed OK when expected to fail parsing")
-        		 	case Right(msg) => 
+        		 	case util.Failure(msg) => 
         		 	  currentReport.addTestReport(true,name, r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
@@ -168,10 +168,10 @@ object RunTurtleW3cTests
 
          	 try { 
         	   TurtleParser.parse(strAction,IRI(baseIRI)) match {
-        		 	case Left(triples) => 
+        		 	case util.Success((triples,pm)) => 
         		 	  val model = RDFTriples2Model(triples)
         		 	  currentReport.addTestReport(false, name, r.getLocalName, testType, "Parsed and model built when expected to fail parsing")
-        		 	case Right(msg) => 
+        		 	case util.Failure(msg) => 
         		 	  currentReport.addTestReport(true,name,r.getLocalName, testType, "Parsing failed with message: " + msg)
         		 }
         	 } catch {
@@ -215,14 +215,14 @@ object RunTurtleW3cTests
 		   expected: Model ) : Either[Model,String]= {
    try {
      TurtleParser.parse(in,baseIRI) match {
-     case Left(triples) => {
+     case util.Success((triples,pm)) => {
           val model = RDFTriples2Model(triples)
           if (model.isIsomorphicWith(expected)) 
         	  Left(model)
           else 
         	  Right("Models are not isomorphic. \nModel    = " + model + "\nExpected = " + expected)
      }
-     case Right(msg) => 
+     case util.Failure(msg) => 
           	  Right("Test: " + name + ". Cannot parse: " + msg + "\n" + 
           	        in + "\n-----------------\n")
      }

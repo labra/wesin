@@ -324,8 +324,8 @@ class TurtleParserSuite
     		triples: Set[RDFTriple]) {
     it("Should parse \"" + s + "\"" + " and return " + triples) {
       val result = TurtleParser.parse(s,baseIRI) match {
-        case Left(x) => x 
-        case Right(msg) => fail(msg)
+        case util.Success((x,pm)) => x 
+        case util.Failure(msg) => fail(msg)
       }
       result should be(triples)
     }
@@ -334,8 +334,8 @@ class TurtleParserSuite
     def shouldNotParseTurtle(s : String) {
     it("Should not parse \"" + s + "\"") {
       TurtleParser.parse(s) match {
-        case Left(x) => fail("Parsed: " + x + " but it should not parse")
-        case Right(msg) => info("Not parsed with message: " + msg)
+        case util.Success(x) => fail("Parsed: " + x + " but it should not parse")
+        case util.Failure(msg) => info("Not parsed with message: " + msg)
       }
     }
    }
