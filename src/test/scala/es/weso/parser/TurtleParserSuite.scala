@@ -294,15 +294,31 @@ class TurtleParserSuite
    } 
 
    describe("BlankNode") {
-     val bNodeTable = BNodeTable.empty
-     val table1 = bNodeTable.getOrAddBNode("1")
-     val tableA = bNodeTable.getOrAddBNode("a")
-     val tableAnon = bNodeTable.newBNode
-     val p = BlankNode(bNodeTable)
-     shouldParseRDF(p,"_:1",BNodeId(0))
-	 shouldParseRDF(p,"_:a",BNodeId(0))
-	 shouldParseRDF(p,"[]",BNodeId(0))
-	 shouldNotParse(p,"<a>")
+     val initial = BNodeTable.empty
+     val table1 = initial.getOrAddBNode("1")
+     val tableA = initial.getOrAddBNode("a")
+     val tableAnon = initial.newBNode
+     val p = BlankNode _ 
+	 shouldParseRDF(p(initial),"_:1",BNodeId(0))
+	 shouldParseRDF(p(initial),"_:a",BNodeId(0))
+	 shouldParseRDF(p(initial),"[]",BNodeId(0))
+	 shouldNotParse(p(initial),"<a>")
+   }
+
+    def shouldParseState[A,S](p:S => Parser[(A,S)], 
+    		s : String, 
+    		a : A, 
+    		initial: S, 
+    		end: S): Unit = {
+    it("Should parse \"" + s + "\"") {
+      val result = parseAll(p(initial),s) match {
+        case Success((x,s1),_) => {
+          x should be (a)
+          s1 should be(end)
+        }
+        case NoSuccess(msg,_) => fail(msg)
+      }
+    }
    }
 
    /** 

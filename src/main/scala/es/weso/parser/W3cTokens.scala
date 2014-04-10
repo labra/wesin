@@ -227,7 +227,7 @@ trait W3cTokens
  // from _:xxx to xxx
  def removeBNodePrefix(s : String) : String = {
    s.toList match {
-     case '_' :: ':' :: rs => rs.toString 
+     case '_' :: ':' :: rs => rs.mkString
    }
  }
   
