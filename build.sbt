@@ -18,10 +18,10 @@ libraryDependencies ++= Seq(
   , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2"
   , "junit" % "junit" % "4.10" % "test"
   , "org.openrdf.sesame" % "sesame-model" % "2.7.10"
- //  , "es.weso" % "stateParser_2.10" % "0.0.1" 
+  , "es.weso" % "stateparser_2.10" % "0.0.1" 
 )
 
-// seq(bintrayResolverSettings:_*)
-// resolvers += Resolver.url("bintray-weso-releases",url("http://dl.bintray.com/weso/weso-releases"))(Resolver.mvnStylePatterns)
+resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
 
+bintray.Plugin.bintrayResolverSettings
 
