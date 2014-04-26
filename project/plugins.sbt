@@ -15,4 +15,3 @@ addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
 
 addSbtPlugin("com.lihaoyi" % "utest-js-plugin" % "0.1.2")
 
-
