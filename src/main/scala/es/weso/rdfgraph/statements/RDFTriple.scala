@@ -4,16 +4,30 @@ import scala.collection.Set
 import es.weso.rdfgraph.nodes._
 
 case class RDFTriple(subj : RDFNode, pred : IRI, obj : RDFNode) {
+
   def extractBNode (node: RDFNode) : Set[BNodeId] = {
     node match {
       case b@BNodeId(id) => Set(b)
       case _ => Set()
     }
   }
-    
+   
+  def extractIRI(node: RDFNode) : Set[IRI] = {
+    node match {
+      case iri: IRI => Set(iri)
+      case _ => Set()
+    }
+  }
+  
   def bNodes : Set[BNodeId] = {
-    val set = Set()
-    set ++ extractBNode(subj) ++ extractBNode(obj)
+    extractBNode(subj) ++ 
+    extractBNode(obj)
+  }
+
+  def iris : Set[IRI] = {
+    extractIRI(subj) ++ 
+    extractIRI(pred) ++ 
+    extractIRI(obj)  
   }
   
   override def toString : String = {

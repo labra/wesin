@@ -7,7 +7,7 @@ import com.typesafe.config._
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions.Help
 import org.slf4j.LoggerFactory
-import es.weso.rdf.RDFModel
+import es.weso.rdf.RDFTriples
 
 class Opts(
     arguments: Array[String],
@@ -55,10 +55,10 @@ object Wesin extends App {
 
   val dataFile = opts.data()
   for (cs <- getContents(dataFile); 
-      rdfmodel <- RDFModel.parse(cs) 
+      rdf <- RDFTriples.parse(cs) 
   ) {
     if (opts.show()) {
-      println(rdfmodel.toString())
+      println(rdf.toString())
     }
 /*    val dataFile = opts.data()
     if (dataFile != null) {
