@@ -50,6 +50,7 @@ object Build extends sbt.Build {
     url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(
       Resolver.ivyStylePatterns)
 
+  
 /*  val wesinDeps = Seq(
     "org.scalatest" % "scalatest_2.10" % "2.1.3",
     "com.assembla.scala-incubator" % "graph-core_2.10" % "1.7.3", //TODO: fix errors in tgraphimpl to migrate to 1.8.0
