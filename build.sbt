@@ -1,12 +1,14 @@
-name := "Wesin" 
+import sbt._
+import sbt.Keys._
+import bintray.Plugin.bintraySettings
+import bintray.Keys._
+import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
 
-version := "0.1.0"
+lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.0"))
 
-scalaVersion := "2.10.3"
+Build.sharedSettings
 
-net.virtualvoid.sbt.graph.Plugin.graphSettings
-
-scalacOptions ++= Seq("-deprecation")
+version := Build.currentVersion
 
 libraryDependencies ++= Seq(
     "commons-configuration" % "commons-configuration" % "1.7"
@@ -15,13 +17,24 @@ libraryDependencies ++= Seq(
   , "org.scala-lang" % "scala-compiler" % "2.10.3" 
   , "com.assembla.scala-incubator" % "graph-core_2.10" % "1.7.3"
   , "org.apache.jena" % "jena-arq" % "2.11.1" 
+  , "com.lihaoyi" %% "utest" % "0.1.3" % "test"
   , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2"
   , "junit" % "junit" % "4.10" % "test"
   , "org.openrdf.sesame" % "sesame-model" % "2.7.10"
   , "es.weso" % "stateparser_2.10" % "0.0.1" 
 )
 
-resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
+testFrameworks += new TestFramework("utest.runner.JvmFramework")
 
-bintray.Plugin.bintrayResolverSettings
+addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2")
+
+autoCompilerPlugins := true
+
+bintraySettings
+
+Build.publishSettings
+
+// resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
+
+// bintray.Plugin.bintrayResolverSettings
 
