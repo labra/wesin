@@ -38,7 +38,7 @@ case class RDFTriples(
  }
    
  override def triplesWithObject(iri: IRI) : Set[RDFTriple] = {
-   triples.filter(t => t.obj.toIRI == iri)
+   triples.filter(t => t.obj.isIRI && t.obj.toIRI == iri)
  }
 
 }

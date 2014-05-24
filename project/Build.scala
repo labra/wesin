@@ -15,7 +15,7 @@ object Build extends sbt.Build {
  
   def repo = "weso-releases" 
 
-  val wesinVersion = "0.0.1"
+  val wesinVersion = "0.0.2"
     
   publishMavenStyle := false
 

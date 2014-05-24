@@ -39,14 +39,8 @@ resourceGenerators in Test += Def.task {
   IO.unzipURL(location, resourceManaged.value / "downloadedTests").toSeq
 }.taskValue
 
-//resourceGenerators in Test += Def.task {
-//    val file = (resourceManaged in Compile).value / "labratest" / "myapp.properties"
-//    val contents = "name=%s\nversion=%s".format(name.value,version.value)
-//    IO.write(file, contents)
-//    Seq(file)
-//  }.taskValue 
 
-  // resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
+// resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
 
 // bintray.Plugin.bintrayResolverSettings
 
