@@ -17,7 +17,6 @@ object IO {
    }
  }
   
-
  def getContents(fileName: String): Try[CharSequence] = {
   try {
     using(io.Source.fromFile(fileName)){ source => 

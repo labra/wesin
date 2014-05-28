@@ -251,11 +251,18 @@ object TurtleParser extends TurtleParser {
    * @return Left(rs) = list of triples successfully parsed
    *         Right(msg) = Error msg
    */
-  def parse(cs:CharSequence, baseIRI: IRI = IRI("")) : Try[(Set[RDFTriple],PrefixMap)] = {
+  def parse(
+		  cs:CharSequence, 
+		  baseIRI: IRI = IRI("")
+      ) : Try[(Set[RDFTriple],PrefixMap)] = {
     try {
      parseAll(turtleDoc(TurtleParserState.initial.newBase(baseIRI)),new CharSequenceReader(cs)) match {
       case Success(ResultParser(x,s1),_) => util.Success((x,s1.namespaces))
-      case NoSuccess(msg,_) 		    => util.Failure(new Exception(msg))
+        case Error(msg,in1) => 
+          scala.util.Failure(new Exception("Error at " + in1.pos + ": " + msg))
+        case Failure(msg,in1) => {
+          scala.util.Failure(new Exception("Failure at " + in1.pos + ": " + msg))
+        }
      }
     } catch {
       case e: Exception => util.Failure(e)
