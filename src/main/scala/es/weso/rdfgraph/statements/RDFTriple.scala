@@ -5,6 +5,9 @@ import es.weso.rdfgraph.nodes._
 
 case class RDFTriple(subj : RDFNode, pred : IRI, obj : RDFNode) {
 
+  def hasSubject(node: RDFNode): Boolean = subj == node
+  def hasObject(node:RDFNode): Boolean = obj == node
+  
   def extractBNode (node: RDFNode) : Set[BNodeId] = {
     node match {
       case b@BNodeId(id) => Set(b)

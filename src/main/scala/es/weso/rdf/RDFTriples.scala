@@ -8,6 +8,7 @@ import es.weso.parser.TurtleParser
 import scala.util.Try
 import es.weso.rdfgraph.nodes.InitialBNodeId
 import es.weso.rdfgraph.nodes.IRI
+import es.weso.rdfgraph.nodes.RDFNode
 
 case class RDFTriples(
     triples: Set[RDFTriple], 
@@ -33,12 +34,13 @@ case class RDFTriples(
  
  override def rdfTriples : Set[RDFTriple] = triples
  
- override def triplesWithSubject(iri: IRI) : Set[RDFTriple] = {
-   triples.filter(t => t.subj.toIRI == iri)
+ 
+ override def triplesWithSubject(node: RDFNode) : Set[RDFTriple] = {
+   triples.filter(_.hasSubject(node))
  }
    
- override def triplesWithObject(iri: IRI) : Set[RDFTriple] = {
-   triples.filter(t => t.obj.isIRI && t.obj.toIRI == iri)
+ override def triplesWithObject(node: RDFNode) : Set[RDFTriple] = {
+   triples.filter(_.hasObject(node))
  }
 
 }

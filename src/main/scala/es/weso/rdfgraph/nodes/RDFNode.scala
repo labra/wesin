@@ -1,6 +1,10 @@
 package es.weso.rdfgraph.nodes
 
-case class RDFNodeException(msg : String) extends Exception
+case class RDFNodeException(msg : String) extends Exception {
+  override def toString():String = {
+    "RDFNodeException: \"" + msg + "\"" 
+  }
+}
 
 
 // TODO: Refactor as a sealed class => should include literals in this file
@@ -12,7 +16,8 @@ class RDFNode {
 
   def toIRI = this match {
     case i : IRI => i
-    case _ => throw RDFNodeException("Cannot convert RDFNode " + this + " to IRI")
+    case _ => 
+      throw RDFNodeException("Cannot convert RDFNode " + this + " to IRI")
   }
 }
 
