@@ -33,7 +33,9 @@ case class RDFTriples(
  }
  
  override def rdfTriples : Set[RDFTriple] = triples
- 
+ override def subjects: Set[RDFNode] = triples.map(_.subj)
+ override def objects: Set[RDFNode] = triples.map(_.obj)
+ override def predicates: Set[RDFNode] = triples.map(_.pred)
  
  override def triplesWithSubject(node: RDFNode) : Set[RDFTriple] = {
    triples.filter(_.hasSubject(node))

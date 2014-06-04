@@ -19,6 +19,10 @@ trait RDF {
   
   def rdfTriples(): Set[RDFTriple]
   
+  def subjects(): Set[RDFNode]
+  def predicates(): Set[RDFNode]
+  def objects(): Set[RDFNode]
+  
   def iris(): Set[IRI] = {
     val ts = rdfTriples
     ts.map(_.iris).flatten
