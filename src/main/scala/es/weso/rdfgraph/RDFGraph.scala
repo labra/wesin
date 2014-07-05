@@ -74,19 +74,19 @@ abstract class RDFGraph {
  
   def foldRDFGraph[A] 
 		(e: A, 
-		 f: (TContext[RDFNode],A) => A)
+		 f: (A,TContext[RDFNode]) => A)
   		(implicit seed : BNodeId) : A = {
     foldRDFGraphSeed(e,f,seed)
   }
 
   def foldRDFGraphSeed[A] (
 		  e: A, 
-		  fn: (TContext[RDFNode],A) => A, 
+		  fn: (A, TContext[RDFNode]) => A, 
 		  seed : BNodeId) : A 
 
  def foldRDFGraphOrd[A] 
 		 (e: A, 
-		  f: (TContext[RDFNode],A) => A)
+		  f: (A, TContext[RDFNode]) => A)
          (implicit ord : Ordering[RDFNode], 
         		   seed : BNodeId) : A = {
     foldRDFGraphSeedOrd(e,f,seed)(ord)
@@ -94,7 +94,7 @@ abstract class RDFGraph {
 
   def foldRDFGraphSeedOrd[A] (
 		  e: A, 
-		  fn: (TContext[RDFNode],A) => A,
+		  fn: (A, TContext[RDFNode]) => A,
 		  seed : BNodeId)
 		  (implicit ord : Ordering[RDFNode]) : A 
   
@@ -125,7 +125,7 @@ object RDFGraph {
   def showFolds (g : RDFGraph) : String = {
     g.foldRDFGraph(
          "\n", 
-         (ctx: TContext[RDFNode], r: String) => "ctx: " + ctx + "\n" + r
+         (r: String, ctx: TContext[RDFNode]) => "ctx: " + ctx + "\n" + r
          )
   }
 
@@ -149,7 +149,7 @@ object RDFGraph {
           case _ => throw new RDFNodeException("Unexpected values " + (x,y) + " comparing RDFNodes")
        }
    	}
-   	g.foldRDFGraphOrd("", (ctx: TContext[RDFNode], r: String) => "ctx: " + ctx + "\n" + r)
+   	g.foldRDFGraphOrd("", (r:String, ctx: TContext[RDFNode]) => "ctx: " + ctx + "\n" + r)
   }
 
   def fromTriples(triples: Set[RDFTriple]): RDFGraph = {

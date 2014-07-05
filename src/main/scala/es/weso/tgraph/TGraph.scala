@@ -2,6 +2,7 @@ package es.weso.tgraph
 
 import scala.collection.immutable.Set
 import scalax.collection.immutable.Graph
+import scala.annotation.tailrec
 
 /*
  * Generic triple graphs
@@ -30,6 +31,11 @@ trait TGraph[A] {
    * @param node to insert
    */
   def decomp (node : A) : Option[(TContext[A],TGraph[A])]
+  
+  def decompAny : Option[(TContext[A],TGraph[A])] = {
+    if (this.isEmpty) None
+    else decomp(nodes.head)
+  }
   
   /*
    * Extend a graph with a new context. 
@@ -63,27 +69,33 @@ trait TGraph[A] {
   
   def triples : Set[(A,A,A)] = {
    foldTGraph(Set[(A,A,A)]())
-   	 { (ctx,r) => ctx.triples ++ r }  
+   	 { (r,ctx) => ctx.triples ++ r }  
   }
   
-  def foldTGraph[B](e:B)(f:(TContext[A],B) => B): B = {
-   if (this.isEmpty) e 
-   else {
-    decomp(nodes.head) match {
-     case None => e
-     case Some(dec) => f(dec._1,dec._2.foldTGraph(e)(f))
+  @tailrec
+  final def foldTGraph[B](accum:B)(f:(B,TContext[A]) => B): B = {
+    decompAny match {
+     case None => accum
+     case Some((ctx,rest)) => {
+       val current = f(accum,ctx)
+       rest.foldTGraph(current)(f)
      }
     }
   }
   
-  def foldTGraphOrd[B](e:B)(f:(TContext[A],B) => B)(implicit ord: Ordering[A]) : B = {
-   if (this.isEmpty) e 
+  @tailrec
+  final def foldTGraphOrd[B](accum:B)(f:(B,TContext[A]) => B)
+                      (implicit ord: Ordering[A]) : B = {
+   if (this.isEmpty) accum 
    else {
-    decomp(nodes.min) match {
-     case None => e
-     case Some(dec) => f(dec._1,dec._2.foldTGraphOrd(e)(f))
+    decomp(nodes.min(ord)) match {
+     case None => accum
+     case Some((ctx,rest)) => {
+       val current = f(accum,ctx)
+       rest.foldTGraphOrd(current)(f)
      }
     }
+   }
   }
   
   def map[B : Manifest](f : A => B) : TGraph[B]
@@ -91,14 +103,14 @@ trait TGraph[A] {
 }
 
 object TGraph {
-  
+ 
+  // TODO: Remove these declarations from here...
+  //       It makes this code dependent on the TGraphImpl
   def empty [A : Manifest]: TGraph[A] =
     TGraphImpl(Graph[A,Triple]()).asInstanceOf[TGraph[A]]
     
   def fromTriple[A: Manifest] (triple: (A,A,A)): TGraph[A] = {
     TGraph.empty.addTriple(triple)
-    //val e : TGraph[A] = TGraph.empty.asInstanceOf[TGraph[A]]
-    // e.addTriple(triple)    
   }
     
 }

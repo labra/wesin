@@ -8,6 +8,7 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions.Help
 import org.slf4j.LoggerFactory
 import es.weso.rdf.RDFTriples
+import scala.util._
 
 class Opts(
     arguments: Array[String],
@@ -52,41 +53,30 @@ object Wesin extends App {
   val log 		= LoggerFactory.getLogger("Application")
   val conf 		= ConfigFactory.load()
   val opts 		= new Opts(args,errorDriver)
+  val verb : Boolean 	= opts.verbose() 
 
-  val dataFile = opts.data()
-  for (cs <- getContents(dataFile); 
-      rdf <- RDFTriples.parse(cs) 
-  ) {
-    if (opts.show()) {
-      println(rdf.toString())
-    }
-/*    val dataFile = opts.data()
-    if (dataFile != null) {
-      for (cs <- getContents(dataFile); 
-          (data,prefixMapData) <- RDF.fromString(cs)) {
-        if (opts.showData()) {
-          println(data.toString())
-        }
-        
-      }  
-    } */
+  def verbose(str: String) : Try[Any] = {
+    if (verb) log.debug(str)
+    Success()
   }
-/*  getContents(schemaFile) match {
-    case Failure(e) => 
-      println("Exception parsing file " + schemaFile + ": " + e.getLocalizedMessage())
-    case Success(cs) => {
-      log.info("Input string:\n" + cs)
-      Schema.fromString(cs) match {
-        case Success((schema,prefixMap)) => 
-           if (opts.showSchema()) {
-        	 log.info("Schema parsed")
-        	 println(schema.toString())
-    	   }
-        case Failure(e) => println("Exception parsing:" + e)
+  
+  val dataFile = opts.data()
+  val result = 
+    for ( cs <- getContents(dataFile)
+	  ; _ <- verbose("Contents:\n" + cs)
+      ; rdf <- RDFTriples.parse(cs)
+      ; _ <- verbose("RDF: " + rdf)
+    ) yield rdf
+  result match {
+      case Success(rdf) => {
+        println("Parsed ok") 
+        if (opts.show()) {
+         println(rdf)
+        }
       }
-    }
-   } */
- }
+      case Failure(e) => println("Exception: " + e.getMessage) 
+  }  
+}
 
  private def errorDriver(e: Throwable, scallop: Scallop) = e match {
     case Help(s) =>

@@ -19,13 +19,20 @@ trait RDF {
   
   def rdfTriples(): Set[RDFTriple]
   
-  def subjects(): Set[RDFNode]
-  def predicates(): Set[RDFNode]
-  def objects(): Set[RDFNode]
+  def subjects(): Set[IRI] = {
+    rdfTriples.map(_.subj).filter(_.isIRI).map(_.toIRI)
+  }
+
+  def predicates(): Set[IRI] = {
+    rdfTriples.map(_.pred).filter(_.isIRI).map(_.toIRI)
+  }
+
+  def objects(): Set[IRI] = {
+    rdfTriples.map(_.obj).filter(_.isIRI).map(_.toIRI)
+  }
   
   def iris(): Set[IRI] = {
-    val ts = rdfTriples
-    ts.map(_.iris).flatten
+    rdfTriples.map(_.iris).flatten
   }
 
   def triplesWithSubject(n: RDFNode): Set[RDFTriple]

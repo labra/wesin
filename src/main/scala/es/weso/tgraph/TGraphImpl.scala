@@ -25,12 +25,6 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
      } yield (TContext(node,p,s,r),this.remove(node))  
   }
 
-  def decompAny : Option[(TContext[A],TGraph[A])] = {
-    if (graph.isEmpty) None 
-    else 
-      decomp(nodes.head)
-  }
-
   def extend(ctx : TContext[A]) = {
     TGraphImpl( 
          ((((graph + ctx.node) 

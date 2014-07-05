@@ -77,33 +77,61 @@ class TGraphSuite extends FunSuite {
     assert(g2.triples == Set(('a','b','c'),('a','b','d')))
   }
 
-  test("foldGraph min") {
+  test("foldTGraph length") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('b','c','a')
     val g2 = g1.addTriple('a','b','d')
     val g = g2
-    val ls = g.foldTGraphOrd(List[Char]())((ctx,r) => ctx.node :: r)
-    assert(ls == List('a','b','c','d'))
+    val result = g.foldTGraph(0)((r,_) => 1 + r)
+    assert(result === 4)
   }
 
-  test("foldGraph min loop") {
+  test("foldTGraph sum") {
+    val g0 = new TGraphImpl(Graph[Int,Triple]())
+    val g1 = g0.addTriple(1,2,3)
+    val g2 = g1.addTriple(3,2,1)
+    val g = g2
+    val result = g.foldTGraph(0)((r,ctx) => r + ctx.node)
+    assert(result === 6)
+  }
+
+  test("foldTGraph sum with 2 nodes") {
+    val g0 = new TGraphImpl(Graph[Int,Triple]())
+    val g1 = g0.addTriple(1,2,1)
+    val g = g1
+    val result = g.foldTGraph(0)((r,ctx) => r + ctx.node)
+    assert(result === 3)
+  }
+
+  test("foldTGraphOrd min") {
+    val g0 = new TGraphImpl(Graph[Char,Triple]())
+    val g1 = g0.addTriple('b','c','a')
+    val g2 = g1.addTriple('a','b','d')
+    val g = g2
+    val ls = g.foldTGraphOrd(List[Char]())((r,ctx) => ctx.node :: r)
+    assert(ls === List('d','c','b','a'))
+  }
+
+  test("foldTGraphOrd min loop") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('a','b','c')
     val g2 = g1.addTriple('c','b','d')
     val g3 = g2.addTriple('d','b','a')
     val g = g3
-    val ls = g.foldTGraphOrd(List[Char]())((ctx,r) => ctx.node :: r)
-    assert(ls === List('a','b','c','d'))
+    val ord = new Ordering[Char] { def compare(x :Char,y :Char):Int = x compare y } 
+    val ls = g.foldTGraphOrd(List[Char]())((r,ctx) => ctx.node :: r)(ord)
+    assert(ls === List('d','c','b','a'))
   }
 
-  test("foldGraph max") {
+  test("foldTGraphOrd max") {
     val g0 = new TGraphImpl(Graph[Char,Triple]())
     val g1 = g0.addTriple('b','c','a')
     val g2 = g1.addTriple('a','b','d')
     val g = g2
-    val ord = new Ordering[Char] { def compare(x :Char,y :Char):Int = y - x } 
-    val ls = g.foldTGraphOrd(List[Char]())((ctx,r) => ctx.node :: r)(ord)
-    assert(ls === List('d','c','b','a'))
+    val ord = new Ordering[Char] { def compare(x :Char,y :Char):Int = y - x }
+    assert(g.nodes.min(ord) === 'd')
+    val ls = g.foldTGraphOrd(List[Char]())((r,ctx) => ctx.node :: r)(ord)
+    assert(ls === List('a','b','c','d'))
   }
 
   test("map empty") {

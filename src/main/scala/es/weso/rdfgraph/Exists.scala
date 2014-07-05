@@ -53,13 +53,13 @@ case class Exists(fn : BNodeId => RDFGraph)(implicit seed : BNodeId) extends RDF
     "Exists " + seed.id + " ( " + fn(seed).show(seed.newBNodeId) + ")"
   }
 
-  override def foldRDFGraphSeed[A] (e: A, f: (TContext[RDFNode],A) => A, seed: BNodeId) : A = {
+  override def foldRDFGraphSeed[A] (e: A, f: (A, TContext[RDFNode]) => A, seed: BNodeId) : A = {
     fn(seed).foldRDFGraphSeed(e,f,seed.newBNodeId)
   }
 
   def foldRDFGraphSeedOrd[A] (
                                e: A,
-                               f: (TContext[RDFNode],A) => A,
+                               f: (A,TContext[RDFNode]) => A,
                                seed : BNodeId)
                              (implicit ord : Ordering[RDFNode]) : A = {
     fn(seed).foldRDFGraphSeedOrd(e,f,seed.newBNodeId)(ord)

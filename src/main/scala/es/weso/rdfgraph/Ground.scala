@@ -100,13 +100,13 @@ case class Ground(graph : TGraph[RDFNode])
     }
   }
 
-  override def foldRDFGraphSeed[A] (e: A, f:(TContext[RDFNode],A) => A, seed : BNodeId) : A = {
+  override def foldRDFGraphSeed[A] (e: A, f:(A,TContext[RDFNode]) => A, seed : BNodeId) : A = {
     graph.foldTGraph(e)(f)
   }
 
   def foldRDFGraphSeedOrd[A] (
                                e: A,
-                               f: (TContext[RDFNode],A) => A,
+                               f: (A,TContext[RDFNode]) => A,
                                seed : BNodeId)
                              (implicit ord : Ordering[RDFNode]) : A = {
     graph.foldTGraphOrd(e)(f)(ord)

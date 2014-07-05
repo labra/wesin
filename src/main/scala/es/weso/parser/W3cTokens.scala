@@ -16,6 +16,7 @@ import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
 import scala.collection.immutable.LinearSeq
 
+
 trait W3cTokens
 	extends Positional 
 	with RegexParsers {
@@ -143,13 +144,13 @@ trait W3cTokens
     } 
 
   lazy val PN_CHARS_BASE_Parser : Parser[Char] = PN_CHARS_BASE.r ^^ { x => str2Char(x) }
-
+    
   lazy val PN_CHARS_BASE =
  	"""[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6""" +
  	"""\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF""" +
  	"""\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF""" +
  	"""\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD""" + 
-   	"""\x{10000}-\x{EFFFF}]""" 
+ 	"""\x{10000}-\x{EFFFF}]""" 
 
  lazy val PN_CHARS_U    = PN_CHARS_BASE + "|_"
  
@@ -192,7 +193,7 @@ trait W3cTokens
     val rex = """\\[uU](.*)""".r
     uchar match {
       case rex(x) => Integer.parseInt(x,16).toChar
-      case _ => throw new Exception("Internal Error: cannot convert uchar " + uchar + " to " + rex.pattern)
+      case _ => throw new ParserException("Internal Error: cannot convert uchar " + uchar + " to " + rex.pattern)
     }
  }
   
@@ -204,7 +205,7 @@ trait W3cTokens
       case "\\r" => '\r'
       case "\\f" => '\f'
       case "\\\"" => '\"'
-      case _ => throw new Exception("Internal Error: cannot convert ECHAR " + echar + " to character")
+      case _ => throw new ParserException("Internal Error: cannot convert ECHAR " + echar + " to character")
     }
  }
 
@@ -228,6 +229,7 @@ trait W3cTokens
  def removeBNodePrefix(s : String) : String = {
    s.toList match {
      case '_' :: ':' :: rs => rs.mkString
+     case _ => throw new ParserException("Internal error: removeBNodePrefix: string " + s + " should start by underscore")
    }
  }
   
