@@ -39,6 +39,7 @@ resourceGenerators in Test += Def.task {
   IO.unzipURL(location, resourceManaged.value / "downloadedTests").toSeq
 }.taskValue
 
+seq(bintrayPublishSettings:_*)
 
 // resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
 
