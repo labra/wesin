@@ -43,5 +43,5 @@ seq(bintrayPublishSettings:_*)
 
 // resolvers += bintray.Opts.resolver.repo("weso", "weso-releases")
 
-
+resolvers += "Bintray" at "http://dl.bintray.com/weso/weso-releases"
 
