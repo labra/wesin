@@ -28,7 +28,7 @@ trait TGraph[A] {
   
   /*
    * Decompose a graph
-   * @param node to insert
+   * @param node to remove
    */
   def decomp (node : A) : Option[(TContext[A],TGraph[A])]
   
@@ -72,27 +72,40 @@ trait TGraph[A] {
    	 { (r,ctx) => ctx.triples ++ r }  
   }
   
-  @tailrec
-  final def foldTGraph[B](accum:B)(f:(B,TContext[A]) => B): B = {
+  def foldTGraph[B](accum:B)(f:(B,TContext[A]) => B): B =
+    foldTGraphByDecomp(accum)(f)
+  
+  /*
+   * Implementation assuming an efficient `decomp`.  
+   */
+  @tailrec private
+  def foldTGraphByDecomp[B](accum:B)(f:(B,TContext[A]) => B): B = {
     decompAny match {
      case None => accum
      case Some((ctx,rest)) => {
        val current = f(accum,ctx)
-       rest.foldTGraph(current)(f)
+       rest.foldTGraphByDecomp(current)(f)
      }
     }
   }
   
-  @tailrec
-  final def foldTGraphOrd[B](accum:B)(f:(B,TContext[A]) => B)
-                      (implicit ord: Ordering[A]) : B = {
+  def foldTGraphOrd[B](accum:B)(f:(B,TContext[A]) => B)
+                      (implicit ord: Ordering[A]) : B =
+    foldTGraphOrdByDecomp(accum)(f)
+
+  /*
+   * Implementation assuming an efficient `decomp`.  
+   */
+  @tailrec private
+  def foldTGraphOrdByDecomp[B](accum:B)(f:(B,TContext[A]) => B)
+                              (implicit ord: Ordering[A]) : B = {
    if (this.isEmpty) accum 
    else {
     decomp(nodes.min(ord)) match {
      case None => accum
      case Some((ctx,rest)) => {
        val current = f(accum,ctx)
-       rest.foldTGraphOrd(current)(f)
+       rest.foldTGraphOrdByDecomp(current)(f)
      }
     }
    }
@@ -107,7 +120,7 @@ object TGraph {
   // TODO: Remove these declarations from here...
   //       It makes this code dependent on the TGraphImpl
   def empty [A : Manifest]: TGraph[A] =
-    TGraphImpl(Graph[A,Triple]()).asInstanceOf[TGraph[A]]
+    TGraphImpl(Graph[A,Triple]())
     
   def fromTriple[A: Manifest] (triple: (A,A,A)): TGraph[A] = {
     TGraph.empty.addTriple(triple)

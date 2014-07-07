@@ -1,13 +1,13 @@
 package es.weso.tgraph
 
-import scalax.collection.GraphPredef.EdgeIn
+import scalax.collection.GraphPredef.OuterEdge
 import scalax.collection.GraphEdge.DiHyperEdge
 import scalax.collection.GraphEdge.EdgeCopy
 
 class Triple[A](nodes: (A,A,A)) 
     extends DiHyperEdge[A](nodes)
     with    EdgeCopy[Triple]
-    with    EdgeIn[A,Triple] {
+    with    OuterEdge[A,Triple] {
 
   override def copy[B](newNodes: Product) =
     new Triple[B](newNodes.asInstanceOf[(B,B,B)])
