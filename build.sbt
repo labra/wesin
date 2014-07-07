@@ -4,24 +4,26 @@ import bintray.Plugin.bintraySettings
 import bintray.Keys._
 import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
 
-lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.0"))
+lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.1"))
 
 Build.sharedSettings
 
 version := Build.currentVersion
 
+scalaVersion := "2.10.4"
+
 libraryDependencies ++= Seq(
     "commons-configuration" % "commons-configuration" % "1.7"
-  , "org.rogach" %% "scallop" % "0.9.1" 
+  , "org.rogach" %% "scallop" % "0.9.1"
   , "com.typesafe" % "config" % "1.2.0"
-  , "org.scala-lang" % "scala-compiler" % "2.10.3" 
-  , "com.assembla.scala-incubator" % "graph-core_2.10" % "1.7.3"
-  , "org.apache.jena" % "jena-arq" % "2.11.1" 
+  , "org.scala-lang" % "scala-compiler" % scalaVersion.value 
+  , "com.assembla.scala-incubator" %% "graph-core" % "1.9.0"
+  , "org.apache.jena" % "jena-arq" % "2.11.1"
   , "com.lihaoyi" %% "utest" % "0.1.3" % "test"
-  , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2"
+  , "org.scalatest" %% "scalatest" % "2.1.3"
   , "junit" % "junit" % "4.10" % "test"
   , "org.openrdf.sesame" % "sesame-model" % "2.7.10"
-  , "es.weso" % "stateparser_2.10" % "0.0.2" 
+  , "es.weso" % "stateparser_2.10" % "0.0.2"
 )
 
 // testFrameworks += new TestFramework("utest.runner.JvmFramework")
