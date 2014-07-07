@@ -1,14 +1,7 @@
 package es.weso.tgraph
 
 import scalax.collection.immutable.Graph
-import scalax.collection.GraphPredef._
-import scalax.collection.GraphEdge._
-import scalax.collection.edge.LDiEdge
-import scalax.collection.edge.Implicits._
-import scalax.collection.edge.LBase.LEdgeImplicits
 import scala.collection.immutable.Set
-
-
 
 case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
 
@@ -40,6 +33,22 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
     TGraphImpl(graph + Triple(triple._1,triple._2,triple._3))
   }
 
+  override def foldTGraph[B](accum:B)(f:(B,TContext[A]) => B): B =
+    fold(graph.nodes)(accum)(f)
+    
+  override def foldTGraphOrd[B](accum:B)(f:(B,TContext[A]) => B)
+                               (implicit ord: Ordering[A]) : B = {
+    val nodeTOrdering = Ordering.by[graph.NodeT,A](_.value)
+    val sorted = graph.nodes.toList.sorted(nodeTOrdering)
+    fold(sorted)(accum)(f)
+  }
+  
+  private def fold[B](nodes: Traversable[graph.NodeT])
+                     (accum:B)(f:(B,TContext[A]) => B): B = {
+    (accum /: nodes)((accum:B, node:graph.NodeT) =>
+      f(accum, TContext(node.value, pred(node), succ(node), rels(node))))
+  }
+
   override def addNode (node : A) : TGraphImpl[A] = {
     TGraphImpl(graph + node)
   }
@@ -53,12 +62,14 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
    * @param node resource 
    */
   def succ(node:A) : Option[Set[(A,A)]] = {
-    graph.find(node).map { 
-    	_.edges.
-    	filter(_._1 == node).
-    	map((e) => (e._2.value,e.last.value)).
-    	toSet[(A,A)]
-    }
+    graph.find(node).map(succ)
+  }
+  
+  def succ(node: graph.NodeT) : Set[(A,A)] = {
+    node.edges.
+      withFilter(_._1 == node).
+      map((e) => (e._2.value,e.last.value)).
+      toSet[(A,A)]
   }
   
   /**
@@ -66,12 +77,14 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
    * @param node resource 
    */
   def pred(node:A) : Option[Set[(A,A)]] = {
-    graph.find(node).map{ 
-       _.edges.
+    graph.find(node).map(pred)
+  }
+
+  def pred(node: graph.NodeT) : Set[(A,A)] = {
+    node.edges.
        filter( _.last == node) . 
        map((e) => (e._1.value,e._2.value)).
        toSet[(A,A)]
-    }
   }
 
   /**
@@ -79,12 +92,14 @@ case class TGraphImpl[A](graph: Graph[A,Triple]) extends TGraph[A] {
    * @param node resource 
    */
   def rels(node:A) : Option[Set[(A,A)]] = {
-    graph.find(node).map {
-      _.edges.
+    graph.find(node).map(rels)
+  }
+
+  def rels(node: graph.NodeT) : Set[(A,A)] = {
+    node.edges.
       filter(_._2 == node).
       map((e) => (e._1.value,e.last.value)).
       toSet[(A,A)]
-    }
   }
 
   def remove(node : A) : TGraphImpl[A] = {
