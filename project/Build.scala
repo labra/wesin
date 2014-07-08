@@ -43,7 +43,7 @@ object Build extends sbt.Build {
   val sharedSettings = Seq(
       organization := "es.weso",
       name := "wesin",
-      scalaVersion := "2.10.4"
+      scalaVersion := "2.11.1"
     )
 
   val scalajsResolver: URLRepository = Resolver.url("scala-js-releases",
