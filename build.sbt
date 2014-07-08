@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
   , "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
   , "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"
   , "es.weso" % "stateparser_2.11" % "0.0.3"
+  , "es.weso" % "tgraph_2.11" % "0.0.1"
   )
 
 // testFrameworks += new TestFramework("utest.runner.JvmFramework")
