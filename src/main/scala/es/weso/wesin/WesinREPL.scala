@@ -4,7 +4,7 @@ import scala.tools.nsc.interpreter.ILoop
  
 
 /** REPL for Wesin
- *  TODO: finnish it
+ *  TODO: this does not work...finnish it
  * */
 
 object TestConsole extends App {
@@ -18,11 +18,11 @@ object TestConsole extends App {
 class SampleILoop extends ILoop {
   override def prompt = "==> "
  
-  addThunk {
+/*  addThunk {
     intp.beQuietDuring {
       intp.addImports("java.lang.Math._")
     }
-  }
+  } */
  
   override def printWelcome() {
     echo("\n" + " Wellcome to a simple REPL ")
