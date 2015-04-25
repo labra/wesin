@@ -1,9 +1,8 @@
 package es.weso.rdfgraph.nodes
 
-import java.net.{URISyntaxException, URI}
+import java.net.{ URISyntaxException, URI }
 
-
-case class IRI(uri : URI) extends RDFNode {
+case class IRI(uri: URI) extends RDFNode {
 
   override def toString = {
     "<" + uri.toString + ">"
@@ -13,7 +12,7 @@ case class IRI(uri : URI) extends RDFNode {
     def compare(a: IRI, b: IRI) = a.uri.compareTo(b.uri)
   }
 
-  def str : String = {
+  def str: String = {
     uri.toString
   }
 
@@ -28,16 +27,16 @@ case class IRI(uri : URI) extends RDFNode {
 }
 
 object IRI {
-  def apply(str:String):IRI = {
+  def apply(str: String): IRI = {
     // Todo: Capture exceptions to provide better error messages?
     IRI(new URI(str))
   }
 
-  def unapply(str:String):Option[IRI] = {
+  def unapply(str: String): Option[IRI] = {
     try {
       Some(IRI(new URI(str)))
     } catch {
-      case _ : URISyntaxException => None
+      case _: URISyntaxException => None
     }
   }
 

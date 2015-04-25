@@ -1,6 +1,5 @@
 package es.weso.parser
 
-
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -13,24 +12,23 @@ import es.weso.rdfgraph.statements.RDFTriple
 
 @RunWith(classOf[JUnitRunner])
 class NTriplesParserSuite extends FunSuite with NTriplesParser {
-  
+
   test("parser string") {
     val parser = NTriplesParser
-    assert(parser.parseAll(parser.string,"\"hello\"").get === "hello")
+    assert(parser.parseAll(parser.string, "\"hello\"").get === "hello")
   }
-
 
   test("parser absolute URI") {
     val parser = NTriplesParser
-    assert(parser.parseAll(parser.absoluteURI,"http://example.org").get === 
-      			"http://example.org")
+    assert(parser.parseAll(parser.absoluteURI, "http://example.org").get ===
+      "http://example.org")
   }
 
   test("parser uriref") {
     val parser = NTriplesParser
     assertParse(uriref, "<http://example.org>", IRI("http://example.org"))
   }
-  
+
   test("bNode") {
     val parser = NTriplesParser
     assertParse(nodeID, "_:b0", BNodeId(0))
@@ -38,59 +36,59 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
 
   test("basic string literal") {
     val parser = NTriplesParser
-    assertParse(literal, "\"john\"", LangLiteral("john",Lang("")))
+    assertParse(literal, "\"john\"", LangLiteral("john", Lang("")))
   }
 
   test("basic string literal with language") {
     val parser = NTriplesParser
-    assertParse(literal, "\"perro\"@es", LangLiteral("perro",Lang("es")))
+    assertParse(literal, "\"perro\"@es", LangLiteral("perro", Lang("es")))
   }
 
   test("literal with scaped unicode char") {
     val parser = NTriplesParser
-    assertParse(literal, "\"Jos\\u00E9\"", LangLiteral("Jos\u00e9",Lang("")))
+    assertParse(literal, "\"Jos\\u00E9\"", LangLiteral("Jos\u00e9", Lang("")))
   }
 
   test("typed literal") {
     val parser = NTriplesParser
-    assertParse(literal, "\"23\"^^<http://example.org/datatype>", 
-    		new DatatypeLiteral("23",IRI("http://example.org/datatype")))
+    assertParse(literal, "\"23\"^^<http://example.org/datatype>",
+      new DatatypeLiteral("23", IRI("http://example.org/datatype")))
   }
 
   test("basic triple") {
     val parser = NTriplesParser
-    assertParse(triple, "<a> <b> <c>.", Some(RDFTriple(IRI("a"),IRI("b"),IRI("c"))))
+    assertParse(triple, "<a> <b> <c>.", Some(RDFTriple(IRI("a"), IRI("b"), IRI("c"))))
   }
 
   test("basic triple with spaces") {
     val parser = NTriplesParser
-    assertParse(triple, "<a> <b> <c> . ", Some(RDFTriple(IRI("a"),IRI("b"),IRI("c"))))
+    assertParse(triple, "<a> <b> <c> . ", Some(RDFTriple(IRI("a"), IRI("b"), IRI("c"))))
   }
 
   test("basic triple with spaces and tabs") {
     val parser = NTriplesParser
-    assertParse(triple, " <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ", 
-    		Some(RDFTriple(IRI("http://example.org/resource3"),
-    		     IRI("http://example.org/property"),
-    		     IRI("http://example.org/resource2"))))
+    assertParse(triple, " <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
+      Some(RDFTriple(IRI("http://example.org/resource3"),
+        IRI("http://example.org/property"),
+        IRI("http://example.org/resource2"))))
   }
 
   test("basic triple with spaces and tabs starting by spaces & tabs") {
     val parser = NTriplesParser
-    assertParse(triple, " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ", 
-    		Some(RDFTriple(IRI("http://example.org/resource3"),
-    		     IRI("http://example.org/property"),
-    		     IRI("http://example.org/resource2"))))
+    assertParse(triple, " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
+      Some(RDFTriple(IRI("http://example.org/resource3"),
+        IRI("http://example.org/property"),
+        IRI("http://example.org/resource2"))))
   }
 
   test("two triples") {
     val parser = NTriplesParser
     val ts = """<a> <b> <c> . 
     		   |<a> <b> <d> .""".stripMargin
-    
-    assertParse(ntripleDoc, ts, 
-    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+
+    assertParse(ntripleDoc, ts,
+      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
 
   test("two triples with comment") {
@@ -98,10 +96,10 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     val ts = """# A comment 
       		   |<a> <b> <c> . 
     		   |<a> <b> <d> .""".stripMargin
-    
-    assertParse(ntripleDoc, ts, 
-    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+
+    assertParse(ntripleDoc, ts,
+      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
 
   test("two triples with comments") {
@@ -112,25 +110,25 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     		   |<a> <b> <d> .
                |# And a comment at the end
                |""".stripMargin
-    
-    assertParse(ntripleDoc, ts, 
-    		Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-          RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+
+    assertParse(ntripleDoc, ts,
+      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
   }
-  
+
   test("Example from file 0") {
     val input = Source.fromURL(getClass.getResource("/test0.nt")).mkString
-    assertParse(ntripleDoc, input, 
-    		Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c"))))
+    assertParse(ntripleDoc, input,
+      Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c"))))
   }
 
   test("Example from file 1") {
     val input = Source.fromURL(getClass.getResource("/test1.nt")).mkString
     assertParse(
-        ntripleDoc, input, 
-    		Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c")),
-          RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/d"))
-        )
+      ntripleDoc, input,
+      Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c")),
+        RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/d"))
+      )
     )
   }
 
@@ -138,17 +136,17 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     val input = Source.fromURL(getClass.getResource("/test2.nt")).mkString
     val triples = parseAll(ntripleDoc, input).get.toSet
     val expected = Stream(
-    			RDFTriple(IRI("http://example.org/a"),IRI("http://example.org/b"),BNodeId(0)),
-    			RDFTriple(IRI("http://example.org/a"),IRI("http://example.org/b"),BNodeId(1)),
-    			RDFTriple(BNodeId(0),IRI("http://example.org/b"),IRI("http://example.org/c")),
-    			RDFTriple(BNodeId(0),IRI("http://example.org/b"),IRI("http://example.org/d")),
-    			RDFTriple(BNodeId(1),IRI("http://example.org/b"),BNodeId(0)),
-    			RDFTriple(BNodeId(1),IRI("http://example.org/b"),IRI("http://example.org/e"))
-    				).toSet
-     assert(triples == expected)
+      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId(0)),
+      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId(1)),
+      RDFTriple(BNodeId(0), IRI("http://example.org/b"), IRI("http://example.org/c")),
+      RDFTriple(BNodeId(0), IRI("http://example.org/b"), IRI("http://example.org/d")),
+      RDFTriple(BNodeId(1), IRI("http://example.org/b"), BNodeId(0)),
+      RDFTriple(BNodeId(1), IRI("http://example.org/b"), IRI("http://example.org/e"))
+    ).toSet
+    assert(triples == expected)
   }
 
-/*    test("Example from file 3") {
+  /*    test("Example from file 3") {
     val input = Source.fromURL(getClass.getResource("/test3.nt")).mkString
     val triples = parseAll(ntripleDoc, input).get.toSet
     val expected = Stream(
@@ -168,27 +166,27 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
       case x: Success[_] => {
         assert(res.get.toList.length === 30)
       }
-      case x: Error => 
-        	println("ERROR: " + x)
-        	fail
-      case x: Failure => 
-        	println("FAILURE" + x)
-        	fail
+      case x: Error =>
+        println("ERROR: " + x)
+        fail
+      case x: Failure =>
+        println("FAILURE" + x)
+        fail
     }
-  } 
+  }
 
-  def assertParse[T](parser: Parser[T], input : String, expected: T) {
-    val res = parseAll(parser,input)
+  def assertParse[T](parser: Parser[T], input: String, expected: T) {
+    val res = parseAll(parser, input)
     res match {
-      case x: Success[_] => assert (res.get === expected)
-      case x: Error => 
-        	println("ERROR on input: " + input)
-        	println(res)
-        	fail
-      case x: Failure => 
-        	println("Failure on input: " + input)
-        	println(res)
-        	fail
+      case x: Success[_] => assert(res.get === expected)
+      case x: Error =>
+        println("ERROR on input: " + input)
+        println(res)
+        fail
+      case x: Failure =>
+        println("Failure on input: " + input)
+        println(res)
+        fail
     }
-  } 
+  }
 }

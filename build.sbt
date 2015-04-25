@@ -4,13 +4,19 @@ import bintray.Plugin.bintraySettings
 import bintray.Keys._
 import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
 
-lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.1"))
+lazy val root = project.in(file("."))
 
-Build.sharedSettings
+organization := "es.weso"
 
-version := Build.currentVersion
+name := "wesin"
 
-scalaVersion := "2.11.1"
+version := "0.1.8"
+
+scalaVersion := "2.11.6"
+
+publishMavenStyle := true
+
+seq(bintraySettings:_*)
 
 libraryDependencies ++= Seq(
     "commons-configuration" % "commons-configuration" % "1.7"
@@ -36,7 +42,15 @@ autoCompilerPlugins := true
 
 bintraySettings
 
-Build.publishSettings
+scalariformSettings
+
+repository in bintray := "weso-releases"
+
+bintrayOrganization in bintray := Some("weso")
+
+licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0"))
+
+// bintrayPublishIvyStyle := false
 
 /* The following line is to download test files from W3c.
    It would be better to do it only when there is internet connection 

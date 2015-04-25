@@ -1,5 +1,5 @@
 package es.weso.parser
 
-class ParserException(msg:String) extends RuntimeException(msg)  {
+class ParserException(msg: String) extends RuntimeException(msg) {
 
 }

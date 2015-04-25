@@ -20,3 +20,10 @@ Author
 ======
 
 [Jose Emilio Labra Gayo](http://www.di.uniovi.es/~labra), [WESO Research Group](http://www.weso.es)
+
+Related Projects
+================
+
+[Banana-RDF](https://github.com/w3c/banana-rdf) contains a more general library to work with RDF from Scala. 
+It allows different underlying implementations like Jena and Sesame. 
+A long term project will be to unify our work with that library.  

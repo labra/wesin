@@ -8,37 +8,36 @@ import java.io.FileInputStream
 import scala.collection.JavaConverters._
 import org.scalatest.Matchers
 
-
 class RunTurtleW3cTestsSuite extends FunSpec with Matchers {
- val report = RunTurtleW3cTests.createReport
- 
- describe("W3c tests report") {
-   for ((r,n) <- report.items zip (1 to report.items.length))
-   it("Should pass test " + n + ": " + r.name) {
-     if (r.passed) info("Info: " + r)
-     else fail("Test did not pass" + r)
-   } 
- }
- 
- // Ignored to pass Travis tests
- // TODO: Refactor this to generate the report only when it is needed
- ignore("Generate W3c EARL report") {
+  val report = RunTurtleW3cTests.createReport
+
+  describe("W3c tests report") {
+    for ((r, n) <- report.items zip (1 to report.items.length))
+      it("Should pass test " + n + ": " + r.name) {
+        if (r.passed) info("Info: " + r)
+        else fail("Test did not pass" + r)
+      }
+  }
+
+  // Ignored to pass Travis tests
+  // TODO: Refactor this to generate the report only when it is needed
+  ignore("Generate W3c EARL report") {
     val passedCount = 291 // Number of tests that have to be passed
     it("Should Generate EARL report with " + passedCount + " passed values") {
       val earlModel = report.generateEARL
-      val conf : Config = ConfigFactory.load()
+      val conf: Config = ConfigFactory.load()
       val outFile = conf.getString("EarlReportFile")
 
-      earlModel.write(new FileOutputStream(outFile),"TURTLE")
+      earlModel.write(new FileOutputStream(outFile), "TURTLE")
 
       val readModel = ModelFactory.createDefaultModel()
-      readModel.read(new FileInputStream(outFile),"","TURTLE")
-      val earl		= "http://www.w3.org/ns/earl#"
+      readModel.read(new FileInputStream(outFile), "", "TURTLE")
+      val earl = "http://www.w3.org/ns/earl#"
       val earl_outcome = readModel.createProperty(earl + "outcome")
-      val earl_passed  = readModel.createResource(earl + "passed")
+      val earl_passed = readModel.createResource(earl + "passed")
       val passed = readModel.listResourcesWithProperty(earl_outcome, earl_passed).toList.asScala
       passed.length should be(passedCount)
-   }
- }
+    }
+  }
 
 }
