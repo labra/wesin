@@ -10,7 +10,7 @@ organization := "es.weso"
 
 name := "wesin"
 
-version := "0.1.8"
+version := "0.1.9"
 
 scalaVersion := "2.11.6"
 
@@ -32,6 +32,7 @@ libraryDependencies ++= Seq(
   , "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"
   , "es.weso" % "stateparser_2.11" % "0.0.3"
   , "es.weso" % "tgraph_2.11" % "0.0.1"
+  , "org.w3" % "banana-rdf_2.11" % "0.8.1"
   )
 
 // testFrameworks += new TestFramework("utest.runner.JvmFramework")
@@ -55,10 +56,10 @@ licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0"))
 /* The following line is to download test files from W3c.
    It would be better to do it only when there is internet connection 
    */
-resourceGenerators in Test += Def.task {
+resourceGenerators in Test <+= Def.task {
   val location = url("http://www.w3.org/2013/TurtleTests/TESTS.zip")
   IO.unzipURL(location, resourceManaged.value / "downloadedTests").toSeq
-}.taskValue
+}
 
 // seq(bintrayPublishSettings:_*)
 

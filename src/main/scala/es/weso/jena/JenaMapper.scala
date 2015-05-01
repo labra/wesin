@@ -1,5 +1,6 @@
 package es.weso.jena
 
+// TODO: Refactor this code 
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }

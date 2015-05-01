@@ -7,6 +7,7 @@ case class RDFTriple(subj: RDFNode, pred: IRI, obj: RDFNode) {
 
   def hasSubject(node: RDFNode): Boolean = subj == node
   def hasObject(node: RDFNode): Boolean = obj == node
+  def hasPredicate(p: IRI): Boolean = pred == p
 
   def extractBNode(node: RDFNode): Set[BNodeId] = {
     node match {
