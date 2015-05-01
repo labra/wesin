@@ -17,10 +17,16 @@ class Opts(
               | Options:
               |""".stripMargin)
   footer("Enjoy!")
-  version("Wesin 0.1")
+  version("Wesin 0.2")
   val data = opt[String]("data",
     required = true,
     descr = "Data file")
+  val data_format = opt[String]("data-format",
+    required = true,
+    descr = "Input Data Format")
+  val processor = opt[String]("processor",
+    required = true,
+    descr = "Processor: Jena, RDFTriples")
   val show = toggle("show",
     prefix = "no-",
     default = Some(false),

@@ -1,4 +1,4 @@
-package es.weso.rdf.reader
+package es.weso.rdf.jena
 
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
@@ -8,27 +8,35 @@ import scala.collection.JavaConversions._
 import scala.collection.immutable.StringOps._
 import scala.util.Try
 import es.weso.rdfgraph.statements._
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import es.weso.rdf._
+import com.hp.hpl.jena.rdf.model.{
+  Model,
+  Resource,
+  Property,
+  Statement,
+  RDFNode => JenaRDFNode,
+  RDFReader => JenaRDFReader
+}
 import org.slf4j._
 import org.apache.jena.riot.{ Lang => JenaLang }
 import org.apache.jena.riot.RDFDataMgr
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import es.weso.rdf._
 import java.io.StringWriter
-import com.hp.hpl.jena.rdf.model._
 import scala.util._
 import java.io._
-import es.weso.rdf.reader.SPARQLQueries._
+import org.apache.jena.riot.{ Lang => JenaLang }
+import es.weso.rdf.jena.SPARQLQueries._
 
-case class RDFFromJenaModel(model: Model) extends RDF {
+case class RDFAsJenaModel(model: Model)
+    extends RDF {
 
   val log = LoggerFactory.getLogger("RDFFromJenaModel")
 
-  override def parse(cs: CharSequence): Try[RDF] = {
+  override def parse(cs: CharSequence): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel
       RDFDataMgr.read(m, cs.toString)
-      Success(RDFFromJenaModel(m))
+      Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception parsing char sequence: " + e.getMessage))
     }
@@ -122,29 +130,54 @@ case class RDFFromJenaModel(model: Model) extends RDF {
       throw new Exception("Unknown type of resource")
   }
 
-  override def prefixMap: PrefixMap = {
+  override def getPrefixMap: PrefixMap = {
     PrefixMap(model.getNsPrefixMap.toMap.map(pair => (pair._1, IRI(pair._2))))
+  }
+
+  override def addPrefixMap(pm: PrefixMap): RDFBuilder = {
+    val map: Map[String, String] = pm.pm.map { case (str, iri) => (str, iri.str) }
+    model.setNsPrefixes(map)
+    this
+  }
+
+  override def addTriples(triples: Set[RDFTriple]): RDFBuilder = {
+    val newModel = JenaMapper.RDFTriples2Model(triples)
+    model.add(newModel)
+    this
+  }
+
+  override def rmTriple(s: RDFNode, p: IRI, o: RDFNode): RDFBuilder = {
+    ???
+  }
+
+  override def createBNode: RDFNode = {
+    val resource = model.createResource
+    ???
   }
 }
 
-object RDFFromJenaModel {
+object RDFAsJenaModel {
 
-  def fromURI(uri: String): Try[RDF] = {
+  def empty: RDF = {
+    RDFAsJenaModel(ModelFactory.createDefaultModel);
+  }
+
+  def fromURI(uri: String): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel()
       RDFDataMgr.read(m, uri)
-      Success(RDFFromJenaModel(m))
+      Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + uri + ": " + e.getMessage))
     }
   }
 
-  def fromFile(file: File): Try[RDF] = {
+  def fromFile(file: File): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel()
       val is: InputStream = new FileInputStream(file)
       RDFDataMgr.read(m, is, JenaLang.TURTLE)
-      Success(RDFFromJenaModel(m))
+      Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + file.getName + ": " + e.getMessage))
     }

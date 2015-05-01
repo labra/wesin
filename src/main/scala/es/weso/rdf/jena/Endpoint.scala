@@ -1,4 +1,4 @@
-package es.weso.rdf.reader
+package es.weso.rdf.jena
 
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
@@ -15,19 +15,23 @@ import com.hp.hpl.jena.rdf.model.Model
 import org.slf4j._
 import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
 import es.weso.rdf._
-import es.weso.rdf.reader.SPARQLQueries._
+import es.weso.rdf.jena.SPARQLQueries._
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import es.weso.rdf.PrefixMap
+import es.weso.rdf.RDF
 
-case class Endpoint(endpoint: String) extends RDF {
+case class Endpoint(endpoint: String) extends RDFReader {
   // TODO: check that endpoint is a well formed URI
 
-  override def prefixMap: PrefixMap = {
+  override def getPrefixMap: PrefixMap = {
     // TODO: Can we get more info about prefix maps from an endpoint?
     PrefixMap(Map())
   }
 
   val log = LoggerFactory.getLogger("Endpoint")
 
-  override def parse(cs: CharSequence): Try[RDF] = {
+  override def parse(cs: CharSequence): Try[RDFReader] = {
     throw new Exception("Cannot parse into an endpoint. endpoint = " + endpoint)
   }
 

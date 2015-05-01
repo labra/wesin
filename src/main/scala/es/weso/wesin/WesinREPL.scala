@@ -18,12 +18,6 @@ object TestConsole extends App {
 class SampleILoop extends ILoop {
   override def prompt = "==> "
 
-  /*  addThunk {
-    intp.beQuietDuring {
-      intp.addImports("java.lang.Math._")
-    }
-  } */
-
   override def printWelcome() {
     echo("\n" + " Wellcome to a simple REPL ")
   }

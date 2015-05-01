@@ -14,11 +14,10 @@ import java.io.InputStream
 
 import scala.io.Source._
 
-import es.weso.jena.JenaMapper
+import es.weso.rdf.jena.JenaMapper._
 
 object RunTurtleW3cTests
-    extends TurtleParser
-    with JenaMapper {
+    extends TurtleParser {
 
   val conf: Config = ConfigFactory.load()
 

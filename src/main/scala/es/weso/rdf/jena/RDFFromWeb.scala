@@ -1,4 +1,4 @@
-package es.weso.rdf.reader
+package es.weso.rdf.jena
 
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
@@ -17,18 +17,22 @@ import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
 import org.apache.jena.riot.RDFDataMgr
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.rdf._
-import es.weso.rdf.reader.SPARQLQueries._
+import es.weso.rdf.jena.SPARQLQueries._
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import es.weso.rdf.PrefixMap
+import es.weso.rdf.RDF
 
-case class RDFFromWeb() extends RDF {
+case class RDFFromWeb() extends RDFReader {
 
   val log = LoggerFactory.getLogger("RDFFromWeb")
 
-  override def prefixMap: PrefixMap = {
+  override def getPrefixMap: PrefixMap = {
     // TODO: Can we get more info about prefix maps from an endpoint?
     PrefixMap(Map())
   }
 
-  override def parse(cs: CharSequence): Try[RDF] = {
+  override def parse(cs: CharSequence): Try[RDFReader] = {
     throw new Exception("Cannot parse RDFFromWeb ")
   }
 

@@ -11,9 +11,9 @@ import es.weso.rdfgraph.nodes.RDFNode
 
 case class RDFTriples(
     triples: Set[RDFTriple],
-    pm: PrefixMap) extends RDF {
+    pm: PrefixMap) extends RDFReader {
 
-  override def parse(cs: CharSequence): Try[RDF] = {
+  override def parse(cs: CharSequence): Try[RDFReader] = {
     for ((triples, pm) <- TurtleParser.parse(cs))
       yield RDFTriples(triples, pm)
   }
@@ -45,14 +45,14 @@ case class RDFTriples(
     triples.filter(_.hasObject(o)).filter(_.hasPredicate(p))
   }
 
-  override def prefixMap: PrefixMap = pm
+  override def getPrefixMap: PrefixMap = pm
 }
 
 object RDFTriples {
 
-  def noTriples: RDF = RDFTriples(Set(), PrefixMap.empty)
+  def noTriples: RDFReader = RDFTriples(Set(), PrefixMap.empty)
 
-  def parse(cs: CharSequence): Try[RDF] =
+  def parse(cs: CharSequence): Try[RDFReader] =
     noTriples.parse(cs)
 
 }

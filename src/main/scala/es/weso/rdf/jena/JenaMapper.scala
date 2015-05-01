@@ -1,4 +1,4 @@
-package es.weso.jena
+package es.weso.rdf.jena
 
 // TODO: Refactor this code 
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
@@ -12,8 +12,10 @@ import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
 import com.hp.hpl.jena.rdf.model.Model
 import es.weso.rdfgraph.statements.RDFTriple
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
 
-trait JenaMapper {
+object JenaMapper {
 
   def RDFTriples2Model(triples: Set[RDFTriple]): JenaModel = {
     val m = ModelFactory.createDefaultModel()

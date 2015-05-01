@@ -1,21 +1,11 @@
-package es.weso.rdf.reader
+package es.weso.rdf.jena
 
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
-import es.weso.rdfgraph.nodes.RDFNode
-import es.weso.rdfgraph.statements.RDFTriple
 import scala.collection.JavaConversions._
 import scala.collection.immutable.StringOps._
-import scala.util.Try
 import es.weso.rdfgraph.statements._
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
-import com.hp.hpl.jena.rdf.model.Property
-import com.hp.hpl.jena.rdf.model.Statement
-import com.hp.hpl.jena.rdf.model.Model
 import org.slf4j._
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
-import org.apache.jena.riot.RDFDataMgr
-import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.rdf._
 
 object SPARQLQueries {
