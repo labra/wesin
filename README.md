@@ -5,8 +5,10 @@ Web Semantics Library in Scala
 
 This repository contains several tools to work with RDF in Scala
 
-* A Turtle Parser that conforms to W3c RDF 1.1 tests
+* A Turtle Parser that conforms to W3c RDF 1.1 tests based on Scala Parser Combinators
 * An inductive representation of RDF graphs
+* A simple Jena to Scala mapper
+* This library is used by [ShExcala](http://labra.github.io/shexcala), an RDF validator using Shape Expressions 
 
 Links
 =====

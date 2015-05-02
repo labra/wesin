@@ -4,7 +4,7 @@ package es.weso.rdf
 import es.weso.rdfgraph.statements._
 import es.weso.rdfgraph.RDFGraph
 import es.weso.parser.TurtleParser
-import scala.util.Try
+import scala.util._
 import es.weso.rdfgraph.nodes.InitialBNodeId
 import es.weso.rdfgraph.nodes.IRI
 import es.weso.rdfgraph.nodes.RDFNode
@@ -13,9 +13,12 @@ case class RDFTriples(
     triples: Set[RDFTriple],
     pm: PrefixMap) extends RDFReader {
 
-  override def parse(cs: CharSequence): Try[RDFReader] = {
-    for ((triples, pm) <- TurtleParser.parse(cs))
-      yield RDFTriples(triples, pm)
+  override def parse(cs: CharSequence, format: String): Try[RDFReader] = {
+    format match {
+      case "TURTLE" => for ((triples, pm) <- TurtleParser.parse(cs))
+        yield RDFTriples(triples, pm)
+      case _ => Failure(throw new Exception("Unsopported format: " + format))
+    }
   }
 
   override def serialize(format: String): String = {

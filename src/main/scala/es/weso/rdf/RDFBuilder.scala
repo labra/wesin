@@ -13,7 +13,7 @@ trait RDFBuilder {
 
   def addTriples(triples: Set[RDFTriple]): RDFBuilder
 
-  def rmTriple(s: RDFNode, p: IRI, o: RDFNode): RDFBuilder
+  def rmTriple(triple: RDFTriple): RDFBuilder
 
 }
 

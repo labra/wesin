@@ -163,7 +163,8 @@ object RunTurtleW3cTests
         try {
           TurtleParser.parse(strAction, IRI(baseIRI)) match {
             case util.Success((triples, pm)) =>
-              val model = RDFTriples2Model(triples)
+              val empty = ModelFactory.createDefaultModel
+              val model = RDFTriples2Model(triples, empty)
               currentReport.addTestReport(false, name, r.getLocalName, testType, "Parsed and model built when expected to fail parsing")
             case util.Failure(msg) =>
               currentReport.addTestReport(true, name, r.getLocalName, testType, "Parsing failed with message: " + msg)
@@ -210,7 +211,8 @@ object RunTurtleW3cTests
     try {
       TurtleParser.parse(in, baseIRI) match {
         case util.Success((triples, pm)) => {
-          val model = RDFTriples2Model(triples)
+          val empty = ModelFactory.createDefaultModel
+          val model = RDFTriples2Model(triples, empty)
           if (model.isIsomorphicWith(expected))
             Left(model)
           else

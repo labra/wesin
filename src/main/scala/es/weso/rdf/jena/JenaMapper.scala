@@ -1,23 +1,34 @@
 package es.weso.rdf.jena
 
 // TODO: Refactor this code 
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
-import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
-import com.hp.hpl.jena.rdf.model.Property
-import com.hp.hpl.jena.rdf.model.Resource
+import com.hp.hpl.jena.rdf.model.{
+  Model => JenaModel,
+  Statement,
+  ModelFactory,
+  RDFNode => JenaRDFNode,
+  Property,
+  Resource,
+  AnonId
+}
 import es.weso.rdfgraph.nodes._
-import com.hp.hpl.jena.rdf.model.AnonId
 import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
-import com.hp.hpl.jena.rdf.model.Model
 import es.weso.rdfgraph.statements.RDFTriple
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
 
 object JenaMapper {
 
-  def RDFTriples2Model(triples: Set[RDFTriple]): JenaModel = {
+  def RDFTriples2Model(triples: Set[RDFTriple], m: JenaModel): JenaModel = {
+    for (t <- triples) {
+      val subj = createResource(m, t.subj)
+      val pred = createProperty(m, t.pred)
+      val obj = createRDFNode(m, t.obj)
+      val stmt = m.createStatement(subj, pred, obj)
+      m.add(stmt)
+    }
+    m
+  }
+
+  /*  def RDFTriples2Model(triples: Set[RDFTriple]): JenaModel = {
     val m = ModelFactory.createDefaultModel()
     for (t <- triples) {
       val subj = createResource(m, t.subj)
@@ -27,6 +38,10 @@ object JenaMapper {
       m.add(stmt)
     }
     m
+  } */
+
+  def RDFTriple2Statement(triple: RDFTriple): Statement = {
+    ???
   }
 
   def createResource(m: JenaModel, node: RDFNode): Resource = {
@@ -73,7 +88,7 @@ object JenaMapper {
     }
   }
 
-  def createProperty(m: Model, pred: IRI): Property = {
+  def createProperty(m: JenaModel, pred: IRI): Property = {
     m.createProperty(pred.str)
   }
 

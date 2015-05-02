@@ -21,21 +21,28 @@ import org.slf4j._
 import org.apache.jena.riot.{ Lang => JenaLang }
 import org.apache.jena.riot.RDFDataMgr
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import java.io.StringWriter
+import java.io._
 import scala.util._
 import java.io._
 import org.apache.jena.riot.{ Lang => JenaLang }
 import es.weso.rdf.jena.SPARQLQueries._
+import org.apache.jena.riot.RDFLanguages._
 
 case class RDFAsJenaModel(model: Model)
     extends RDF {
 
   val log = LoggerFactory.getLogger("RDFFromJenaModel")
 
-  override def parse(cs: CharSequence): Try[RDFReader] = {
+  override def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel
-      RDFDataMgr.read(m, cs.toString)
+      val lang = format.toUpperCase match {
+        case "TURTLE" => TURTLE
+        case "NTRIPLES" => NTRIPLES
+        case _ => throw new Exception("Unknown format " + format)
+      }
+      val str_reader = new StringReader(cs.toString)
+      RDFDataMgr.read(m, str_reader, "", lang)
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception parsing char sequence: " + e.getMessage))
@@ -141,19 +148,27 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def addTriples(triples: Set[RDFTriple]): RDFBuilder = {
-    val newModel = JenaMapper.RDFTriples2Model(triples)
+    val newModel = JenaMapper.RDFTriples2Model(triples, model)
     model.add(newModel)
     this
   }
 
-  override def rmTriple(s: RDFNode, p: IRI, o: RDFNode): RDFBuilder = {
-    ???
+  // TODO: This is not efficient
+  override def rmTriple(triple: RDFTriple): RDFBuilder = {
+    val empty = ModelFactory.createDefaultModel
+    val model2delete = JenaMapper.RDFTriples2Model(Set(triple), empty)
+    model.difference(model2delete)
+    this
   }
 
+  // TODO: Check the safeness of using just the hash code to ensure uniqueness of blank nodes
+  //       Potential problem: interaction between this code and function newBnodeId
+  //       Possible solution return resource.getId.getLabelString 
   override def createBNode: RDFNode = {
     val resource = model.createResource
-    ???
+    BNodeId(resource.hashCode)
   }
+
 }
 
 object RDFAsJenaModel {
@@ -180,6 +195,13 @@ object RDFAsJenaModel {
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + file.getName + ": " + e.getMessage))
+    }
+  }
+
+  def extractModel(rdf: RDFReader): Model = {
+    rdf match {
+      case rdfJena: RDFAsJenaModel => rdfJena.model
+      case _ => throw new Exception("Cannot extract Model from rdf:" + rdf)
     }
   }
 

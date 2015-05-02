@@ -10,7 +10,7 @@ trait RDFReader {
   /**
    * parse a string and obtain an RDF graph
    */
-  def parse(cs: CharSequence): Try[RDFReader]
+  def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFReader]
 
   /**
    * convert a RDF graph to a String
