@@ -4,8 +4,12 @@ import java.net.{ URISyntaxException, URI }
 
 case class IRI(uri: URI) extends RDFNode {
 
-  def +(str: String): IRI = {
+  def add(str: String): IRI = {
     IRI(uri.toString + str)
+  }
+
+  def +(str: String): IRI = {
+    add(str)
   }
 
   override def toString = {

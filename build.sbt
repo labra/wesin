@@ -10,7 +10,7 @@ organization := "es.weso"
 
 name := "wesin"
 
-version := "0.2.2"
+version := "0.2.4"
 
 scalaVersion := "2.11.6"
 

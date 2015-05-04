@@ -24,7 +24,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory
 import java.io._
 import scala.util._
 import java.io._
-import org.apache.jena.riot.{ Lang => JenaLang }
 import es.weso.rdf.jena.SPARQLQueries._
 import org.apache.jena.riot.RDFLanguages._
 
@@ -36,13 +35,8 @@ case class RDFAsJenaModel(model: Model)
   override def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel
-      val lang = format.toUpperCase match {
-        case "TURTLE" => TURTLE
-        case "NTRIPLES" => NTRIPLES
-        case _ => throw new Exception("Unknown format " + format)
-      }
       val str_reader = new StringReader(cs.toString)
-      RDFDataMgr.read(m, str_reader, "", lang)
+      RDFDataMgr.read(m, str_reader, "", shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception parsing char sequence: " + e.getMessage))
@@ -67,7 +61,7 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def rdfTriples(): Set[RDFTriple] = {
-    throw new Exception("Cannot obtain triples from RDFFromWeb ")
+    model2triples(model)
   }
 
   override def triplesWithSubject(node: RDFNode): Set[RDFTriple] = {
@@ -164,11 +158,13 @@ case class RDFAsJenaModel(model: Model)
   // TODO: Check the safeness of using just the hash code to ensure uniqueness of blank nodes
   //       Potential problem: interaction between this code and function newBnodeId
   //       Possible solution return resource.getId.getLabelString 
-  override def createBNode: RDFNode = {
+  override def createBNode: (RDFNode, RDFBuilder) = {
     val resource = model.createResource
-    BNodeId(resource.hashCode)
+    (BNodeId(resource.hashCode), this)
   }
 
+  override def addPrefix(alias: String, iri: String): RDFBuilder = ???
+  override def qName(str: String): IRI = ???
 }
 
 object RDFAsJenaModel {
@@ -187,15 +183,27 @@ object RDFAsJenaModel {
     }
   }
 
-  def fromFile(file: File): Try[RDFReader] = {
+  def fromFile(file: File, format: String): Try[RDFReader] = {
     try {
       val m = ModelFactory.createDefaultModel()
       val is: InputStream = new FileInputStream(file)
-      RDFDataMgr.read(m, is, JenaLang.TURTLE)
+      RDFDataMgr.read(m, is, shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + file.getName + ": " + e.getMessage))
     }
+  }
+
+  def fromChars(cs: CharSequence, format: String): Try[RDFReader] = {
+    try {
+      RDFAsJenaModel.empty.parse(cs, format)
+    } catch {
+      case e: Exception => Failure(throw new Exception("Exception reading  " + formatLines(cs.toString) + "\n " + e.getMessage))
+    }
+  }
+
+  def formatLines(cs: CharSequence): String = {
+    cs.toString.lines.zipWithIndex.map(p => (p._2 + 1).toString + " " + p._1).mkString("\n")
   }
 
   def extractModel(rdf: RDFReader): Model = {
