@@ -28,11 +28,13 @@ import es.weso.rdf.jena.SPARQLQueries._
 import org.apache.jena.riot.RDFLanguages._
 
 case class RDFAsJenaModel(model: Model)
-    extends RDF {
+    extends RDFReader
+    with RDFBuilder {
+  type Rdf = RDFAsJenaModel
 
   val log = LoggerFactory.getLogger("RDFFromJenaModel")
 
-  override def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFReader] = {
+  override def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFAsJenaModel] = {
     try {
       val m = ModelFactory.createDefaultModel
       val str_reader = new StringReader(cs.toString)
@@ -132,23 +134,23 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def getPrefixMap: PrefixMap = {
-    PrefixMap(model.getNsPrefixMap.toMap.map(pair => (pair._1, IRI(pair._2))))
+    PrefixMap(model.getNsPrefixMap.toMap.map { case (alias, iri) => (alias, IRI(iri)) })
   }
 
-  override def addPrefixMap(pm: PrefixMap): RDFBuilder = {
+  override def addPrefixMap(pm: PrefixMap): RDFAsJenaModel = {
     val map: Map[String, String] = pm.pm.map { case (str, iri) => (str, iri.str) }
     model.setNsPrefixes(map)
     this
   }
 
-  override def addTriples(triples: Set[RDFTriple]): RDFBuilder = {
+  override def addTriples(triples: Set[RDFTriple]): RDFAsJenaModel = {
     val newModel = JenaMapper.RDFTriples2Model(triples, model)
     model.add(newModel)
     this
   }
 
   // TODO: This is not efficient
-  override def rmTriple(triple: RDFTriple): RDFBuilder = {
+  override def rmTriple(triple: RDFTriple): RDFAsJenaModel = {
     val empty = ModelFactory.createDefaultModel
     val model2delete = JenaMapper.RDFTriples2Model(Set(triple), empty)
     model.difference(model2delete)
@@ -158,22 +160,28 @@ case class RDFAsJenaModel(model: Model)
   // TODO: Check the safeness of using just the hash code to ensure uniqueness of blank nodes
   //       Potential problem: interaction between this code and function newBnodeId
   //       Possible solution return resource.getId.getLabelString 
-  override def createBNode: (RDFNode, RDFBuilder) = {
+  override def createBNode: (RDFNode, RDFAsJenaModel) = {
     val resource = model.createResource
     (BNodeId(resource.hashCode), this)
   }
 
-  override def addPrefix(alias: String, iri: String): RDFBuilder = ???
-  override def qName(str: String): IRI = ???
+  override def addPrefix(alias: String, iri: String): RDFAsJenaModel = {
+    model.setNsPrefix(alias, iri)
+    this
+  }
+
+  def qName(str: String): IRI = {
+    IRI(model.expandPrefix(str))
+  }
 }
 
 object RDFAsJenaModel {
 
-  def empty: RDF = {
+  def empty: RDFAsJenaModel = {
     RDFAsJenaModel(ModelFactory.createDefaultModel);
   }
 
-  def fromURI(uri: String): Try[RDFReader] = {
+  def fromURI(uri: String): Try[RDFAsJenaModel] = {
     try {
       val m = ModelFactory.createDefaultModel()
       RDFDataMgr.read(m, uri)
@@ -183,7 +191,7 @@ object RDFAsJenaModel {
     }
   }
 
-  def fromFile(file: File, format: String): Try[RDFReader] = {
+  def fromFile(file: File, format: String): Try[RDFAsJenaModel] = {
     try {
       val m = ModelFactory.createDefaultModel()
       val is: InputStream = new FileInputStream(file)
@@ -194,7 +202,7 @@ object RDFAsJenaModel {
     }
   }
 
-  def fromChars(cs: CharSequence, format: String): Try[RDFReader] = {
+  def fromChars(cs: CharSequence, format: String): Try[RDFAsJenaModel] = {
     try {
       RDFAsJenaModel.empty.parse(cs, format)
     } catch {
@@ -206,7 +214,7 @@ object RDFAsJenaModel {
     cs.toString.lines.zipWithIndex.map(p => (p._2 + 1).toString + " " + p._1).mkString("\n")
   }
 
-  def extractModel(rdf: RDFReader): Model = {
+  def extractModel(rdf: RDFAsJenaModel): Model = {
     rdf match {
       case rdfJena: RDFAsJenaModel => rdfJena.model
       case _ => throw new Exception("Cannot extract Model from rdf:" + rdf)

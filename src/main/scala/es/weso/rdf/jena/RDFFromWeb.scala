@@ -20,10 +20,9 @@ import es.weso.rdf._
 import es.weso.rdf.jena.SPARQLQueries._
 import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
 import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
-import es.weso.rdf.PrefixMap
-import es.weso.rdf.RDF
 
 case class RDFFromWeb() extends RDFReader {
+  type Rdf = RDFFromWeb
 
   val log = LoggerFactory.getLogger("RDFFromWeb")
 
@@ -32,7 +31,7 @@ case class RDFFromWeb() extends RDFReader {
     PrefixMap(Map())
   }
 
-  override def parse(cs: CharSequence, format: String): Try[RDFReader] = {
+  override def parse(cs: CharSequence, format: String): Try[Rdf] = {
     throw new Exception("Cannot parse RDFFromWeb ")
   }
 

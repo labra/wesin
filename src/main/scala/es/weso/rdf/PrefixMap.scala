@@ -9,6 +9,16 @@ case class PrefixMap(pm: Map[String, IRI]) {
     pm.get(prefix)
   }
 
+  def qname(str: String): Option[IRI] = {
+    str.indexOf(":") match {
+      case (-1) => Some(IRI(str))
+      case n => {
+        val (alias, localname) = str.splitAt(n)
+        getIRI(alias).map(iri => iri.add(localname))
+      }
+    }
+  }
+
   def contains(prefix: String): Boolean = pm.contains(prefix)
 
   def addPrefix(prefix: String, iri: IRI): PrefixMap = {

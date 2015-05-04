@@ -7,25 +7,25 @@ import PREFIXES._
 
 trait RDFBuilder {
 
-  def addPrefixMap(pm: PrefixMap): RDFBuilder
+  type Rdf <: RDFBuilder
 
-  def addPrefix(alias: String, iri: String): RDFBuilder
+  def addPrefixMap(pm: PrefixMap): Rdf
 
-  def createBNode: (RDFNode, RDFBuilder)
+  def addPrefix(alias: String, iri: String): Rdf
 
-  def addTriples(triples: Set[RDFTriple]): RDFBuilder
+  def createBNode: (RDFNode, Rdf)
 
-  def addTriple(triple: RDFTriple): RDFBuilder = {
+  def addTriples(triples: Set[RDFTriple]): Rdf
+
+  def addTriple(triple: RDFTriple): Rdf = {
     addTriples(Set(triple))
   }
 
-  def addType(node: RDFNode, typeNode: RDFNode): RDFBuilder = {
+  def addType(node: RDFNode, typeNode: RDFNode): Rdf = {
     addTriple(RDFTriple(node, rdf_type, typeNode))
   }
 
-  def rmTriple(triple: RDFTriple): RDFBuilder
-
-  def qName(str: String): IRI
+  def rmTriple(triple: RDFTriple): Rdf
 
 }
 

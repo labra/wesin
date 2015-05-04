@@ -5,6 +5,4 @@ import scala.util.Try
 import es.weso.rdfgraph.nodes.IRI
 import es.weso.rdfgraph.nodes.RDFNode
 
-trait RDF extends RDFBuilder with RDFReader {
-
-}
+// trait RDF extends RDFBuilder with RDFReader

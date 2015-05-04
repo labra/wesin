@@ -12,8 +12,9 @@ import es.weso.rdfgraph.nodes.RDFNode
 case class RDFTriples(
     triples: Set[RDFTriple],
     pm: PrefixMap) extends RDFReader {
+  type Rdf = RDFTriples
 
-  override def parse(cs: CharSequence, format: String): Try[RDFReader] = {
+  override def parse(cs: CharSequence, format: String): Try[Rdf] = {
     format match {
       case "TURTLE" => for ((triples, pm) <- TurtleParser.parse(cs))
         yield RDFTriples(triples, pm)

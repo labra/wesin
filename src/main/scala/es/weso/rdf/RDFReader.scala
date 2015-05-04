@@ -7,10 +7,12 @@ import es.weso.rdfgraph.nodes.RDFNode
 
 trait RDFReader {
 
+  type Rdf <: RDFReader
+
   /**
    * parse a string and obtain an RDF graph
    */
-  def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFReader]
+  def parse(cs: CharSequence, format: String = "TURTLE"): Try[Rdf]
 
   /**
    * convert a RDF graph to a String
