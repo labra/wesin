@@ -1,5 +1,6 @@
 package es.weso.rdf.jena
 
+import es.weso.jena._
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
 import es.weso.rdfgraph.nodes.RDFNode
@@ -15,7 +16,8 @@ import com.hp.hpl.jena.rdf.model.{
   Property,
   Statement,
   RDFNode => JenaRDFNode,
-  RDFReader => JenaRDFReader
+  RDFReader => JenaRDFReader,
+  SimpleSelector => JenaSelector
 }
 import org.slf4j._
 import org.apache.jena.riot.{ Lang => JenaLang }
@@ -26,6 +28,7 @@ import scala.util._
 import java.io._
 import es.weso.rdf.jena.SPARQLQueries._
 import org.apache.jena.riot.RDFLanguages._
+import es.weso.rdf.jena.JenaMapper._
 
 case class RDFAsJenaModel(model: Model)
     extends RDFReader
@@ -67,14 +70,28 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def triplesWithSubject(node: RDFNode): Set[RDFTriple] = {
-    if (node.isIRI) {
-      val subj = node.toIRI
+    // val ju = new JenaConversions
+    // val resource = rdfNode2Resource(node, model)
+    // toRDFTriples(ju.triplesWithSubject(resource, model).toSet.toSet)
+    /*      val subj = node.toIRI
       val m = QueryExecutionFactory.create(queryTriplesWithSubject(subj), model).execConstruct()
       val triples = model2triples(m)
       log.debug("triples with subject " + subj + " =\n" + triples)
-      triples
+      triples */
+    Set()
+  }
+
+  def toRDFTriples(ls: Set[Statement]): Set[RDFTriple] = {
+    ls.map(st => statement2triple(st))
+  }
+
+  override def triplesWithPredicate(node: IRI): Set[RDFTriple] = {
+    if (node.isIRI) {
+      val p = node
+      val m = QueryExecutionFactory.create(queryTriplesWithObject(p), model).execConstruct()
+      model2triples(m)
     } else
-      throw new Exception("triplesWithSubject: node " + node + " must be a IRI")
+      throw new Exception("triplesWithPredicate: node " + node + " must be a IRI")
   }
 
   override def triplesWithObject(node: RDFNode): Set[RDFTriple] = {
@@ -114,7 +131,7 @@ case class RDFAsJenaModel(model: Model)
 
   def jena2rdfnode(r: JenaRDFNode): RDFNode = {
     if (r.isAnon) {
-      BNodeId(r.asNode.getBlankNodeId().hashCode())
+      BNodeId(r.asNode.getBlankNodeId.getLabelString)
     } else if (r.isURIResource) {
       IRI(r.asResource.getURI())
     } else if (r.isLiteral) {
@@ -162,7 +179,7 @@ case class RDFAsJenaModel(model: Model)
   //       Possible solution return resource.getId.getLabelString 
   override def createBNode: (RDFNode, RDFAsJenaModel) = {
     val resource = model.createResource
-    (BNodeId(resource.hashCode), this)
+    (BNodeId(resource.getId.getLabelString), this)
   }
 
   override def addPrefix(alias: String, iri: String): RDFAsJenaModel = {
@@ -173,12 +190,17 @@ case class RDFAsJenaModel(model: Model)
   def qName(str: String): IRI = {
     IRI(model.expandPrefix(str))
   }
+
+  def empty: Rdf = {
+    RDFAsJenaModel.empty
+  }
+
 }
 
 object RDFAsJenaModel {
 
   def empty: RDFAsJenaModel = {
-    RDFAsJenaModel(ModelFactory.createDefaultModel);
+    RDFAsJenaModel(ModelFactory.createDefaultModel)
   }
 
   def fromURI(uri: String): Try[RDFAsJenaModel] = {

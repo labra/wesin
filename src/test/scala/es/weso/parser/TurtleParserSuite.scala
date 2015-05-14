@@ -15,8 +15,8 @@ class TurtleParserSuite
 
     describe("turtleDoc") {
       implicit val s = TurtleParserState.initial
-      val a01 = RDFTriple(BNodeId(0), RDFNode.rdftype, BNodeId(1))
-      val a02 = RDFTriple(BNodeId(0), RDFNode.rdftype, BNodeId(2))
+      val a01 = RDFTriple(BNodeId("b" + 0), RDFNode.rdftype, BNodeId("b" + 1))
+      val a02 = RDFTriple(BNodeId("b" + 0), RDFNode.rdftype, BNodeId("b" + 2))
       val abc = RDFTriple(IRI("a"), IRI("b"), IRI("c"))
       val baseIRI = IRI("")
       shouldParseTurtle(
@@ -103,16 +103,16 @@ class TurtleParserSuite
         TurtleParserState.initial.
           addPrefix("a", IRI("http://example.org/a#"))
       val p = triples(state)
-      val b0 = BNodeId(0)
+      val b0 = BNodeId("b" + 0)
       val ap = IRI("http://example.org/a#p")
       val aq = IRI("http://example.org/a#p")
       val ab = IRI("http://example.org/a#b")
-      val a01 = RDFTriple(BNodeId(0), RDFNode.rdftype, BNodeId(1))
-      val a02 = RDFTriple(BNodeId(0), RDFNode.rdftype, BNodeId(2))
+      val a01 = RDFTriple(BNodeId("b" + 0), RDFNode.rdftype, BNodeId("b" + 1))
+      val a02 = RDFTriple(BNodeId("b" + 0), RDFNode.rdftype, BNodeId("b" + 2))
 
       shouldParseRDF(p, "_:0 a _:1,_:2", List(a01, a02))
       shouldParseRDF(p, "_:0 a _:1; a _:2", List(a01, a02))
-      shouldParseRDF(p, "[a:p a:b ]", List(RDFTriple(BNodeId(0), ap, ab)))
+      shouldParseRDF(p, "[a:p a:b ]", List(RDFTriple(BNodeId("b" + 0), ap, ab)))
       shouldParseRDF(p, "_:b.0 a _:1", List(a01))
       shouldNotParse(p, "<a> = <b>")
       shouldNotParse(p, " ")
@@ -123,9 +123,9 @@ class TurtleParserSuite
         TurtleParserState.initial.
           addPrefix("a", IRI("http://example.org/a#"))
       val p = subjPredicatesObjectList(state)
-      val a12 = (RDFNode.rdftype, List(BNodeId(1), BNodeId(2)))
-      val a34 = (RDFNode.rdftype, List(BNodeId(3), BNodeId(4)))
-      shouldParseRDF(p, "_:0 a _:1,_:2 ; a _:3, _:4", (BNodeId(0), List(a12, a34)))
+      val a12 = (RDFNode.rdftype, List(BNodeId("b" + 1), BNodeId("b" + 2)))
+      val a34 = (RDFNode.rdftype, List(BNodeId("b" + 3), BNodeId("b" + 4)))
+      shouldParseRDF(p, "_:0 a _:1,_:2 ; a _:3, _:4", (BNodeId("b" + 0), List(a12, a34)))
     }
 
     describe("predicateObjectList") {
@@ -134,9 +134,9 @@ class TurtleParserSuite
           addPrefix("a", IRI("http://example.org/a#"))
 
       val p = predicateObjectList(state)
-      val a01 = (RDFNode.rdftype, List(BNodeId(0), BNodeId(1)))
+      val a01 = (RDFNode.rdftype, List(BNodeId("b" + 0), BNodeId("b" + 1)))
       val a12 = (RDFNode.rdftype, List(IntegerLiteral(1), IntegerLiteral(2)))
-      val a23 = (RDFNode.rdftype, List(BNodeId(2), BNodeId(3)))
+      val a23 = (RDFNode.rdftype, List(BNodeId("b" + 2), BNodeId("b" + 3)))
       val abac1 = (IRI("http://example.org/a#b"), List(IRI("http://example.org/a#c"), IntegerLiteral(1)))
       val result = List(a01, abac1)
 
@@ -157,9 +157,9 @@ class TurtleParserSuite
         TurtleParserState.initial.
           addPrefix("a", IRI("http://example.org/a#"))
       val p = verbObjectList(state)
-      shouldParseRDF(p, "a _:1,_:2", (RDFNode.rdftype, List(BNodeId(0), BNodeId(1))))
-      shouldParseRDF(p, " a _:1, _:2", (RDFNode.rdftype, List(BNodeId(0), BNodeId(1))))
-      shouldParseRDF(p, "a:b _:1,_:2", (IRI("http://example.org/a#b"), List(BNodeId(0), BNodeId(1))))
+      shouldParseRDF(p, "a _:1,_:2", (RDFNode.rdftype, List(BNodeId("b" + 0), BNodeId("b" + 1))))
+      shouldParseRDF(p, " a _:1, _:2", (RDFNode.rdftype, List(BNodeId("b" + 0), BNodeId("b" + 1))))
+      shouldParseRDF(p, "a:b _:1,_:2", (IRI("http://example.org/a#b"), List(BNodeId("b" + 0), BNodeId("b" + 1))))
     }
 
     describe("objectList") {
@@ -167,15 +167,15 @@ class TurtleParserSuite
         TurtleParserState.initial.
           addPrefix("a", IRI("http://example.org/a#"))
       val p = objectList(state)
-      shouldParseRDF(p, "_:1,_:2", List(BNodeId(0), BNodeId(1)))
-      shouldParseRDF(p, "_:1,_:2,_:1", List(BNodeId(0), BNodeId(1), BNodeId(0)))
-      shouldParseRDF(p, "_:1,a:b,_:1", List(BNodeId(0), IRI("http://example.org/a#b"), BNodeId(0)))
+      shouldParseRDF(p, "_:1,_:2", List(BNodeId("b" + 0), BNodeId("b" + 1)))
+      shouldParseRDF(p, "_:1,_:2,_:1", List(BNodeId("b" + 0), BNodeId("b" + 1), BNodeId("b" + 0)))
+      shouldParseRDF(p, "_:1,a:b,_:1", List(BNodeId("b" + 0), IRI("http://example.org/a#b"), BNodeId("b" + 0)))
       shouldParseRDF(p, "1,2,3", List(IntegerLiteral(1), IntegerLiteral(2), IntegerLiteral(3)))
       shouldParseRDF(p, "1, 2, 3", List(IntegerLiteral(1), IntegerLiteral(2), IntegerLiteral(3)))
       shouldParseRDF(p, "1 , 2 , 3 ", List(IntegerLiteral(1), IntegerLiteral(2), IntegerLiteral(3)))
       shouldParseRDF(p, "1 , true , false ", List(IntegerLiteral(1), RDFNode.trueLiteral, RDFNode.falseLiteral))
       shouldParseRDF(p, "#Comment\n 1 , true # Other comment\n , false ", List(IntegerLiteral(1), RDFNode.trueLiteral, RDFNode.falseLiteral))
-      shouldParseRDF(p, "_:1, a:b, _:1", List(BNodeId(0), IRI("http://example.org/a#b"), BNodeId(0)))
+      shouldParseRDF(p, "_:1, a:b, _:1", List(BNodeId("b" + 0), IRI("http://example.org/a#b"), BNodeId("b" + 0)))
     }
 
     describe("rdf_object") {
@@ -189,8 +189,8 @@ class TurtleParserSuite
       shouldParseRDF(p, "-2.3e-1", DoubleLiteral(-2.3e-1))
       shouldParseRDF(p, "a:b", IRI("http://example.org/a#b"))
       shouldParseRDF(p, "<http://example.org/a#b>", IRI("http://example.org/a#b"))
-      shouldParseRDF(p, "_:1", BNodeId(0))
-      shouldParseRDF(p, "[]", BNodeId(0))
+      shouldParseRDF(p, "_:1", BNodeId("b" + 0))
+      shouldParseRDF(p, "[]", BNodeId("b" + 0))
       shouldNotParse(p, "<http://www.w3.org/2013/TurtleTests/{abc}>")
     }
 
@@ -217,8 +217,8 @@ class TurtleParserSuite
       val s = TurtleParserState.initial
       val p = collection(s)
       shouldParseRDF(p, "( )", RDFNode.rdfnil)
-      shouldParseRDF(p, "( <a> )", BNodeId(0))
-      shouldParseRDF(p, "( <a> <b> )", BNodeId(1))
+      shouldParseRDF(p, "( <a> )", BNodeId("b" + 0))
+      shouldParseRDF(p, "( <a> <b> )", BNodeId("b" + 1))
     }
 
     describe("NumericLiteral") {
@@ -297,9 +297,9 @@ class TurtleParserSuite
       val tableA = initial.getOrAddBNode("a")
       val tableAnon = initial.newBNode
       val p = BlankNode _
-      shouldParseRDF(p(initial), "_:1", BNodeId(0))
-      shouldParseRDF(p(initial), "_:a", BNodeId(0))
-      shouldParseRDF(p(initial), "[]", BNodeId(0))
+      shouldParseRDF(p(initial), "_:1", BNodeId("b" + 0))
+      shouldParseRDF(p(initial), "_:a", BNodeId("b" + 0))
+      shouldParseRDF(p(initial), "[]", BNodeId("b" + 0))
       shouldNotParse(p(initial), "<a>")
     }
 

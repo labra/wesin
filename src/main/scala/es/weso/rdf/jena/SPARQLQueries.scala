@@ -39,6 +39,16 @@ object SPARQLQueries {
     )
   }
 
+  def queryTriplesWithPredicate(obj: IRI) = {
+    val s = obj.str
+    QueryFactory.create(
+      s"""|construct {?x <${s}> ?y } where {
+          | ?x <${s}> ?y .
+          |}
+          |""".stripMargin
+    )
+  }
+
   def queryTriplesWithPredicateObject(p: IRI, o: IRI) = {
     QueryFactory.create(
       s"""|construct {?x <${p.str}> <${o.str}> } where {

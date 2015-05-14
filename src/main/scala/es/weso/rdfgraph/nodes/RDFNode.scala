@@ -13,6 +13,11 @@ class RDFNode {
     case _ => false
   }
 
+  def isBNode = this match {
+    case i: BNodeId => true
+    case _ => false
+  }
+
   def toIRI = this match {
     case i: IRI => i
     case _ =>
@@ -20,8 +25,13 @@ class RDFNode {
   }
 }
 
-case class BNodeId(id: Int) extends RDFNode {
-  def newBNodeId: BNodeId = BNodeId(id + 1)
+case class BNodeId(id: String) extends RDFNode {
+  private var n: Int = 0
+  // TODO: the following code is ugly and unsafe...remove
+  def newBNodeId: BNodeId = {
+    n += 1
+    BNodeId("b" + n)
+  }
 
   override def toString: String = {
     "_:b" + id
@@ -29,7 +39,7 @@ case class BNodeId(id: Int) extends RDFNode {
 
 }
 
-object InitialBNodeId extends BNodeId(0)
+object InitialBNodeId extends BNodeId("b0")
 
 object RDFNode {
   val xsd = "http://www.w3.org/2001/XMLSchema#"

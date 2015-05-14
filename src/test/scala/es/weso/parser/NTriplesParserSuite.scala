@@ -31,7 +31,7 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
 
   test("bNode") {
     val parser = NTriplesParser
-    assertParse(nodeID, "_:b0", BNodeId(0))
+    assertParse(nodeID, "_:b0", BNodeId("b" + 0))
   }
 
   test("basic string literal") {
@@ -136,12 +136,12 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     val input = Source.fromURL(getClass.getResource("/test2.nt")).mkString
     val triples = parseAll(ntripleDoc, input).get.toSet
     val expected = Stream(
-      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId(0)),
-      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId(1)),
-      RDFTriple(BNodeId(0), IRI("http://example.org/b"), IRI("http://example.org/c")),
-      RDFTriple(BNodeId(0), IRI("http://example.org/b"), IRI("http://example.org/d")),
-      RDFTriple(BNodeId(1), IRI("http://example.org/b"), BNodeId(0)),
-      RDFTriple(BNodeId(1), IRI("http://example.org/b"), IRI("http://example.org/e"))
+      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId("b" + 0)),
+      RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), BNodeId("b" + 1)),
+      RDFTriple(BNodeId("b" + 0), IRI("http://example.org/b"), IRI("http://example.org/c")),
+      RDFTriple(BNodeId("b" + 0), IRI("http://example.org/b"), IRI("http://example.org/d")),
+      RDFTriple(BNodeId("b" + 1), IRI("http://example.org/b"), BNodeId("b" + 0)),
+      RDFTriple(BNodeId("b" + 1), IRI("http://example.org/b"), IRI("http://example.org/e"))
     ).toSet
     assert(triples == expected)
   }
@@ -151,8 +151,8 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     val triples = parseAll(ntripleDoc, input).get.toSet
     val expected = Stream(
     			RDFTriple(IRI("http://example.org/resource1"),IRI("http://example.org/property"),IRI("http://example.org/resource2")),
-    			RDFTriple(BNodeId(0),IRI("http://example.org/property"),IRI("http://example.org/resource2")),
-    			RDFTriple(IRI("http://example.org/resource2"),IRI("http://example.org/property"),BNodeId(0)),
+    			RDFTriple(BNodeId("b" + 0),IRI("http://example.org/property"),IRI("http://example.org/resource2")),
+    			RDFTriple(IRI("http://example.org/resource2"),IRI("http://example.org/property"),BNodeId("b" + 0)),
     			RDFTriple(IRI("http://example.org/resource3"),IRI("http://example.org/property"),IRI("http://example.org/resource2"))
   				).toSet
      assert(triples == expected)

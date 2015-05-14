@@ -45,6 +45,10 @@ case class RDFTriples(
     triples.filter(_.hasObject(node))
   }
 
+  override def triplesWithPredicate(p: IRI): Set[RDFTriple] = {
+    triples.filter(_.hasPredicate(p))
+  }
+
   override def triplesWithPredicateObject(p: IRI, o: RDFNode): Set[RDFTriple] = {
     triples.filter(_.hasObject(o)).filter(_.hasPredicate(p))
   }

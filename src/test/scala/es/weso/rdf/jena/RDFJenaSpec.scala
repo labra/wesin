@@ -38,7 +38,7 @@ class RDFJenaSpec
       val pm: PrefixMap = PrefixMap(map)
       rdf.addPrefixMap(pm)
       rdf.addTriples(Set(
-        RDFTriple(IRI("http://example.org#a"), IRI("http://foaf.org#knows"), BNodeId(1)), RDFTriple(BNodeId(1), IRI("http://foaf.org#knows"), BNodeId(2)), RDFTriple(BNodeId(2), IRI("http://foaf.org#name"), StringLiteral("pepe"))
+        RDFTriple(IRI("http://example.org#a"), IRI("http://foaf.org#knows"), BNodeId("b" + 1)), RDFTriple(BNodeId("b" + 1), IRI("http://foaf.org#knows"), BNodeId("b" + 2)), RDFTriple(BNodeId("b" + 2), IRI("http://foaf.org#name"), StringLiteral("pepe"))
       ))
       val m2 = str2model("""|@prefix : <http://example.org#> .
                             |@prefix foaf: <http://foaf.org#> .

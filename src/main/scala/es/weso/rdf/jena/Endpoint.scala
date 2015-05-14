@@ -70,6 +70,11 @@ case class Endpoint(endpoint: String) extends RDFReader {
     } else throw new Exception("triplesWithSubject: node " + node + " must be a IRI")
   }
 
+  def triplesWithPredicate(p: IRI): Set[RDFTriple] = {
+    val model = QueryExecutionFactory.sparqlService(endpoint, queryTriplesWithPredicate(p)).execConstruct()
+    model2triples(model)
+  }
+
   def triplesWithObject(node: RDFNode): Set[RDFTriple] = {
     if (node.isIRI) {
       val model = QueryExecutionFactory.sparqlService(endpoint, queryTriplesWithObject(node.toIRI)).execConstruct()
@@ -101,7 +106,7 @@ case class Endpoint(endpoint: String) extends RDFReader {
 
   def jena2rdfnode(r: JenaRDFNode): RDFNode = {
     if (r.isAnon) {
-      BNodeId(r.asNode.getBlankNodeId().hashCode())
+      BNodeId(r.asNode.getBlankNodeId.getLabelString)
     } else if (r.isURIResource) {
       IRI(r.asResource.getURI())
     } else if (r.isLiteral) {

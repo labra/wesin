@@ -60,7 +60,7 @@ trait NTriplesParser extends Positional with RegexParsers {
       {
         bNodesMap.getOrElse(name,
           {
-            val v = BNodeId(bNodesMap.size)
+            val v = BNodeId("b" + bNodesMap.size)
             bNodesMap.update(name, v);
             v
           })

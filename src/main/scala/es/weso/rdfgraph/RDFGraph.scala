@@ -100,7 +100,7 @@ object RDFGraph {
 
   // Implicit definition for starting BNodeId
   // Should I put it in other place?
-  implicit val initialBNode = BNodeId(0)
+  implicit val initialBNode = BNodeId("b" + 0)
 
   /**
    * Empty RDF Graph (no nodes and edges)

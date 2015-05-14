@@ -56,6 +56,13 @@ case class RDFFromWeb() extends RDFReader {
       throw new Exception("triplesWithSubject: node " + node + " must be a IRI")
   }
 
+  override def triplesWithPredicate(p: IRI): Set[RDFTriple] = {
+    val derefModel = ModelFactory.createDefaultModel
+    RDFDataMgr.read(derefModel, p.str)
+    val model = QueryExecutionFactory.create(queryTriplesWithPredicate(p), derefModel).execConstruct()
+    model2triples(model)
+  }
+
   override def triplesWithObject(node: RDFNode): Set[RDFTriple] = {
     if (node.isIRI) {
       val obj = node.toIRI
@@ -95,7 +102,7 @@ case class RDFFromWeb() extends RDFReader {
 
   def jena2rdfnode(r: JenaRDFNode): RDFNode = {
     if (r.isAnon) {
-      BNodeId(r.asNode.getBlankNodeId().hashCode())
+      BNodeId(r.asNode.getBlankNodeId.getLabelString)
     } else if (r.isURIResource) {
       IRI(r.asResource.getURI())
     } else if (r.isLiteral) {

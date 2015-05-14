@@ -27,5 +27,7 @@ trait RDFBuilder {
 
   def rmTriple(triple: RDFTriple): Rdf
 
+  def empty: Rdf
+
 }
 

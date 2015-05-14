@@ -8,12 +8,14 @@ import com.hp.hpl.jena.rdf.model.{
   RDFNode => JenaRDFNode,
   Property,
   Resource,
+  Literal,
   AnonId
 }
 import es.weso.rdfgraph.nodes._
 import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
 import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.PREFIXES._
 
 object JenaMapper {
 
@@ -28,21 +30,70 @@ object JenaMapper {
     m
   }
 
-  /*  def RDFTriples2Model(triples: Set[RDFTriple]): JenaModel = {
-    val m = ModelFactory.createDefaultModel()
-    for (t <- triples) {
-      val subj = createResource(m, t.subj)
-      val pred = createProperty(m, t.pred)
-      val obj = createRDFNode(m, t.obj)
-      val stmt = m.createStatement(subj, pred, obj)
-      m.add(stmt)
-    }
-    m
-  } */
-
   def RDFTriple2Statement(triple: RDFTriple): Statement = {
     ???
   }
+
+  def statement2RDFTriple(s: Statement): RDFTriple = {
+    val subj: RDFNode = jenaNode2RDFNode(s.getSubject)
+    val pred: IRI = property2IRI(s.getPredicate)
+    val obj: RDFNode = jenaNode2RDFNode(s.getObject)
+    RDFTriple(subj, pred, obj)
+  }
+
+  def rdfNode2Property(n: RDFNode, m: JenaModel): Property = {
+    n match {
+      case i: IRI => m.getProperty(i.str)
+      case _ => throw new Exception("rdfNode2Property: unexpected node " + n)
+    }
+  }
+
+  def rdfNode2Resource(n: RDFNode, m: JenaModel): Resource = {
+    n match {
+      case i: IRI => m.getResource(i.str)
+      case BNodeId(id) => {
+        // Creates the BNode if it doesn't exist
+        m.createResource(new AnonId(id))
+      }
+      case _ => throw new Exception("rdfNode2Resource: unexpected node " + n)
+    }
+  }
+
+  def rdfNode2JenaNode(n: RDFNode, m: JenaModel): JenaRDFNode = {
+    n match {
+      case i: IRI => m.getResource(i.str)
+      case BNodeId(id) => {
+        // Creates the BNode if it doesn't exist
+        m.createResource(new AnonId(id))
+      }
+      case IntegerLiteral(n) => m.createTypedLiteral(n)
+      case DecimalLiteral(d) => m.createTypedLiteral(d)
+      //      case BooleanLiteral(b) => m.createLiteral(b)
+      case LangLiteral(str, Lang(lang)) => m.createLiteral(str, lang)
+      case _ => throw new Exception("rdfNode2JenaNode: unexpected node " + n)
+    }
+  }
+
+  def jenaNode2RDFNode(r: JenaRDFNode): RDFNode = {
+    if (r.isURIResource()) {
+      IRI(r.asResource().getURI)
+    } else if (r.isAnon) {
+      BNodeId(r.asResource().getId.getLabelString)
+    } else if (r.isLiteral) {
+      val lit = r.asLiteral()
+      val datatype = IRI(lit.getDatatypeURI)
+      datatype match {
+        case xsd_string => StringLiteral(lit.getLexicalForm)
+        case xsd_integer => IntegerLiteral(lit.getLexicalForm.toInt)
+        case xsd_decimal => DecimalLiteral(lit.getLexicalForm.toDouble)
+        case xsd_boolean => BooleanLiteral(lit.getLexicalForm.toBoolean)
+        case rdf_langString => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
+        case _ => DatatypeLiteral(lit.getLexicalForm, datatype)
+      }
+    } else throw new Exception("resource2RDFNode: unexpected type of resource")
+  }
+
+  def property2IRI(p: Property): IRI = IRI(p.getURI)
 
   def createResource(m: JenaModel, node: RDFNode): Resource = {
     node match {
