@@ -9,14 +9,21 @@ case class RDFNodeException(msg: String) extends Exception {
 // TODO: Refactor as a sealed class => should include literals in this file
 class RDFNode {
   def isIRI = this match {
-    case i: IRI => true
+    case _: IRI => true
     case _ => false
   }
 
   def isBNode = this match {
-    case i: BNodeId => true
+    case _: BNodeId => true
     case _ => false
   }
+
+  def isLiteral = this match {
+    case _: Literal => true
+    case _ => false
+  }
+
+  def isNonLiteral = this.isIRI || this.isBNode
 
   def toIRI = this match {
     case i: IRI => i
@@ -26,15 +33,14 @@ class RDFNode {
 }
 
 case class BNodeId(id: String) extends RDFNode {
-  private var n: Int = 0
   // TODO: the following code is ugly and unsafe...remove
   def newBNodeId: BNodeId = {
-    n += 1
+    val n = id.drop(1).toInt + 1
     BNodeId("b" + n)
   }
 
   override def toString: String = {
-    "_:b" + id
+    "_:" + id
   }
 
 }

@@ -226,10 +226,7 @@ trait W3cTokens
 
   // from _:xxx to xxx
   def removeBNodePrefix(s: String): String = {
-    s.toList match {
-      case '_' :: ':' :: rs => rs.mkString
-      case _ => throw new ParserException("Internal error: removeBNodePrefix: string " + s + " should start by underscore")
-    }
+    s.drop(2)
   }
 
   def str2Double(s: String): Double = s.toDouble

@@ -4,6 +4,7 @@ package es.weso.rdf.jena
 import com.hp.hpl.jena.rdf.model.{
   Model => JenaModel,
   Statement,
+  StmtIterator,
   ModelFactory,
   RDFNode => JenaRDFNode,
   Property,
@@ -16,6 +17,7 @@ import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
 import es.weso.rdfgraph.statements.RDFTriple
 import es.weso.rdf.PREFIXES._
+import scala.collection.JavaConversions._
 
 object JenaMapper {
 
@@ -31,7 +33,8 @@ object JenaMapper {
   }
 
   def RDFTriple2Statement(triple: RDFTriple): Statement = {
-    ???
+    // TODO: implement
+    throw new Exception("RDFTriple2Statement: unimplemented conversion from " + triple)
   }
 
   def statement2RDFTriple(s: Statement): RDFTriple = {
@@ -83,11 +86,11 @@ object JenaMapper {
       val lit = r.asLiteral()
       val datatype = IRI(lit.getDatatypeURI)
       datatype match {
-        case xsd_string => StringLiteral(lit.getLexicalForm)
-        case xsd_integer => IntegerLiteral(lit.getLexicalForm.toInt)
-        case xsd_decimal => DecimalLiteral(lit.getLexicalForm.toDouble)
-        case xsd_boolean => BooleanLiteral(lit.getLexicalForm.toBoolean)
-        case rdf_langString => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
+        case `xsd_string` => StringLiteral(lit.getLexicalForm)
+        case `xsd_integer` => IntegerLiteral(lit.getLexicalForm.toInt)
+        case `xsd_decimal` => DecimalLiteral(lit.getLexicalForm.toDouble)
+        case `xsd_boolean` => BooleanLiteral(lit.getLexicalForm.toBoolean)
+        case `rdf_langString` => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
         case _ => DatatypeLiteral(lit.getLexicalForm, datatype)
       }
     } else throw new Exception("resource2RDFNode: unexpected type of resource")
@@ -141,6 +144,22 @@ object JenaMapper {
 
   def createProperty(m: JenaModel, pred: IRI): Property = {
     m.createProperty(pred.str)
+  }
+
+  def triplesSubject(resource: Resource, model: JenaModel): Set[Statement] = {
+    model.listStatements(resource, null, null).toSet.toSet
+  }
+
+  def triplesPredicate(pred: Property, model: JenaModel): Set[Statement] = {
+    model.listStatements(null, pred, null).toSet.toSet
+  }
+
+  def triplesObject(obj: Resource, model: JenaModel): Set[Statement] = {
+    model.listStatements(null, null, obj).toSet.toSet
+  }
+
+  def triplesPredicateObject(property: Property, obj: Resource, model: JenaModel): Set[Statement] = {
+    model.listStatements(null, property, obj).toSet.toSet
   }
 
 }

@@ -42,9 +42,10 @@ case class Ground(graph: TGraph[RDFNode])(implicit seed: BNodeId) extends RDFGra
         g.insertTripleMap(triple, map))
     } else {
       Exists {
-        case (bnode) => addTriplesBNodes(bnodes.tail,
-          triples,
-          map + (bnodes.head -> bnode))
+        case (bnode) =>
+          addTriplesBNodes(bnodes.tail,
+            triples,
+            map + (bnodes.head -> bnode))
       }
     }
   }

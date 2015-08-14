@@ -4,6 +4,7 @@ import es.weso.rdfgraph.statements._
 import scala.util.Try
 import es.weso.rdfgraph.nodes.IRI
 import es.weso.rdfgraph.nodes.RDFNode
+import es.weso.rdf.PREFIXES._
 
 trait RDFReader {
 
@@ -27,15 +28,15 @@ trait RDFReader {
   /**
    * Returns the set of subjects that are IRIs in a graph
    */
-  def subjects(): Set[IRI] = {
-    rdfTriples.map(_.subj).filter(_.isIRI).map(_.toIRI)
+  def subjects(): Set[RDFNode] = {
+    rdfTriples.map(_.subj)
   }
 
   /**
    * Returns the set of predicates
    */
   def predicates(): Set[IRI] = {
-    rdfTriples.map(_.pred).filter(_.isIRI).map(_.toIRI)
+    rdfTriples.map(_.pred)
   }
 
   /**
@@ -46,7 +47,7 @@ trait RDFReader {
   }
 
   /**
-   * The set of all iri's available in an RDF graph
+   * The set of all iri's available
    */
   def iris(): Set[IRI] = {
     rdfTriples.map(_.iris).flatten
@@ -75,6 +76,10 @@ trait RDFReader {
    * @param node
    */
   def triplesWithPredicateObject(p: IRI, o: RDFNode): Set[RDFTriple]
+
+  def triplesWithType(expectedType: IRI): Set[RDFTriple] = {
+    triplesWithPredicateObject(rdf_type, expectedType)
+  }
 
   /**
    * Set of RDFTriples that contain a node as subject and a given Predicate

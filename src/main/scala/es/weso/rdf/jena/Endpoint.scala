@@ -43,7 +43,8 @@ case class Endpoint(endpoint: String) extends RDFReader {
     resultSet.map(qs => IRI(qs.get("x").asResource.getURI)).toSet
   }
 
-  override def subjects(): Set[IRI] = {
+  override def subjects(): Set[RDFNode] = {
+    // TODO: The following code only returns resource IRIs (no BNodes)
     val resultSet = QueryExecutionFactory.sparqlService(endpoint, findIRIs).execSelect()
     resultSet.map(qs => IRI(qs.get("x").asResource.getURI)).toSet
   }

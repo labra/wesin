@@ -31,6 +31,7 @@ case class PrefixMap(pm: Map[String, IRI]) {
     }
     pm.map(cnv).mkString("\n")
   }
+
 }
 
 object PrefixMap {

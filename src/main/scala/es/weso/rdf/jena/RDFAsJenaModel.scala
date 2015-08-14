@@ -1,6 +1,6 @@
 package es.weso.rdf.jena
 
-import es.weso.jena._
+// import es.weso.jena.JenaConversions
 import com.hp.hpl.jena.query._
 import es.weso.rdfgraph.nodes._
 import es.weso.rdfgraph.nodes.RDFNode
@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.{
   Statement,
   RDFNode => JenaRDFNode,
   RDFReader => JenaRDFReader,
-  SimpleSelector => JenaSelector
+  StmtIterator
 }
 import org.slf4j._
 import org.apache.jena.riot.{ Lang => JenaLang }
@@ -29,6 +29,7 @@ import java.io._
 import es.weso.rdf.jena.SPARQLQueries._
 import org.apache.jena.riot.RDFLanguages._
 import es.weso.rdf.jena.JenaMapper._
+import es.weso.rdf.PREFIXES._
 
 case class RDFAsJenaModel(model: Model)
     extends RDFReader
@@ -60,9 +61,9 @@ case class RDFAsJenaModel(model: Model)
     resources.filter(s => s.isURIResource).map(r => IRI(r.getURI))
   }
 
-  override def subjects(): Set[IRI] = {
+  override def subjects(): Set[RDFNode] = {
     val resources: Set[Resource] = model.listSubjects().toSet().toSet
-    resources.filter(s => s.isURIResource).map(r => IRI(r.getURI))
+    resources.map(r => jenaNode2RDFNode(r))
   }
 
   override def rdfTriples(): Set[RDFTriple] = {
@@ -70,15 +71,9 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def triplesWithSubject(node: RDFNode): Set[RDFTriple] = {
-    // val ju = new JenaConversions
-    // val resource = rdfNode2Resource(node, model)
-    // toRDFTriples(ju.triplesWithSubject(resource, model).toSet.toSet)
-    /*      val subj = node.toIRI
-      val m = QueryExecutionFactory.create(queryTriplesWithSubject(subj), model).execConstruct()
-      val triples = model2triples(m)
-      log.debug("triples with subject " + subj + " =\n" + triples)
-      triples */
-    Set()
+    val resource = rdfNode2Resource(node, model)
+    val statements: Set[Statement] = triplesSubject(resource, model)
+    toRDFTriples(statements)
   }
 
   def toRDFTriples(ls: Set[Statement]): Set[RDFTriple] = {
@@ -86,33 +81,28 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def triplesWithPredicate(node: IRI): Set[RDFTriple] = {
-    if (node.isIRI) {
-      val p = node
-      val m = QueryExecutionFactory.create(queryTriplesWithObject(p), model).execConstruct()
-      model2triples(m)
-    } else
-      throw new Exception("triplesWithPredicate: node " + node + " must be a IRI")
+    val pred = rdfNode2Property(node, model)
+    val statements: Set[Statement] = triplesPredicate(pred, model)
+    toRDFTriples(statements)
   }
 
   override def triplesWithObject(node: RDFNode): Set[RDFTriple] = {
-    if (node.isIRI) {
-      val obj = node.toIRI
-      val m = QueryExecutionFactory.create(queryTriplesWithObject(obj), model).execConstruct()
-      model2triples(m)
-    } else
-      throw new Exception("triplesWithObject: node " + node + " must be a IRI")
+    val obj = rdfNode2Resource(node, model)
+    val statements: Set[Statement] = triplesObject(obj, model)
+    toRDFTriples(statements)
   }
 
-  override def triplesWithPredicateObject(p: IRI, node: RDFNode): Set[RDFTriple] = {
-    if (node.isIRI) {
-      val obj = node.toIRI
-      val derefModel = ModelFactory.createDefaultModel
-      RDFDataMgr.read(derefModel, obj.str)
-      val model = QueryExecutionFactory.create(queryTriplesWithPredicateObject(p, obj), derefModel).execConstruct()
-      model2triples(model)
-    } else
-      throw new Exception("triplesWithObject: node " + node + " must be a IRI")
+  override def triplesWithPredicateObject(p: IRI, o: RDFNode): Set[RDFTriple] = {
+    val pred = rdfNode2Property(p, model)
+    val obj = rdfNode2Resource(o, model)
+    val statements: Set[Statement] = triplesPredicateObject(pred, obj, model)
+    toRDFTriples(statements)
   }
+
+  // TODO: Check if it can be optimized in Jena 
+  /*  override def triplesWithType(expectedType:IRI): Set[RDFTriple] = {
+    triplesWithPredicateObject(rdf_type,expectedType)
+  } */
 
   def model2triples(model: Model): Set[RDFTriple] = {
     model.listStatements().map(st => statement2triple(st)).toSet
@@ -199,14 +189,18 @@ case class RDFAsJenaModel(model: Model)
 
 object RDFAsJenaModel {
 
+  def apply() {
+    RDFAsJenaModel.empty
+  }
+
   def empty: RDFAsJenaModel = {
     RDFAsJenaModel(ModelFactory.createDefaultModel)
   }
 
-  def fromURI(uri: String): Try[RDFAsJenaModel] = {
+  def fromURI(uri: String, format: String = "TURTLE"): Try[RDFAsJenaModel] = {
     try {
       val m = ModelFactory.createDefaultModel()
-      RDFDataMgr.read(m, uri)
+      RDFDataMgr.read(m, uri, shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + uri + ": " + e.getMessage))
