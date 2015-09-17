@@ -195,7 +195,7 @@ trait TurtleParser
   def RDFLiteral(prefixMap: PrefixMap) =
     string ~ opt(LANGTAG | "^^" ~> iri(prefixMap)) ^^ {
       case str ~ None => StringLiteral(str)
-      case str ~ Some(Lang(l)) => LangLiteral(str, Lang(l))
+      case str ~ Some(Lang(l)) => LangLiteral(str, Lang(l.toLowerCase))
       case str ~ Some(i: IRI) => DatatypeLiteral(str, i)
     }
 

@@ -30,7 +30,7 @@ case class Endpoint(endpoint: String) extends RDFReader {
 
   val log = LoggerFactory.getLogger("Endpoint")
 
-  override def parse(cs: CharSequence, format: String): Try[Endpoint] = {
+  override def parse(cs: CharSequence, format: String, base: Option[String]): Try[Endpoint] = {
     throw new Exception("Cannot parse into an endpoint. endpoint = " + endpoint)
   }
 

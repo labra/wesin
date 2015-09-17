@@ -38,11 +38,12 @@ case class RDFAsJenaModel(model: Model)
 
   val log = LoggerFactory.getLogger("RDFFromJenaModel")
 
-  override def parse(cs: CharSequence, format: String = "TURTLE"): Try[RDFAsJenaModel] = {
+  override def parse(cs: CharSequence, format: String = "TURTLE", base: Option[String] = None): Try[RDFAsJenaModel] = {
     try {
       val m = ModelFactory.createDefaultModel
       val str_reader = new StringReader(cs.toString)
-      RDFDataMgr.read(m, str_reader, "", shortnameToLang(format))
+      val baseURI = base.getOrElse("")
+      RDFDataMgr.read(m, str_reader, baseURI, shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception parsing char sequence: " + e.getMessage))
@@ -197,30 +198,32 @@ object RDFAsJenaModel {
     RDFAsJenaModel(ModelFactory.createDefaultModel)
   }
 
-  def fromURI(uri: String, format: String = "TURTLE"): Try[RDFAsJenaModel] = {
+  def fromURI(uri: String, format: String = "TURTLE", base: Option[String] = None): Try[RDFAsJenaModel] = {
+    val baseURI = base.getOrElse("")
     try {
       val m = ModelFactory.createDefaultModel()
-      RDFDataMgr.read(m, uri, shortnameToLang(format))
+      RDFDataMgr.read(m, uri, baseURI, shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + uri + ": " + e.getMessage))
     }
   }
 
-  def fromFile(file: File, format: String): Try[RDFAsJenaModel] = {
+  def fromFile(file: File, format: String, base: Option[String] = None): Try[RDFAsJenaModel] = {
+    val baseURI = base.getOrElse("")
     try {
       val m = ModelFactory.createDefaultModel()
       val is: InputStream = new FileInputStream(file)
-      RDFDataMgr.read(m, is, shortnameToLang(format))
+      RDFDataMgr.read(m, is, baseURI, shortnameToLang(format))
       Success(RDFAsJenaModel(m))
     } catch {
       case e: Exception => Failure(throw new Exception("Exception accessing  " + file.getName + ": " + e.getMessage))
     }
   }
 
-  def fromChars(cs: CharSequence, format: String): Try[RDFAsJenaModel] = {
+  def fromChars(cs: CharSequence, format: String, base: Option[String] = None): Try[RDFAsJenaModel] = {
     try {
-      RDFAsJenaModel.empty.parse(cs, format)
+      RDFAsJenaModel.empty.parse(cs, format, base)
     } catch {
       case e: Exception => Failure(throw new Exception("Exception reading  " + formatLines(cs.toString) + "\n " + e.getMessage))
     }

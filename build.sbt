@@ -10,9 +10,9 @@ organization := "es.weso"
 
 name := "wesin"
 
-version := "0.3.3"
+version := "0.4.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 publishMavenStyle := true
 
@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
 //  , "org.openrdf.sesame" % "sesame-model" % "2.7.10"
   , "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
   , "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"
-  , "es.weso" % "stateparser_2.11" % "0.0.4"
+  , "es.weso" % "stateparser_2.11" % "0.0.6"
   , "es.weso" % "tgraph_2.11" % "0.0.1"
   , "org.w3" % "banana-rdf_2.11" % "0.8.1"
   )

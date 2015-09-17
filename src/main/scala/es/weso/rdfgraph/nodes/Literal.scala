@@ -64,7 +64,8 @@ case class StringLiteral(lexicalForm: String) extends Literal {
   override def hasLang(lang: Lang) = false
 
   override def toString: String = {
-    lexicalForm
+    // TODO: Check if literal contains extended chars 
+    "\"" + lexicalForm + "\""
   }
 
 }
@@ -83,7 +84,7 @@ case class BooleanLiteral(bool: Boolean) extends Literal {
 }
 
 case class LangLiteral(lexicalForm: String, lang: Lang) extends Literal {
-  val dataType = RDFNode.LangStringDatatypeIRI
+  lazy val dataType = RDFNode.LangStringDatatypeIRI
 
   def isLangLiteral = true
   def hasLang(l: Lang) = lang.matchLanguage(l)
@@ -92,6 +93,7 @@ case class LangLiteral(lexicalForm: String, lang: Lang) extends Literal {
     val lex = "\"" + lexicalForm + "\""
     lex + lang
   }
+
 }
 
 case class Lang(lang: String) {
@@ -116,4 +118,12 @@ case class Lang(lang: String) {
     case ls => "@" + ls
   }
 
+  // The following code has been inspired by:
+  // http://stackoverflow.com/questions/7681183/how-can-i-define-a-custom-equality-operation-that-will-be-used-by-immutable-set
+  override def equals(o: Any) = o match {
+    case that: Lang => that.lang.toLowerCase == this.lang.toLowerCase
+    case _ => false
+  }
+
+  override def hashCode = lang.toLowerCase.hashCode
 }

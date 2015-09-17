@@ -14,9 +14,10 @@ case class RDFTriples(
     pm: PrefixMap) extends RDFReader {
   type Rdf = RDFTriples
 
-  override def parse(cs: CharSequence, format: String): Try[Rdf] = {
+  override def parse(cs: CharSequence, format: String, base: Option[String]): Try[Rdf] = {
+    val baseURI = IRI(base.getOrElse(""))
     format match {
-      case "TURTLE" => for ((triples, pm) <- TurtleParser.parse(cs))
+      case "TURTLE" => for ((triples, pm) <- TurtleParser.parse(cs, baseURI))
         yield RDFTriples(triples, pm)
       case _ => Failure(throw new Exception("Unsopported format: " + format))
     }

@@ -31,7 +31,7 @@ case class RDFFromWeb() extends RDFReader {
     PrefixMap(Map())
   }
 
-  override def parse(cs: CharSequence, format: String): Try[Rdf] = {
+  override def parse(cs: CharSequence, format: String, base: Option[String]): Try[Rdf] = {
     throw new Exception("Cannot parse RDFFromWeb ")
   }
 

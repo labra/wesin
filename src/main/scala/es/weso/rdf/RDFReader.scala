@@ -13,7 +13,7 @@ trait RDFReader {
   /**
    * parse a string and obtain an RDF graph
    */
-  def parse(cs: CharSequence, format: String = "TURTLE"): Try[Rdf]
+  def parse(cs: CharSequence, format: String = "TURTLE", base: Option[String] = None): Try[Rdf]
 
   /**
    * convert a RDF graph to a String
@@ -42,6 +42,7 @@ trait RDFReader {
   /**
    * Returns the set of objects that are IRIs in a graph
    */
+  // TODO: Extend this to return all objects: Seq[RDFNode]
   def objects(): Set[IRI] = {
     rdfTriples.map(_.obj).filter(_.isIRI).map(_.toIRI)
   }
