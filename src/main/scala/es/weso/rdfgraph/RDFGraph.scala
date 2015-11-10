@@ -55,9 +55,11 @@ abstract class RDFGraph {
    * @param triples set of triples to insert
    * @param map maps from BNodeIds in triples to BNodeIds in graph
    */
-  def addTriplesBNodes(bnodes: Set[BNodeId],
+  def addTriplesBNodes(
+    bnodes: Set[BNodeId],
     triples: Set[RDFTriple],
-    map: Map[BNodeId, BNodeId]): RDFGraph
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph
 
   /**
    * insertTripleMap inserts a triple in this graph
@@ -66,31 +68,40 @@ abstract class RDFGraph {
    * @param map maps from BNodeIds in triple to BNodeIds in Graph
    *
    */
-  def insertTripleMap(triple: RDFTriple,
-    map: Map[BNodeId, BNodeId]): RDFGraph
+  def insertTripleMap(
+    triple: RDFTriple,
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph
 
   def show(implicit seed: BNodeId): String
 
-  def foldRDFGraph[A](e: A,
-    f: (A, TContext[RDFNode]) => A)(implicit seed: BNodeId): A = {
+  def foldRDFGraph[A](
+    e: A,
+    f: (A, TContext[RDFNode]) => A
+  )(implicit seed: BNodeId): A = {
     foldRDFGraphSeed(e, f, seed)
   }
 
   def foldRDFGraphSeed[A](
     e: A,
     fn: (A, TContext[RDFNode]) => A,
-    seed: BNodeId): A
+    seed: BNodeId
+  ): A
 
-  def foldRDFGraphOrd[A](e: A,
-    f: (A, TContext[RDFNode]) => A)(implicit ord: Ordering[RDFNode],
-      seed: BNodeId): A = {
+  def foldRDFGraphOrd[A](
+    e: A,
+    f: (A, TContext[RDFNode]) => A
+  )(implicit
+    ord: Ordering[RDFNode],
+    seed: BNodeId): A = {
     foldRDFGraphSeedOrd(e, f, seed)(ord)
   }
 
   def foldRDFGraphSeedOrd[A](
     e: A,
     fn: (A, TContext[RDFNode]) => A,
-    seed: BNodeId)(implicit ord: Ordering[RDFNode]): A
+    seed: BNodeId
+  )(implicit ord: Ordering[RDFNode]): A
 
   //  def isomorphic(other : RDFGraph) : Boolean
 

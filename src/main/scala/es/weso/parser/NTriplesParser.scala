@@ -58,12 +58,14 @@ trait NTriplesParser extends Positional with RegexParsers {
   def nodeID: Parser[BNodeId] = "_:" ~> name ^^
     { (name) =>
       {
-        bNodesMap.getOrElse(name,
+        bNodesMap.getOrElse(
+          name,
           {
             val v = BNodeId("b" + bNodesMap.size)
             bNodesMap.update(name, v);
             v
-          })
+          }
+        )
       }
     }
   def literal: Parser[Literal] = datatypeLiteral | langLiteral
@@ -90,7 +92,8 @@ trait NTriplesParser extends Positional with RegexParsers {
   def name: Parser[String] = """[A-Za-z][A-Za-z0-9]*""".r
   def absoluteURI: Parser[String] = rep(charURI | chrExcept('>', '\n', EofCh)) ^^ { _ mkString "" }
 
-  def charURI = elem("URI char",
+  def charURI = elem(
+    "URI char",
     (ch) => ch != '<' && ch != '>'
       && ch > 0x32 // Not allowed control and space chars in URIs
       && ch <= 0x7F // Only ASCII (chars < 127) in URIs 

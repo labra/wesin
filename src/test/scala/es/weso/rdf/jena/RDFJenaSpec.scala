@@ -99,6 +99,47 @@ class RDFJenaSpec
       triples should be(Set(t1, t2))
     }
 
+    it("Should be able to get subjects with xsd:date") {
+      val str = """|@prefix : <http://example.org#> .
+                   |@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+                   |:a :date "25/10/2015"^^xsd:date .
+                   |""".stripMargin
+      val rdf = RDFAsJenaModel.empty.parse(str, "TURTLE").get
+      val a = IRI("http://example.org#a")
+      val date = IRI("http://example.org#date")
+      val value = DatatypeLiteral("25/10/2015", IRI("http://www.w3.org/2001/XMLSchema#date"))
+      val triples = rdf.triplesWithSubject(a)
+      val t1 = RDFTriple(a, date, value)
+      triples should be(Set(t1))
+    }
+
+    it("Should be able to get subjects with xsd:integer") {
+      val str = """|@prefix : <http://example.org#> .
+                   |@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+                   |:a :age 15 .
+                   |""".stripMargin
+      val rdf = RDFAsJenaModel.empty.parse(str, "TURTLE").get
+      val a = IRI("http://example.org#a")
+      val age = IRI("http://example.org#age")
+      val value = IntegerLiteral(15)
+      val triples = rdf.triplesWithSubject(a)
+      val t1 = RDFTriple(a, age, value)
+      triples should be(Set(t1))
+    }
+
+    it("Should be able to get subjects with datatype :xxx") {
+      val str = """|@prefix : <http://example.org#> .
+                   |@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+                   |:a :age "15"^^:xxx .
+                   |""".stripMargin
+      val rdf = RDFAsJenaModel.empty.parse(str, "TURTLE").get
+      val a = IRI("http://example.org#a")
+      val age = IRI("http://example.org#age")
+      val value = DatatypeLiteral("15", IRI("http://example.org#xxx"))
+      val triples = rdf.triplesWithSubject(a)
+      val t1 = RDFTriple(a, age, value)
+      triples should be(Set(t1))
+    }
   }
 
 }

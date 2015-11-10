@@ -38,14 +38,18 @@ case class Exists(fn: BNodeId => RDFGraph)(implicit seed: BNodeId) extends RDFGr
   /*
    * add triples which can have a set of bNodes
    */
-  override def addTriplesBNodes(bnodes: Set[BNodeId],
+  override def addTriplesBNodes(
+    bnodes: Set[BNodeId],
     triples: Set[RDFTriple],
-    map: Map[BNodeId, BNodeId]): RDFGraph = {
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph = {
     Exists { case (bnode) => fn(bnode).addTriplesBNodes(bnodes, triples, map) }
   }
 
-  override def insertTripleMap(triple: RDFTriple,
-    map: Map[BNodeId, BNodeId]): RDFGraph = {
+  override def insertTripleMap(
+    triple: RDFTriple,
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph = {
     Exists { case (bnode) => fn(bnode).insertTripleMap(triple, map) }
   }
 
@@ -60,7 +64,8 @@ case class Exists(fn: BNodeId => RDFGraph)(implicit seed: BNodeId) extends RDFGr
   def foldRDFGraphSeedOrd[A](
     e: A,
     f: (A, TContext[RDFNode]) => A,
-    seed: BNodeId)(implicit ord: Ordering[RDFNode]): A = {
+    seed: BNodeId
+  )(implicit ord: Ordering[RDFNode]): A = {
     fn(seed).foldRDFGraphSeedOrd(e, f, seed.newBNodeId)(ord)
   }
 

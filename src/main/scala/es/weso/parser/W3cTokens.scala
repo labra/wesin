@@ -55,8 +55,7 @@ trait W3cTokens
       case None => ""
       case Some(str) => str
     }
-      | failure("Expected prefix name")
-    )
+      | failure("Expected prefix name"))
 
   def PNAME_NS(prefixMap: PrefixMap): Parser[IRI] = {
     PNAME_NS_Parser ^?
@@ -133,8 +132,7 @@ trait W3cTokens
 
   lazy val WS_STR = """\u0020|\u0009|\u000D|\u000A"""
   lazy val WS = rep(WS_STR.r
-    | "#" ~ rep(chrExcept(EofCh, '\n'))
-  )
+    | "#" ~ rep(chrExcept(EofCh, '\n')))
 
   def chrExcept(cs: Char*) = elem("", ch => (cs forall (ch != _)))
 

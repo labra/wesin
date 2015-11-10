@@ -66,7 +66,10 @@ class W3cTokensSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = PNAME_NS(prefixMap)
       shouldParseGeneric(p, "a:", IRI("http://example.org/a#"))
       shouldParseGeneric(p, ":", IRI("http://example.org#"))
@@ -80,7 +83,10 @@ class W3cTokensSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = PNAME_LN(prefixMap)
       shouldParseGeneric(p, "a:b", IRI("http://example.org/a#b"))
       shouldParseGeneric(p, "a:aa", IRI("http://example.org/a#aa"))

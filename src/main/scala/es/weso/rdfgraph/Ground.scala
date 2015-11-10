@@ -24,8 +24,10 @@ case class Ground(graph: TGraph[RDFNode])(implicit seed: BNodeId) extends RDFGra
     }
   }
 
-  override def insertTripleMap(triple: RDFTriple,
-    map: Map[BNodeId, BNodeId]): RDFGraph = {
+  override def insertTripleMap(
+    triple: RDFTriple,
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph = {
     val s = getBNodeMap(triple.subj, map)
     val p = triple.pred
     val o = getBNodeMap(triple.obj, map)
@@ -35,7 +37,8 @@ case class Ground(graph: TGraph[RDFNode])(implicit seed: BNodeId) extends RDFGra
   override def addTriplesBNodes(
     bnodes: Set[BNodeId],
     triples: Set[RDFTriple],
-    map: Map[BNodeId, BNodeId]): RDFGraph = {
+    map: Map[BNodeId, BNodeId]
+  ): RDFGraph = {
     if (bnodes.isEmpty) {
       val current: RDFGraph = this
       triples.foldLeft(current)((g, triple) =>
@@ -43,9 +46,11 @@ case class Ground(graph: TGraph[RDFNode])(implicit seed: BNodeId) extends RDFGra
     } else {
       Exists {
         case (bnode) =>
-          addTriplesBNodes(bnodes.tail,
+          addTriplesBNodes(
+            bnodes.tail,
             triples,
-            map + (bnodes.head -> bnode))
+            map + (bnodes.head -> bnode)
+          )
       }
     }
   }
@@ -108,7 +113,8 @@ case class Ground(graph: TGraph[RDFNode])(implicit seed: BNodeId) extends RDFGra
   def foldRDFGraphSeedOrd[A](
     e: A,
     f: (A, TContext[RDFNode]) => A,
-    seed: BNodeId)(implicit ord: Ordering[RDFNode]): A = {
+    seed: BNodeId
+  )(implicit ord: Ordering[RDFNode]): A = {
     graph.foldTGraphOrd(e)(f)(ord)
   }
 

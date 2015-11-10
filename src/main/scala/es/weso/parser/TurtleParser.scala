@@ -30,8 +30,7 @@ trait TurtleParser
 
   def turtleDoc(implicit s: TurtleParserState): Parser[ResultParser[Set[RDFTriple], TurtleParserState]] =
     positioned(opt(WS) ~> repState(s, statement) ^^
-      { case (lss, s) => ResultParser(lss.flatten.toSet, s) }
-    )
+      { case (lss, s) => ResultParser(lss.flatten.toSet, s) })
 
   /*  def turtleDoc(implicit s: TurtleParserState) : 
 	  		Parser[(Set[RDFTriple],TurtleParserState)] = 
@@ -41,13 +40,11 @@ trait TurtleParser
 
   def statement(s: TurtleParserState): Parser[(RDFTriples, TurtleParserState)] =
     (directive(s) <~ opt(WS) ^^ { case s1 => (List(), s1) }
-      | triples(s) <~ token(".")
-    )
+      | triples(s) <~ token("."))
 
   def directive(s: TurtleParserState): Parser[TurtleParserState] =
     (prefixDirective(s)
-      | baseDirective(s)
-    )
+      | baseDirective(s))
 
   def baseDirective(s: TurtleParserState): Parser[TurtleParserState] = {
     (SPARQLBase | baseId) ^^ {
@@ -95,8 +92,7 @@ trait TurtleParser
           (collectedTriples ++ toTriples((bnode, ps)).map(t => RDFTriple(t, s.baseIRI)), s2)
         }
       }
-      | failure("Expected triple")
-    )
+      | failure("Expected triple"))
 
   def toTriples[A, B, C](ns: (A, List[(B, List[C])])): List[(A, B, C)] = {
     for (ps <- ns._2; y <- ps._2) yield (ns._1, ps._1, y)
@@ -124,21 +120,18 @@ trait TurtleParser
 
   def token(tk: String): Parser[String] =
     (opt(WS) ~> tk.r <~ opt(WS)
-      | failure(tk + " expected")
-    )
+      | failure(tk + " expected"))
 
   def verb(ns: PrefixMap): Parser[IRI] =
     (predicate(ns)
-      | "a" ^^ { case _ => (RDFNode.rdftype) }
-    )
+      | "a" ^^ { case _ => (RDFNode.rdftype) })
 
   type RDFTriples = List[RDFTriple]
 
   def subject(s: TurtleParserState): Parser[(RDFNode, TurtleParserState)] =
     (iri(s.namespaces) ^^ { case iri => (iri, s) }
       | BlankNode(s.bNodeLabels) ^^ { case (id, t) => (id, s.newTable(t)) }
-      | collection(s)
-    )
+      | collection(s))
 
   def predicate = iri _
 
@@ -148,8 +141,7 @@ trait TurtleParser
         | BlankNode(s.bNodeLabels) ^^ { case (id, table) => (id, s.newTable(table)) }
         | collection(s)
         | blankNodePropertyList(s)
-        | literal(s.namespaces) ^^ { case l => (l, s) }
-      ) <~ opt(WS)
+        | literal(s.namespaces) ^^ { case l => (l, s) }) <~ opt(WS)
 
   def literal(prefixMap: PrefixMap): Parser[Literal] =
     (
@@ -201,8 +193,7 @@ trait TurtleParser
 
   lazy val BooleanLiteral: Parser[Literal] =
     ("true" ^^ { _ => RDFNode.trueLiteral }
-      | "false" ^^ { _ => RDFNode.falseLiteral }
-    )
+      | "false" ^^ { _ => RDFNode.falseLiteral })
 
   lazy val string: Parser[String] = opt(WS) ~> (
     STRING_LITERAL_LONG_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE |
@@ -212,19 +203,16 @@ trait TurtleParser
   def iri(prefixMap: PrefixMap) =
     (IRIREF
       | PrefixedName(prefixMap)
-      | failure("iri expected")
-    )
+      | failure("iri expected"))
 
   def PrefixedName(prefixMap: PrefixMap): Parser[IRI] =
     (PNAME_LN(prefixMap)
-      | PNAME_NS(prefixMap)
-    )
+      | PNAME_NS(prefixMap))
 
   def BlankNode(bNodeTable: BNodeTable): Parser[(BNodeId, BNodeTable)] =
     (BLANK_NODE_LABEL(bNodeTable)
       | ANON(bNodeTable)
-      | failure("Blank Node expected")
-    )
+      | failure("Blank Node expected"))
 
 }
 
@@ -239,7 +227,8 @@ object TurtleParser extends TurtleParser {
    */
   def parse(
     cs: CharSequence,
-    baseIRI: IRI = IRI("")): Try[(Set[RDFTriple], PrefixMap)] = {
+    baseIRI: IRI = IRI("")
+  ): Try[(Set[RDFTriple], PrefixMap)] = {
     try {
       parseAll(turtleDoc(TurtleParserState.initial.newBase(baseIRI)), new CharSequenceReader(cs)) match {
         case Success(ResultParser(x, s1), _) => util.Success((x, s1.namespaces))

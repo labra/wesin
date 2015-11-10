@@ -11,40 +11,57 @@ import scala.util._
 
 class Opts(
     arguments: Array[String],
-    onError: (Throwable, Scallop) => Nothing) extends ScallopConf(arguments) {
+    onError: (Throwable, Scallop) => Nothing
+) extends ScallopConf(arguments) {
 
   banner("""| Wesin
               | Options:
               |""".stripMargin)
   footer("Enjoy!")
   version("Wesin 0.2")
-  val data = opt[String]("data",
+  val data = opt[String](
+    "data",
     required = true,
-    descr = "Data file")
-  val data_format = opt[String]("data-format",
+    descr = "Data file"
+  )
+  val data_format = opt[String](
+    "data-format",
     required = true,
-    descr = "Input Data Format")
-  val processor = opt[String]("processor",
+    descr = "Input Data Format"
+  )
+  val processor = opt[String](
+    "processor",
     required = true,
-    descr = "Processor: Jena, RDFTriples")
-  val show = toggle("show",
+    descr = "Processor: Jena, RDFTriples"
+  )
+  val show = toggle(
+    "show",
     prefix = "no-",
     default = Some(false),
     descrYes = "show RDF",
-    descrNo = "don't show RDF")
-  val verbose = toggle("verbose",
+    descrNo = "don't show RDF"
+  )
+  val verbose = toggle(
+    "verbose",
     prefix = "no-",
     default = Some(false),
     descrYes = "Normal output",
-    descrNo = "Verbose output")
-  val output = opt[String]("out",
-    descr = "Output RDF to file")
-  val version = opt[Boolean]("version",
+    descrNo = "Verbose output"
+  )
+  val output = opt[String](
+    "out",
+    descr = "Output RDF to file"
+  )
+  val version = opt[Boolean](
+    "version",
     noshort = true,
-    descr = "Print version")
-  val help = opt[Boolean]("help",
+    descr = "Print version"
+  )
+  val help = opt[Boolean](
+    "help",
     noshort = true,
-    descr = "Show this message")
+    descr = "Show this message"
+  )
 
   override protected def onError(e: Throwable) = onError(e, builder)
 }

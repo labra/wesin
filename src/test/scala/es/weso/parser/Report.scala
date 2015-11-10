@@ -158,7 +158,7 @@ case class SingleTestReport(
     uriTest: String, // URI of test
     testType: String, // Type of test
     moreInfo: String // Info about what happened
-    ) {
+) {
 
   override def toString: String =
     if (passed) testType + ". OK " + name +

@@ -17,19 +17,24 @@ import es.weso.rdfgraph.nodes.BNodeId
 case class BNodeTable(
     bNodeName: Map[BNodeId, Option[String]],
     nameBNode: Map[String, BNodeId],
-    nodes: Int = 0) {
+    nodes: Int = 0
+) {
 
   def newBNode: (BNodeId, BNodeTable) =
-    (BNodeId("b" + nodes),
-      BNodeTable(bNodeName, nameBNode, nodes + 1))
+    (
+      BNodeId("b" + nodes),
+      BNodeTable(bNodeName, nameBNode, nodes + 1)
+    )
 
   def getOrAddBNode(idName: String): (BNodeId, BNodeTable) = {
     nameBNode.get(idName) match {
       case None => {
         val id = BNodeId(idName)
-        (id, BNodeTable(bNodeName + (id -> Some(idName)),
+        (id, BNodeTable(
+          bNodeName + (id -> Some(idName)),
           nameBNode + (idName -> id),
-          nodes + 1))
+          nodes + 1
+        ))
       }
       case Some(bNodeId) => (bNodeId, this)
     }

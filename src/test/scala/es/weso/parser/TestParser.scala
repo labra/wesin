@@ -49,9 +49,11 @@ trait TestParser
    *  @param s input string to parse
    *
    */
-  def shouldParseNamed[A](testName: String,
+  def shouldParseNamed[A](
+    testName: String,
     p: Parser[A],
-    s: String) {
+    s: String
+  ) {
     it("Should parse " + testName) {
       val result = parseAll(p, s) match {
         case Success(x, _) => true
@@ -69,9 +71,11 @@ trait TestParser
    *  @param s input string to parse
    *
    */
-  def shouldNotParseNamed[A](testName: String,
+  def shouldNotParseNamed[A](
+    testName: String,
     p: Parser[A],
-    s: String) {
+    s: String
+  ) {
     it("Should not parse " + testName) {
       val result = parseAll(p, s) match {
         case Success(x, s1) =>

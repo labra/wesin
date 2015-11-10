@@ -36,7 +36,7 @@ case class RDFAsJenaModel(model: Model)
     with RDFBuilder {
   type Rdf = RDFAsJenaModel
 
-  val log = LoggerFactory.getLogger("RDFFromJenaModel")
+  val log = LoggerFactory.getLogger("RDFAsJenaModel")
 
   override def parse(cs: CharSequence, format: String = "TURTLE", base: Option[String] = None): Try[RDFAsJenaModel] = {
     try {
@@ -72,9 +72,13 @@ case class RDFAsJenaModel(model: Model)
   }
 
   override def triplesWithSubject(node: RDFNode): Set[RDFTriple] = {
-    val resource = rdfNode2Resource(node, model)
-    val statements: Set[Statement] = triplesSubject(resource, model)
-    toRDFTriples(statements)
+    val maybeResource = rdfNode2Resource(node, model)
+    val empty: Set[RDFTriple] = Set()
+    maybeResource.fold(empty) {
+      case resource =>
+        val statements: Set[Statement] = triplesSubject(resource, model)
+        toRDFTriples(statements)
+    }
   }
 
   def toRDFTriples(ls: Set[Statement]): Set[RDFTriple] = {
@@ -89,15 +93,23 @@ case class RDFAsJenaModel(model: Model)
 
   override def triplesWithObject(node: RDFNode): Set[RDFTriple] = {
     val obj = rdfNode2Resource(node, model)
-    val statements: Set[Statement] = triplesObject(obj, model)
-    toRDFTriples(statements)
+    val empty: Set[RDFTriple] = Set()
+    obj.fold(empty) { o =>
+      {
+        val statements: Set[Statement] = triplesObject(o, model)
+        toRDFTriples(statements)
+      }
+    }
   }
 
   override def triplesWithPredicateObject(p: IRI, o: RDFNode): Set[RDFTriple] = {
     val pred = rdfNode2Property(p, model)
-    val obj = rdfNode2Resource(o, model)
-    val statements: Set[Statement] = triplesPredicateObject(pred, obj, model)
-    toRDFTriples(statements)
+    val maybeObj = rdfNode2Resource(o, model)
+    val empty: Set[RDFTriple] = Set()
+    maybeObj.fold(empty) { obj =>
+      val statements: Set[Statement] = triplesPredicateObject(pred, obj, model)
+      toRDFTriples(statements)
+    }
   }
 
   // TODO: Check if it can be optimized in Jena 
@@ -113,7 +125,8 @@ case class RDFAsJenaModel(model: Model)
     RDFTriple(
       jena2rdfnode(st.getSubject),
       property2iri(st.getPredicate),
-      jena2rdfnode(st.getObject))
+      jena2rdfnode(st.getObject)
+    )
   }
 
   def property2iri(p: Property): IRI = {
@@ -131,11 +144,15 @@ case class RDFAsJenaModel(model: Model)
         StringLiteral(lit.getString())
       } else
         IRI(lit.getDatatypeURI()) match {
-          case RDFNode.IntegerDatatypeIRI => IntegerLiteral(lit.getInt)
+          case RDFNode.IntegerDatatypeIRI => {
+            IntegerLiteral(lit.getInt)
+          }
           case RDFNode.BooleanDatatypeIRI => BooleanLiteral(lit.getBoolean)
           case RDFNode.DoubleDatatypeIRI => DoubleLiteral(lit.getDouble())
           case RDFNode.LangStringDatatypeIRI => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
-          case _ => DatatypeLiteral(lit.getLexicalForm, IRI(lit.getDatatypeURI))
+          case uri => {
+            DatatypeLiteral(lit.getLexicalForm, IRI(lit.getDatatypeURI()))
+          }
         }
     } else
       throw new Exception("Unknown type of resource")

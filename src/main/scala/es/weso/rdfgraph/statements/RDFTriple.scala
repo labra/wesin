@@ -46,9 +46,11 @@ object RDFTriple {
    */
   def apply(triple: (RDFNode, IRI, RDFNode)) = new RDFTriple(triple._1, triple._2, triple._3)
 
-  def apply(triple: (RDFNode, IRI, RDFNode), base: IRI) = new RDFTriple(resolve(triple._1, base),
+  def apply(triple: (RDFNode, IRI, RDFNode), base: IRI) = new RDFTriple(
+    resolve(triple._1, base),
     base.resolve(triple._2),
-    resolve(triple._3, base))
+    resolve(triple._3, base)
+  )
 
   def resolve(node: RDFNode, base: IRI): RDFNode = {
     node match {

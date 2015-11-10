@@ -2,7 +2,7 @@ package es.weso.rdf
 
 /** Implementation of RDF trait using Sets of triples **/
 import es.weso.rdfgraph.statements._
-import es.weso.rdfgraph.RDFGraph
+// import es.weso.rdfgraph.RDFGraph
 import es.weso.parser.TurtleParser
 import scala.util._
 import es.weso.rdfgraph.nodes.InitialBNodeId
@@ -11,7 +11,8 @@ import es.weso.rdfgraph.nodes.RDFNode
 
 case class RDFTriples(
     triples: Set[RDFTriple],
-    pm: PrefixMap) extends RDFReader {
+    pm: PrefixMap
+) extends RDFReader {
   type Rdf = RDFTriples
 
   override def parse(cs: CharSequence, format: String, base: Option[String]): Try[Rdf] = {

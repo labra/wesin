@@ -93,7 +93,8 @@ case class RDFFromWeb() extends RDFReader {
     RDFTriple(
       jena2rdfnode(st.getSubject),
       property2iri(st.getPredicate),
-      jena2rdfnode(st.getObject))
+      jena2rdfnode(st.getObject)
+    )
   }
 
   def property2iri(p: Property): IRI = {

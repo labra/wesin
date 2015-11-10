@@ -34,9 +34,11 @@ class TurtleParserSuite
         """|@base <http://example.org/>.
             |<a> <b> <c> .""".stripMargin,
         baseIRI,
-        Set(RDFTriple(IRI("http://example.org/a"),
+        Set(RDFTriple(
+          IRI("http://example.org/a"),
           IRI("http://example.org/b"),
-          IRI("http://example.org/c")))
+          IRI("http://example.org/c")
+        ))
       )
       shouldParseTurtle(" _:0 a _:1,_:2 .", baseIRI, Set(a01, a02))
       shouldParseTurtle("_:0 a _:1,_:2 .", baseIRI, Set(a01, a02))
@@ -47,7 +49,8 @@ class TurtleParserSuite
       shouldParseTurtle(
         """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.""".stripMargin,
         baseIRI,
-        Set())
+        Set()
+      )
       shouldParseTurtle(
         """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             |""".stripMargin,
@@ -57,10 +60,11 @@ class TurtleParserSuite
         """|@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
             |@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
             |<s> <p> "123"^^xsd:string .""".stripMargin,
-        baseIRI, Set(RDFTriple(IRI("s"),
-          IRI("p"),
-          DatatypeLiteral("123", IRI("http://www.w3.org/2001/XMLSchema#string"))
-        ))
+        baseIRI, Set(RDFTriple(
+        IRI("s"),
+        IRI("p"),
+        DatatypeLiteral("123", IRI("http://www.w3.org/2001/XMLSchema#string"))
+      ))
       )
       shouldNotParseTurtle("""|# Bad IRI : good escape, bad charcater
         |<http://www.w3.org/2013/TurtleTests/\u0020> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .""".stripMargin)
@@ -72,41 +76,59 @@ class TurtleParserSuite
 
     describe("baseId") {
       val p = baseId
-      shouldParseGeneric(p,
+      shouldParseGeneric(
+        p,
         "@base <http://example.org/a#> .",
-        IRI("http://example.org/a#"))
-      shouldParseGeneric(p,
+        IRI("http://example.org/a#")
+      )
+      shouldParseGeneric(
+        p,
         "@base <http://example.org/>.",
-        IRI("http://example.org/"))
-      shouldParseGeneric(p,
+        IRI("http://example.org/")
+      )
+      shouldParseGeneric(
+        p,
         "@base <http://example.org/año#>  .",
-        IRI("http://example.org/año#"))
+        IRI("http://example.org/año#")
+      )
     }
 
     describe("prefixId") {
       val p = prefixId
-      shouldParseGeneric(p,
+      shouldParseGeneric(
+        p,
         "@prefix a: <http://example.org/a#> .",
-        ("a", IRI("http://example.org/a#")))
-      shouldParseGeneric(p,
+        ("a", IRI("http://example.org/a#"))
+      )
+      shouldParseGeneric(
+        p,
         "@prefix : <http://example.org/a#>.",
-        ("", IRI("http://example.org/a#")))
-      shouldParseGeneric(p,
+        ("", IRI("http://example.org/a#"))
+      )
+      shouldParseGeneric(
+        p,
         "@prefix año: <http://example.org/a#> \n.",
-        ("año", IRI("http://example.org/a#")))
+        ("año", IRI("http://example.org/a#"))
+      )
     }
 
     describe("SPARQLPrefix") {
       val p = SPARQLPrefix
-      shouldParseGeneric(p,
+      shouldParseGeneric(
+        p,
         "prefix a: <http://example.org/a#>",
-        ("a", IRI("http://example.org/a#")))
-      shouldParseGeneric(p,
+        ("a", IRI("http://example.org/a#"))
+      )
+      shouldParseGeneric(
+        p,
         "PREFIX : <http://example.org/a#>",
-        ("", IRI("http://example.org/a#")))
-      shouldParseGeneric(p,
+        ("", IRI("http://example.org/a#"))
+      )
+      shouldParseGeneric(
+        p,
         "Prefix año: <http://example.org/a#>",
-        ("año", IRI("http://example.org/a#")))
+        ("año", IRI("http://example.org/a#"))
+      )
     }
 
     describe("triples") {
@@ -216,7 +238,10 @@ class TurtleParserSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = literal(prefixMap)
       shouldParseGeneric(p, "1.2", DecimalLiteral(1.2))
       shouldParseGeneric(p, "12", IntegerLiteral(12))
@@ -251,7 +276,10 @@ class TurtleParserSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = RDFLiteral(prefixMap)
       shouldParseGeneric(p, "\"123\"^^a:integer", DatatypeLiteral("123", IRI("http://example.org/a#integer")))
       shouldParseGeneric(p, "\"123\"^^<http://example.org/a#integer>", DatatypeLiteral("123", IRI("http://example.org/a#integer")))
@@ -285,7 +313,10 @@ class TurtleParserSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = iri(prefixMap)
       shouldParseGeneric(p, ":a", IRI("http://example.org#a"))
       shouldParseGeneric(p, "a:b", IRI("http://example.org/a#b"))
@@ -300,7 +331,10 @@ class TurtleParserSuite
         PrefixMap.addPrefix("a", IRI("http://example.org/a#"))(
           PrefixMap.addPrefix("", IRI("http://example.org#"))(
             PrefixMap.addPrefix("año", IRI("http://example.org/año#"))(
-              PrefixMap.empty)))
+              PrefixMap.empty
+            )
+          )
+        )
       val p = PrefixedName(prefixMap)
       shouldParseGeneric(p, ":a", IRI("http://example.org#a"))
       shouldParseGeneric(p, "a:b", IRI("http://example.org/a#b"))
@@ -318,11 +352,13 @@ class TurtleParserSuite
       //    shouldNotParse(p(initial), "<a>")
     }
 
-    def shouldParseState[A, S](p: S => Parser[(A, S)],
+    def shouldParseState[A, S](
+      p: S => Parser[(A, S)],
       s: String,
       a: A,
       initial: S,
-      end: S): Unit = {
+      end: S
+    ): Unit = {
       it("Should parse \"" + s + "\"") {
         val result = parseAll(p(initial), s) match {
           case Success((x, s1), _) => {
@@ -348,9 +384,11 @@ class TurtleParserSuite
       }
     }
 
-    def shouldParseTurtle(s: String,
+    def shouldParseTurtle(
+      s: String,
       baseIRI: IRI = IRI(""),
-      triples: Set[RDFTriple]) {
+      triples: Set[RDFTriple]
+    ) {
       it("Should parse \"" + s + "\"" + " and return " + triples) {
         val result = TurtleParser.parse(s, baseIRI) match {
           case util.Success((x, pm)) => x

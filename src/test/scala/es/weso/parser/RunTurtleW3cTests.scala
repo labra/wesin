@@ -204,10 +204,12 @@ object RunTurtleW3cTests
     } else "<resource " + r + " with no name>"
   }
 
-  def passTurtleEval(name: String,
+  def passTurtleEval(
+    name: String,
     baseIRI: IRI,
     in: String,
-    expected: Model): Either[Model, String] = {
+    expected: Model
+  ): Either[Model, String] = {
     try {
       TurtleParser.parse(in, baseIRI) match {
         case util.Success((triples, pm)) => {
@@ -235,9 +237,11 @@ object RunTurtleW3cTests
    * @param base Base URL (default = empty String)
    * @param lang Syntax language. Can be: RDF/XML, N-TRIPLES, TURTLE. Default value: TURTLE
    */
-  def str2model(s: String,
+  def str2model(
+    s: String,
     base: String = "",
-    lang: String = "TURTLE"): Model = {
+    lang: String = "TURTLE"
+  ): Model = {
     val m = ModelFactory.createDefaultModel
     val in: InputStream = new ByteArrayInputStream(s.getBytes("UTF-8"))
     m.read(in, base, lang)

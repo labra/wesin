@@ -68,17 +68,21 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
   test("basic triple with spaces and tabs") {
     val parser = NTriplesParser
     assertParse(triple, " <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
-      Some(RDFTriple(IRI("http://example.org/resource3"),
+      Some(RDFTriple(
+        IRI("http://example.org/resource3"),
         IRI("http://example.org/property"),
-        IRI("http://example.org/resource2"))))
+        IRI("http://example.org/resource2")
+      )))
   }
 
   test("basic triple with spaces and tabs starting by spaces & tabs") {
     val parser = NTriplesParser
     assertParse(triple, " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
-      Some(RDFTriple(IRI("http://example.org/resource3"),
+      Some(RDFTriple(
+        IRI("http://example.org/resource3"),
         IRI("http://example.org/property"),
-        IRI("http://example.org/resource2"))))
+        IRI("http://example.org/resource2")
+      )))
   }
 
   test("two triples") {
@@ -87,8 +91,10 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     		   |<a> <b> <d> .""".stripMargin
 
     assertParse(ntripleDoc, ts,
-      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+      Stream(
+        RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))
+      ))
   }
 
   test("two triples with comment") {
@@ -98,8 +104,10 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     		   |<a> <b> <d> .""".stripMargin
 
     assertParse(ntripleDoc, ts,
-      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+      Stream(
+        RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))
+      ))
   }
 
   test("two triples with comments") {
@@ -112,8 +120,10 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
                |""".stripMargin
 
     assertParse(ntripleDoc, ts,
-      Stream(RDFTriple(IRI("a"), IRI("b"), IRI("c")),
-        RDFTriple(IRI("a"), IRI("b"), IRI("d"))))
+      Stream(
+        RDFTriple(IRI("a"), IRI("b"), IRI("c")),
+        RDFTriple(IRI("a"), IRI("b"), IRI("d"))
+      ))
   }
 
   test("Example from file 0") {
@@ -126,7 +136,8 @@ class NTriplesParserSuite extends FunSuite with NTriplesParser {
     val input = Source.fromURL(getClass.getResource("/test1.nt")).mkString
     assertParse(
       ntripleDoc, input,
-      Stream(RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c")),
+      Stream(
+        RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/c")),
         RDFTriple(IRI("http://example.org/a"), IRI("http://example.org/b"), IRI("http://example.org/d"))
       )
     )

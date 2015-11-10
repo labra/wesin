@@ -51,14 +51,14 @@ object JenaMapper {
     }
   }
 
-  def rdfNode2Resource(n: RDFNode, m: JenaModel): Resource = {
+  def rdfNode2Resource(n: RDFNode, m: JenaModel): Option[Resource] = {
     n match {
-      case i: IRI => m.getResource(i.str)
+      case i: IRI => Some(m.getResource(i.str))
       case BNodeId(id) => {
         // Creates the BNode if it doesn't exist
-        m.createResource(new AnonId(id))
+        Some(m.createResource(new AnonId(id)))
       }
-      case _ => throw new Exception("rdfNode2Resource: unexpected node " + n)
+      case _ => None
     }
   }
 

@@ -192,8 +192,10 @@ class RDFGraphSuite extends FunSuite {
     val g1 = RDFGraph.empty.addTriples(Set(tabc, tcba))
     def empty: Set[RDFNode] = Set()
     def add(ctx: TContext[RDFNode], set: Set[RDFNode]): Set[RDFNode] = set + ctx.node
-    assert(g1.foldRDFGraph(Set(): Set[RDFNode],
-      (set: Set[RDFNode], ctx: TContext[RDFNode]) => set + ctx.node)
+    assert(g1.foldRDFGraph(
+      Set(): Set[RDFNode],
+      (set: Set[RDFNode], ctx: TContext[RDFNode]) => set + ctx.node
+    )
       === Set(IRI("a"), IRI("b"), IRI("c")))
   }
 
