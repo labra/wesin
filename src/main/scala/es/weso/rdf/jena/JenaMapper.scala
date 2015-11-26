@@ -47,7 +47,7 @@ object JenaMapper {
   def rdfNode2Property(n: RDFNode, m: JenaModel): Property = {
     n match {
       case i: IRI => m.getProperty(i.str)
-      case _ => throw new Exception("rdfNode2Property: unexpected node " + n)
+      case _      => throw new Exception("rdfNode2Property: unexpected node " + n)
     }
   }
 
@@ -69,11 +69,11 @@ object JenaMapper {
         // Creates the BNode if it doesn't exist
         m.createResource(new AnonId(id))
       }
-      case IntegerLiteral(n) => m.createTypedLiteral(n)
-      case DecimalLiteral(d) => m.createTypedLiteral(d)
+      case IntegerLiteral(n)            => m.createTypedLiteral(n)
+      case DecimalLiteral(d)            => m.createTypedLiteral(d)
       //      case BooleanLiteral(b) => m.createLiteral(b)
       case LangLiteral(str, Lang(lang)) => m.createLiteral(str, lang)
-      case _ => throw new Exception("rdfNode2JenaNode: unexpected node " + n)
+      case _                            => throw new Exception("rdfNode2JenaNode: unexpected node " + n)
     }
   }
 
@@ -84,14 +84,23 @@ object JenaMapper {
       BNodeId(r.asResource().getId.getLabelString)
     } else if (r.isLiteral) {
       val lit = r.asLiteral()
-      val datatype = IRI(lit.getDatatypeURI)
-      datatype match {
-        case `xsd_string` => StringLiteral(lit.getLexicalForm)
-        case `xsd_integer` => IntegerLiteral(lit.getLexicalForm.toInt)
-        case `xsd_decimal` => DecimalLiteral(lit.getLexicalForm.toDouble)
-        case `xsd_boolean` => BooleanLiteral(lit.getLexicalForm.toBoolean)
-        case `rdf_langString` => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
-        case _ => DatatypeLiteral(lit.getLexicalForm, datatype)
+      if (lit.getLanguage() != "") {
+        LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
+      } else {
+        val maybeDatatype = lit.getDatatypeURI
+        if (maybeDatatype == null) {
+          StringLiteral(lit.getString())
+        } else {
+        val datatype = IRI(maybeDatatype)
+        datatype match {
+          case RDFNode.StringDatatypeIRI     => StringLiteral(lit.getLexicalForm)
+          case RDFNode.IntegerDatatypeIRI    => IntegerLiteral(lit.getLexicalForm.toInt)
+          case RDFNode.DecimalDatatypeIRI    => DecimalLiteral(lit.getLexicalForm.toDouble)
+          case RDFNode.BooleanDatatypeIRI    => BooleanLiteral(lit.getLexicalForm.toBoolean)
+          case RDFNode.LangStringDatatypeIRI => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
+          case _                => DatatypeLiteral(lit.getLexicalForm, datatype)
+        }
+        }
       }
     } else throw new Exception("resource2RDFNode: unexpected type of resource")
   }
@@ -101,8 +110,8 @@ object JenaMapper {
   def createResource(m: JenaModel, node: RDFNode): Resource = {
     node match {
       case BNodeId(id) => m.createResource(new AnonId(id.toString))
-      case i: IRI => m.createResource(i.str)
-      case _ => throw new Exception("Cannot create a resource from " + node)
+      case i: IRI      => m.createResource(i.str)
+      case _           => throw new Exception("Cannot create a resource from " + node)
     }
   }
 
@@ -123,10 +132,10 @@ object JenaMapper {
       case DatatypeLiteral(str, i: IRI) =>
         i.str match {
           case `xsdinteger` => m.createTypedLiteral(str, XSDDatatype.XSDinteger)
-          case `xsddouble` => m.createTypedLiteral(str, XSDDatatype.XSDdouble)
+          case `xsddouble`  => m.createTypedLiteral(str, XSDDatatype.XSDdouble)
           case `xsddecimal` => m.createTypedLiteral(str, XSDDatatype.XSDdecimal)
           case `xsdboolean` => m.createTypedLiteral(str, XSDDatatype.XSDboolean)
-          case _ => m.createTypedLiteral(str, new BaseDatatype(i.str))
+          case _            => m.createTypedLiteral(str, new BaseDatatype(i.str))
         }
       case DecimalLiteral(d) =>
         m.createTypedLiteral(d.toString(), XSDDatatype.XSDdecimal)

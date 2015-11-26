@@ -7,7 +7,7 @@ organization := "es.weso"
 
 name := "wesin"
 
-version := "0.4.4"
+version := "0.4.7"
 
 scalaVersion := "2.11.7"
 
@@ -35,7 +35,7 @@ addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2")
 
 autoCompilerPlugins := true
 
-scalariformSettings
+// scalariformSettings
 
 bintrayRepository in bintray := "weso-releases"
 
@@ -47,10 +47,10 @@ licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0"))
 /* The following line is to download test files from W3c.
    It would be better to do it only when there is internet connection 
    */
-resourceGenerators in Test <+= Def.task {
-  val location = url("http://www.w3.org/2013/TurtleTests/TESTS.zip")
-  IO.unzipURL(location, resourceManaged.value / "downloadedTests").toSeq
-}
+// resourceGenerators in Test <+= Def.task {
+//   val location = url("http://www.w3.org/2013/TurtleTests/TESTS.zip")
+//  IO.unzipURL(location, resourceManaged.value / "downloadedTests").toSeq
+// }
 
 resolvers += "Bintray" at "http://dl.bintray.com/weso/weso-releases"
 

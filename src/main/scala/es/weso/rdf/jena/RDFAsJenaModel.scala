@@ -134,28 +134,7 @@ case class RDFAsJenaModel(model: Model)
   }
 
   def jena2rdfnode(r: JenaRDFNode): RDFNode = {
-    if (r.isAnon) {
-      BNodeId(r.asNode.getBlankNodeId.getLabelString)
-    } else if (r.isURIResource) {
-      IRI(r.asResource.getURI())
-    } else if (r.isLiteral) {
-      val lit = r.asLiteral
-      if (lit.getDatatypeURI() == null) {
-        StringLiteral(lit.getString())
-      } else
-        IRI(lit.getDatatypeURI()) match {
-          case RDFNode.IntegerDatatypeIRI => {
-            IntegerLiteral(lit.getInt)
-          }
-          case RDFNode.BooleanDatatypeIRI => BooleanLiteral(lit.getBoolean)
-          case RDFNode.DoubleDatatypeIRI => DoubleLiteral(lit.getDouble())
-          case RDFNode.LangStringDatatypeIRI => LangLiteral(lit.getLexicalForm, Lang(lit.getLanguage))
-          case uri => {
-            DatatypeLiteral(lit.getLexicalForm, IRI(lit.getDatatypeURI()))
-          }
-        }
-    } else
-      throw new Exception("Unknown type of resource")
+    JenaMapper.jenaNode2RDFNode(r)
   }
 
   override def getPrefixMap: PrefixMap = {

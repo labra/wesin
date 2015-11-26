@@ -140,6 +140,21 @@ class RDFJenaSpec
       val t1 = RDFTriple(a, age, value)
       triples should be(Set(t1))
     }
+
+    it("Should be able to get subjects with lang literal") {
+      val str = """|@prefix : <http://example.org#> .
+                   |@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+                   |:a :age "hi"@en .
+                   |""".stripMargin
+      val rdf = RDFAsJenaModel.empty.parse(str, "TURTLE").get
+      val a = IRI("http://example.org#a")
+      val age = IRI("http://example.org#age")
+      val value = LangLiteral("hi", Lang("en"))
+      val triples = rdf.triplesWithSubject(a)
+      val t1 = RDFTriple(a, age, value)
+      triples should be(Set(t1))
+    }
+
   }
 
 }
