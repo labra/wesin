@@ -1,0 +1,1875 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>NTriplesParser - es.weso.parser.NTriplesParser</title>
+          <meta name="description" content="NTriplesParser - es.weso.parser.NTriplesParser" />
+          <meta name="keywords" content="NTriplesParser es.weso.parser.NTriplesParser" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'es.weso.parser.NTriplesParser$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="NTriplesParser.html" title="See companion trait"><img alt="Object/Trait" src="../../../lib/object_to_trait_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="es">es</a>.<a href="../package.html" class="extype" name="es.weso">weso</a>.<a href="package.html" class="extype" name="es.weso.parser">parser</a></p>
+        <h1><a href="NTriplesParser.html" title="See companion trait">NTriplesParser</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="NTriplesParser.html" title="See companion trait">trait NTriplesParser</a>
+            | <a href="package.html" class="extype" name="es.weso.parser">package parser</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NTriplesParser</span><span class="result"> extends <a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a>, <span class="extype" name="scala.util.parsing.combinator.RegexParsers">RegexParsers</span>, <span class="extype" name="scala.util.parsing.combinator.Parsers">Parsers</span>, <span class="extype" name="scala.util.parsing.input.Positional">Positional</span>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="es.weso.parser.NTriplesParser"><span>NTriplesParser</span></li><li class="in" name="es.weso.parser.NTriplesParser"><span>NTriplesParser</span></li><li class="in" name="scala.util.parsing.combinator.RegexParsers"><span>RegexParsers</span></li><li class="in" name="scala.util.parsing.combinator.Parsers"><span>Parsers</span></li><li class="in" name="scala.util.parsing.input.Positional"><span>Positional</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="scala.util.parsing.combinator.RegexParsers.Elem" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Elem=Char"></a>
+      <a id="Elem:Elem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Elem</span><span class="result"> = <span class="extype" name="scala.Char">Char</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@Elem=Char" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers → Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.Error" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ErrorextendsParsers.this.NoSuccesswithProductwithSerializable"></a>
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Error</span><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.Parsers.NoSuccess">NoSuccess</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@ErrorextendsParsers.this.NoSuccesswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.Failure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FailureextendsParsers.this.NoSuccesswithProductwithSerializable"></a>
+      <a id="Failure:Failure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Failure</span><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.Parsers.NoSuccess">NoSuccess</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@FailureextendsParsers.this.NoSuccesswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.Input" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Input=scala.util.parsing.input.Reader[Parsers.this.Elem]"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Input</span><span class="result"> = <span class="extype" name="scala.util.parsing.input.Reader">Reader</span>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@Input=scala.util.parsing.input.Reader[Parsers.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.NoSuccess" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="NoSuccessextendsParsers.this.ParseResult[Nothing]"></a>
+      <a id="NoSuccess:NoSuccess"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NoSuccess</span><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.Parsers.ParseResult">ParseResult</span>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@NoSuccessextendsParsers.this.ParseResult[Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.OnceParser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="OnceParser[+T]extendsParsers.this.Parser[T]"></a>
+      <a id="OnceParser[+T]:OnceParser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">OnceParser</span><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.Parsers.Parser">Parser</span>[<span class="extype" name="scala.util.parsing.combinator.Parsers.OnceParser.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@OnceParser[+T]extendsParsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.ParseResult" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ParseResult[+T]extendsAnyRef"></a>
+      <a id="ParseResult[+T]:ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ParseResult</span><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@ParseResult[+T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.Parser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]"></a>
+      <a id="Parser[+T]:Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Parser</span><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends (<span class="extype" name="scala.util.parsing.combinator.Parsers.Input">Input</span>) ⇒ <span class="extype" name="scala.util.parsing.combinator.Parsers.ParseResult">ParseResult</span>[<span class="extype" name="scala.util.parsing.combinator.Parsers.Parser.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.Success" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Success[+T]extendsParsers.this.ParseResult[T]withProductwithSerializable"></a>
+      <a id="Success[+T]:Success[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Success</span><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.Parsers.ParseResult">ParseResult</span>[<span class="extype" name="scala.util.parsing.combinator.Parsers.Success.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@Success[+T]extendsParsers.this.ParseResult[T]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers.~" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~[+a,+b]extendsProductwithSerializable"></a>
+      <a id="~[+a,+b]:~[a,b]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde" class="name">~</span><span class="tparams">[<span name="a">+a</span>, <span name="b">+b</span>]</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@~[+a,+b]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#OnceParser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OnceParser[T](f:Parsers.this.Input=&gt;Parsers.this.ParseResult[T]):Parsers.this.Parser[T]withParsers.this.OnceParser[T]"></a>
+      <a id="OnceParser[T]((Input)⇒ParseResult[T]):Parser[T]withOnceParser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">OnceParser</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (<a href="#Input=scala.util.parsing.input.Reader[Parsers.this.Elem]" class="extmbr" name="es.weso.parser.NTriplesParser.Input">Input</a>) ⇒ <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.OnceParser.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.OnceParser.T">T</span>] with <a href="#OnceParser[+T]extendsParsers.this.Parser[T]" class="extmbr" name="es.weso.parser.NTriplesParser.OnceParser">OnceParser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.OnceParser.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@OnceParser[T](f:Parsers.this.Input=&gt;Parsers.this.ParseResult[T]):Parsers.this.Parser[T]withParsers.this.OnceParser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#Parser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Parser[T](f:Parsers.this.Input=&gt;Parsers.this.ParseResult[T]):Parsers.this.Parser[T]"></a>
+      <a id="Parser[T]((Input)⇒ParseResult[T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Parser</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (<a href="#Input=scala.util.parsing.input.Reader[Parsers.this.Elem]" class="extmbr" name="es.weso.parser.NTriplesParser.Input">Input</a>) ⇒ <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.Parser.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.Parser.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@Parser[T](f:Parsers.this.Input=&gt;Parsers.this.ParseResult[T]):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#absoluteURI" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="absoluteURI:NTriplesParser.this.Parser[String]"></a>
+      <a id="absoluteURI:Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">absoluteURI</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@absoluteURI:NTriplesParser.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#accept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="accept[U](expected:String,f:PartialFunction[Parsers.this.Elem,U]):Parsers.this.Parser[U]"></a>
+      <a id="accept[U](String,PartialFunction[Elem,U]):Parser[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">accept</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="expected">expected: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="f">f: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>, <span class="extype" name="scala.util.parsing.combinator.Parsers.accept.U">U</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.accept.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@accept[U](expected:String,f:PartialFunction[Parsers.this.Elem,U]):Parsers.this.Parser[U]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#accept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="accept[ES](es:ES)(implicitevidence$1:ES=&gt;List[Parsers.this.Elem]):Parsers.this.Parser[List[Parsers.this.Elem]]"></a>
+      <a id="accept[ES](ES)((ES)⇒List[Elem]):Parser[List[Elem]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">accept</span><span class="tparams">[<span name="ES">ES</span>]</span><span class="params">(<span name="es">es: <span class="extype" name="scala.util.parsing.combinator.Parsers.accept.ES">ES</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="scala.util.parsing.combinator.Parsers.accept.ES">ES</span>) ⇒ <a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@accept[ES](es:ES)(implicitevidence$1:ES=&gt;List[Parsers.this.Elem]):Parsers.this.Parser[List[Parsers.this.Elem]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#accept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="accept(e:Parsers.this.Elem):Parsers.this.Parser[Parsers.this.Elem]"></a>
+      <a id="accept(Elem):Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">accept</span><span class="params">(<span name="e">e: <a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@accept(e:Parsers.this.Elem):Parsers.this.Parser[Parsers.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#acceptIf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="acceptIf(p:Parsers.this.Elem=&gt;Boolean)(err:Parsers.this.Elem=&gt;String):Parsers.this.Parser[Parsers.this.Elem]"></a>
+      <a id="acceptIf((Elem)⇒Boolean)((Elem)⇒String):Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">acceptIf</span><span class="params">(<span name="p">p: (<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span name="err">err: (<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@acceptIf(p:Parsers.this.Elem=&gt;Boolean)(err:Parsers.this.Elem=&gt;String):Parsers.this.Parser[Parsers.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#acceptMatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="acceptMatch[U](expected:String,f:PartialFunction[Parsers.this.Elem,U]):Parsers.this.Parser[U]"></a>
+      <a id="acceptMatch[U](String,PartialFunction[Elem,U]):Parser[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">acceptMatch</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="expected">expected: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="f">f: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>, <span class="extype" name="scala.util.parsing.combinator.Parsers.acceptMatch.U">U</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.acceptMatch.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@acceptMatch[U](expected:String,f:PartialFunction[Parsers.this.Elem,U]):Parsers.this.Parser[U]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#acceptSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="acceptSeq[ES](es:ES)(implicitevidence$2:ES=&gt;Iterable[Parsers.this.Elem]):Parsers.this.Parser[List[Parsers.this.Elem]]"></a>
+      <a id="acceptSeq[ES](ES)((ES)⇒Iterable[Elem]):Parser[List[Elem]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">acceptSeq</span><span class="tparams">[<span name="ES">ES</span>]</span><span class="params">(<span name="es">es: <span class="extype" name="scala.util.parsing.combinator.Parsers.acceptSeq.ES">ES</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="scala.util.parsing.combinator.Parsers.acceptSeq.ES">ES</span>) ⇒ <a href="../../../scala/package.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@acceptSeq[ES](es:ES)(implicitevidence$2:ES=&gt;Iterable[Parsers.this.Elem]):Parsers.this.Parser[List[Parsers.this.Elem]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#bNodesMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bNodesMap:scala.collection.mutable.Map[String,es.weso.rdf.nodes.BNodeId]"></a>
+      <a id="bNodesMap:Map[String,BNodeId]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bNodesMap</span><span class="result">: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="es.weso.rdf.nodes.BNodeId">BNodeId</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@bNodesMap:scala.collection.mutable.Map[String,es.weso.rdf.nodes.BNodeId]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#chainl1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="chainl1[T,U](first:=&gt;Parsers.this.Parser[T],p:=&gt;Parsers.this.Parser[U],q:=&gt;Parsers.this.Parser[(T,U)=&gt;T]):Parsers.this.Parser[T]"></a>
+      <a id="chainl1[T,U](⇒Parser[T],⇒Parser[U],⇒Parser[(T,U)⇒T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chainl1</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span name="first">first: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>, <span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.U">U</span>]</span>, <span name="q">q: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[(<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>, <span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.U">U</span>) ⇒ <span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@chainl1[T,U](first:=&gt;Parsers.this.Parser[T],p:=&gt;Parsers.this.Parser[U],q:=&gt;Parsers.this.Parser[(T,U)=&gt;T]):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#chainl1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="chainl1[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[(T,T)=&gt;T]):Parsers.this.Parser[T]"></a>
+      <a id="chainl1[T](⇒Parser[T],⇒Parser[(T,T)⇒T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chainl1</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>, <span name="q">q: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[(<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>, <span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>) ⇒ <span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainl1.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@chainl1[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[(T,T)=&gt;T]):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#chainr1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="chainr1[T,U](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[(T,U)=&gt;U],combine:(T,U)=&gt;U,first:U):Parsers.this.Parser[U]"></a>
+      <a id="chainr1[T,U](⇒Parser[T],⇒Parser[(T,U)⇒U],(T,U)⇒U,U):Parser[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chainr1</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.T">T</span>]</span>, <span name="q">q: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[(<span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.T">T</span>, <span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span>) ⇒ <span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span>]</span>, <span name="combine">combine: (<span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.T">T</span>, <span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span>) ⇒ <span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span></span>, <span name="first">first: <span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.chainr1.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@chainr1[T,U](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[(T,U)=&gt;U],combine:(T,U)=&gt;U,first:U):Parsers.this.Parser[U]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#charSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="charSeq:NTriplesParser.this.Parser[String]"></a>
+      <a id="charSeq:Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">charSeq</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@charSeq:NTriplesParser.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#charURI" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="charURI:NTriplesParser.this.Parser[NTriplesParser.this.Elem]"></a>
+      <a id="charURI:Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">charURI</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@charURI:NTriplesParser.this.Parser[NTriplesParser.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#character" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="character:NTriplesParser.this.Parser[NTriplesParser.this.Elem]"></a>
+      <a id="character:Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">character</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@character:NTriplesParser.this.Parser[NTriplesParser.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#chrExcept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="chrExcept(cs:Char*):NTriplesParser.this.Parser[NTriplesParser.this.Elem]"></a>
+      <a id="chrExcept(Char*):Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chrExcept</span><span class="params">(<span name="cs">cs: <span class="extype" name="scala.Char">Char</span>*</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@chrExcept(cs:Char*):NTriplesParser.this.Parser[NTriplesParser.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#comment" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="comment:NTriplesParser.this.Parser[Option[es.weso.rdf.triples.RDFTriple]]"></a>
+      <a id="comment:Parser[Option[RDFTriple]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">comment</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Option">Option</span>[<a href="../rdf/triples/RDFTriple.html" class="extype" name="es.weso.rdf.triples.RDFTriple">RDFTriple</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@comment:NTriplesParser.this.Parser[Option[es.weso.rdf.triples.RDFTriple]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#commit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="commit[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[T]"></a>
+      <a id="commit[T](⇒Parser[T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commit</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.commit.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.commit.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@commit[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#datatypeLiteral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="datatypeLiteral:NTriplesParser.this.Parser[es.weso.rdf.nodes.DatatypeLiteral]"></a>
+      <a id="datatypeLiteral:Parser[DatatypeLiteral]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">datatypeLiteral</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.DatatypeLiteral">DatatypeLiteral</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@datatypeLiteral:NTriplesParser.this.Parser[es.weso.rdf.nodes.DatatypeLiteral]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#elem" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="elem(e:Parsers.this.Elem):Parsers.this.Parser[Parsers.this.Elem]"></a>
+      <a id="elem(Elem):Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">elem</span><span class="params">(<span name="e">e: <a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@elem(e:Parsers.this.Elem):Parsers.this.Parser[Parsers.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#elem" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="elem(kind:String,p:Parsers.this.Elem=&gt;Boolean):Parsers.this.Parser[Parsers.this.Elem]"></a>
+      <a id="elem(String,(Elem)⇒Boolean):Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">elem</span><span class="params">(<span name="kind">kind: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="p">p: (<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@elem(kind:String,p:Parsers.this.Elem=&gt;Boolean):Parsers.this.Parser[Parsers.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#eof" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eof:scala.util.matching.Regex"></a>
+      <a id="eof:Regex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eof</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@eof:scala.util.matching.Regex" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#eoln" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eoln:NTriplesParser.this.Parser[None.type]"></a>
+      <a id="eoln:Parser[None.type]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eoln</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.None">None</span>.type]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@eoln:NTriplesParser.this.Parser[None.type]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#err" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="err(msg:String):Parsers.this.Parser[Nothing]"></a>
+      <a id="err(String):Parser[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">err</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@err(msg:String):Parsers.this.Parser[Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#failure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="failure(msg:String):Parsers.this.Parser[Nothing]"></a>
+      <a id="failure(String):Parser[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failure</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@failure(msg:String):Parsers.this.Parser[Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#guard" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="guard[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[T]"></a>
+      <a id="guard[T](⇒Parser[T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">guard</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.guard.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.guard.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@guard[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#handleWhiteSpace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handleWhiteSpace(source:CharSequence,offset:Int):Int"></a>
+      <a id="handleWhiteSpace(CharSequence,Int):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleWhiteSpace</span><span class="params">(<span name="source">source: <span class="extype" name="java.lang.CharSequence">CharSequence</span></span>, <span name="offset">offset: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@handleWhiteSpace(source:CharSequence,offset:Int):Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#hexDigit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hexDigit:NTriplesParser.this.Parser[NTriplesParser.this.Elem]"></a>
+      <a id="hexDigit:Parser[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hexDigit</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="#Elem=Char" class="extmbr" name="es.weso.parser.NTriplesParser.Elem">Elem</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@hexDigit:NTriplesParser.this.Parser[NTriplesParser.this.Elem]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#hexDigits" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hexDigits:scala.collection.immutable.Set[Char]"></a>
+      <a id="hexDigits:Set[Char]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hexDigits</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Char">Char</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@hexDigits:scala.collection.immutable.Set[Char]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#langLiteral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="langLiteral:NTriplesParser.this.Parser[es.weso.rdf.nodes.LangLiteral]"></a>
+      <a id="langLiteral:Parser[LangLiteral]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">langLiteral</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.LangLiteral">LangLiteral</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@langLiteral:NTriplesParser.this.Parser[es.weso.rdf.nodes.LangLiteral]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#language" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="language:NTriplesParser.this.Parser[es.weso.rdf.nodes.Lang]"></a>
+      <a id="language:Parser[Lang]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">language</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.Lang">Lang</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@language:NTriplesParser.this.Parser[es.weso.rdf.nodes.Lang]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#lazyrep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lazyrep[T](p:NTriplesParser.this.Parser[Stream[T]]):NTriplesParser.this.Parser[Stream[T]]"></a>
+      <a id="lazyrep[T](Parser[Stream[T]]):Parser[Stream[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lazyrep</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="es.weso.parser.NTriplesParser.lazyrep.T">T</span>]]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="es.weso.parser.NTriplesParser.lazyrep.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@lazyrep[T](p:NTriplesParser.this.Parser[Stream[T]]):NTriplesParser.this.Parser[Stream[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#line" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="line:NTriplesParser.this.Parser[Stream[es.weso.rdf.triples.RDFTriple]]"></a>
+      <a id="line:Parser[Stream[RDFTriple]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">line</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="../rdf/triples/RDFTriple.html" class="extype" name="es.weso.rdf.triples.RDFTriple">RDFTriple</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@line:NTriplesParser.this.Parser[Stream[es.weso.rdf.triples.RDFTriple]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#literal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="literal:NTriplesParser.this.Parser[es.weso.rdf.nodes.Literal]"></a>
+      <a id="literal:Parser[Literal]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">literal</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.Literal">Literal</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@literal:NTriplesParser.this.Parser[es.weso.rdf.nodes.Literal]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#literal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="literal(s:String):RegexParsers.this.Parser[String]"></a>
+      <a id="literal(String):Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">literal</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@literal(s:String):RegexParsers.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log[T](p:=&gt;Parsers.this.Parser[T])(name:String):Parsers.this.Parser[T]"></a>
+      <a id="log[T](⇒Parser[T])(String):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.log.T">T</span>]</span>)</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.log.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@log[T](p:=&gt;Parsers.this.Parser[T])(name:String):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#mkList" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mkList[T]:Parsers.this.~[T,List[T]]=&gt;List[T]"></a>
+      <a id="mkList[T]:(~[T,List[T]])⇒List[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mkList</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: (<a href="#~[+a,+b]extendsProductwithSerializable" class="extmbr" name="es.weso.parser.NTriplesParser.~">~</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.mkList.T">T</span>, <a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.mkList.T">T</span>]]) ⇒ <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.util.parsing.combinator.Parsers.mkList.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@mkList[T]:Parsers.this.~[T,List[T]]=&gt;List[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="name:NTriplesParser.this.Parser[String]"></a>
+      <a id="name:Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@name:NTriplesParser.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#nodeID" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nodeID:NTriplesParser.this.Parser[es.weso.rdf.nodes.BNodeId]"></a>
+      <a id="nodeID:Parser[BNodeId]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nodeID</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.BNodeId">BNodeId</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@nodeID:NTriplesParser.this.Parser[es.weso.rdf.nodes.BNodeId]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#not" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="not[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[Unit]"></a>
+      <a id="not[T](⇒Parser[T]):Parser[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">not</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.not.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@not[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[Unit]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#ntripleDoc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ntripleDoc:NTriplesParser.this.Parser[Stream[es.weso.rdf.triples.RDFTriple]]"></a>
+      <a id="ntripleDoc:Parser[Stream[RDFTriple]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ntripleDoc</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="../rdf/triples/RDFTriple.html" class="extype" name="es.weso.rdf.triples.RDFTriple">RDFTriple</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@ntripleDoc:NTriplesParser.this.Parser[Stream[es.weso.rdf.triples.RDFTriple]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#obj" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="obj:NTriplesParser.this.Parser[es.weso.rdf.nodes.RDFNode]"></a>
+      <a id="obj:Parser[RDFNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">obj</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.RDFNode">RDFNode</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@obj:NTriplesParser.this.Parser[es.weso.rdf.nodes.RDFNode]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#opt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="opt[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[Option[T]]"></a>
+      <a id="opt[T](⇒Parser[T]):Parser[Option[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">opt</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.opt.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.util.parsing.combinator.Parsers.opt.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@opt[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[Option[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parse[T](p:RegexParsers.this.Parser[T],in:java.io.Reader):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parse[T](Parser[T],Reader):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parse</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>, <span name="in">in: <span class="extype" name="java.io.Reader">Reader</span></span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parse[T](p:RegexParsers.this.Parser[T],in:java.io.Reader):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parse[T](p:RegexParsers.this.Parser[T],in:CharSequence):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parse[T](Parser[T],CharSequence):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parse</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>, <span name="in">in: <span class="extype" name="java.lang.CharSequence">CharSequence</span></span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parse[T](p:RegexParsers.this.Parser[T],in:CharSequence):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parse[T](p:RegexParsers.this.Parser[T],in:scala.util.parsing.input.Reader[Char]):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parse[T](Parser[T],Reader[Char]):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parse</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>, <span name="in">in: <span class="extype" name="scala.util.parsing.input.Reader">Reader</span>[<span class="extype" name="scala.Char">Char</span>]</span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parse.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parse[T](p:RegexParsers.this.Parser[T],in:scala.util.parsing.input.Reader[Char]):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parseAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseAll[T](p:RegexParsers.this.Parser[T],in:CharSequence):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parseAll[T](Parser[T],CharSequence):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseAll</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>, <span name="in">in: <span class="extype" name="java.lang.CharSequence">CharSequence</span></span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parseAll[T](p:RegexParsers.this.Parser[T],in:CharSequence):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parseAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseAll[T](p:RegexParsers.this.Parser[T],in:java.io.Reader):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parseAll[T](Parser[T],Reader):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseAll</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>, <span name="in">in: <span class="extype" name="java.io.Reader">Reader</span></span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parseAll[T](p:RegexParsers.this.Parser[T],in:java.io.Reader):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#parseAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseAll[T](p:RegexParsers.this.Parser[T],in:scala.util.parsing.input.Reader[Char]):RegexParsers.this.ParseResult[T]"></a>
+      <a id="parseAll[T](Parser[T],Reader[Char]):ParseResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseAll</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>, <span name="in">in: <span class="extype" name="scala.util.parsing.input.Reader">Reader</span>[<span class="extype" name="scala.Char">Char</span>]</span>)</span><span class="result">: <a href="#ParseResult[+T]extendsAnyRef" class="extmbr" name="es.weso.parser.NTriplesParser.ParseResult">ParseResult</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.parseAll.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@parseAll[T](p:RegexParsers.this.Parser[T],in:scala.util.parsing.input.Reader[Char]):RegexParsers.this.ParseResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#phrase" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="phrase[T](p:RegexParsers.this.Parser[T]):RegexParsers.this.Parser[T]"></a>
+      <a id="phrase[T](Parser[T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">phrase</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.phrase.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.phrase.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@phrase[T](p:RegexParsers.this.Parser[T]):RegexParsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers → Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.input.Positional#pos" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pos:scala.util.parsing.input.Position"></a>
+      <a id="pos:Position"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pos</span><span class="result">: <span class="extype" name="scala.util.parsing.input.Position">Position</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@pos:scala.util.parsing.input.Position" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Positional</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#positioned" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="positioned[T&lt;:scala.util.parsing.input.Positional](p:=&gt;RegexParsers.this.Parser[T]):RegexParsers.this.Parser[T]"></a>
+      <a id="positioned[T&lt;:Positional](⇒Parser[T]):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">positioned</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.util.parsing.input.Positional">Positional</span></span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.positioned.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.RegexParsers.positioned.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@positioned[T&lt;:scala.util.parsing.input.Positional](p:=&gt;RegexParsers.this.Parser[T]):RegexParsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers → Parsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#pred" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pred:NTriplesParser.this.Parser[es.weso.rdf.nodes.IRI]"></a>
+      <a id="pred:Parser[IRI]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pred</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.IRI">IRI</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@pred:NTriplesParser.this.Parser[es.weso.rdf.nodes.IRI]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.RegexParsers#regex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="regex(r:scala.util.matching.Regex):RegexParsers.this.Parser[String]"></a>
+      <a id="regex(Regex):Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">regex</span><span class="params">(<span name="r">r: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@regex(r:scala.util.matching.Regex):RegexParsers.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RegexParsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#rep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rep[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]"></a>
+      <a id="rep[T](⇒Parser[T]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rep</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@rep[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#rep1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rep1[T](first:=&gt;Parsers.this.Parser[T],p0:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]"></a>
+      <a id="rep1[T](⇒Parser[T],⇒Parser[T]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rep1</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="first">first: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1.T">T</span>]</span>, <span name="p0">p0: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@rep1[T](first:=&gt;Parsers.this.Parser[T],p0:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd><dt>Annotations</dt><dd>
+                <span class="name">@migration</span>
+              
+        </dd><dt>Migration</dt><dd class="cmt"><p><i>(Changed in version 2.9.0)</i> The <code>p0</code> call-by-name arguments is evaluated at most once per constructed Parser object, instead of on every need that arises during parsing.</p></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#rep1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rep1[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]"></a>
+      <a id="rep1[T](⇒Parser[T]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rep1</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@rep1[T](p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#rep1sep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rep1sep[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[Any]):Parsers.this.Parser[List[T]]"></a>
+      <a id="rep1sep[T](⇒Parser[T],⇒Parser[Any]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rep1sep</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1sep.T">T</span>]</span>, <span name="q">q: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.rep1sep.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@rep1sep[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[Any]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#repN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repN[T](num:Int,p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]"></a>
+      <a id="repN[T](Int,⇒Parser[T]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">repN</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.repN.T">T</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.repN.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@repN[T](num:Int,p:=&gt;Parsers.this.Parser[T]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#repsep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repsep[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[Any]):Parsers.this.Parser[List[T]]"></a>
+      <a id="repsep[T](⇒Parser[T],⇒Parser[Any]):Parser[List[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">repsep</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.repsep.T">T</span>]</span>, <span name="q">q: ⇒ <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.repsep.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@repsep[T](p:=&gt;Parsers.this.Parser[T],q:=&gt;Parsers.this.Parser[Any]):Parsers.this.Parser[List[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.util.parsing.input.Positional#setPos" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setPos(newpos:scala.util.parsing.input.Position):Positional.this.type"></a>
+      <a id="setPos(Position):NTriplesParser.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPos</span><span class="params">(<span name="newpos">newpos: <span class="extype" name="scala.util.parsing.input.Position">Position</span></span>)</span><span class="result">: <a href="" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@setPos(newpos:scala.util.parsing.input.Position):Positional.this.type" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Positional</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#skipWhitespace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="skipWhitespace:Boolean"></a>
+      <a id="skipWhitespace:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">skipWhitespace</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@skipWhitespace:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a> → RegexParsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#string" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="string:NTriplesParser.this.Parser[String]"></a>
+      <a id="string:Parser[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">string</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@string:NTriplesParser.this.Parser[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#subj" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="subj:NTriplesParser.this.Parser[es.weso.rdf.nodes.RDFNode]"></a>
+      <a id="subj:Parser[RDFNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subj</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.RDFNode">RDFNode</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@subj:NTriplesParser.this.Parser[es.weso.rdf.nodes.RDFNode]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.util.parsing.combinator.Parsers#success" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="success[T](v:T):Parsers.this.Parser[T]"></a>
+      <a id="success[T](T):Parser[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">success</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="v">v: <span class="extype" name="scala.util.parsing.combinator.Parsers.success.T">T</span></span>)</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.util.parsing.combinator.Parsers.success.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@success[T](v:T):Parsers.this.Parser[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parsers</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#tab" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tab:scala.util.matching.Regex"></a>
+      <a id="tab:Regex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tab</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@tab:scala.util.matching.Regex" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#triple" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="triple:NTriplesParser.this.Parser[Option[es.weso.rdf.triples.RDFTriple]]"></a>
+      <a id="triple:Parser[Option[RDFTriple]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">triple</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="scala.Option">Option</span>[<a href="../rdf/triples/RDFTriple.html" class="extype" name="es.weso.rdf.triples.RDFTriple">RDFTriple</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@triple:NTriplesParser.this.Parser[Option[es.weso.rdf.triples.RDFTriple]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#uriref" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="uriref:NTriplesParser.this.Parser[es.weso.rdf.nodes.IRI]"></a>
+      <a id="uriref:Parser[IRI]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">uriref</span><span class="result">: <a href="#Parser[+T]extendsParsers.this.Input=&gt;Parsers.this.ParseResult[T]" class="extmbr" name="es.weso.parser.NTriplesParser.Parser">Parser</a>[<span class="extype" name="es.weso.rdf.nodes.IRI">IRI</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@uriref:NTriplesParser.this.Parser[es.weso.rdf.nodes.IRI]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#whiteSpace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whiteSpace:scala.util.matching.Regex"></a>
+      <a id="whiteSpace:Regex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whiteSpace</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@whiteSpace:scala.util.matching.Regex" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a> → RegexParsers</dd></dl></div>
+    </li><li name="es.weso.parser.NTriplesParser#ws" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ws:scala.util.matching.Regex"></a>
+      <a id="ws:Regex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ws</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.NTriplesParser$@ws:scala.util.matching.Regex" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="es.weso.parser.NTriplesParser">
+              <h3>Inherited from <a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></h3>
+            </div><div class="parent" name="scala.util.parsing.combinator.RegexParsers">
+              <h3>Inherited from <span class="extype" name="scala.util.parsing.combinator.RegexParsers">RegexParsers</span></h3>
+            </div><div class="parent" name="scala.util.parsing.combinator.Parsers">
+              <h3>Inherited from <span class="extype" name="scala.util.parsing.combinator.Parsers">Parsers</span></h3>
+            </div><div class="parent" name="scala.util.parsing.input.Positional">
+              <h3>Inherited from <span class="extype" name="scala.util.parsing.input.Positional">Positional</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

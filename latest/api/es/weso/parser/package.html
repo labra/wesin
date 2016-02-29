@@ -1,0 +1,278 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>parser - es.weso.parser</title>
+          <meta name="description" content="parser - es.weso.parser" />
+          <meta name="keywords" content="parser es.weso.parser" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'es.weso.parser.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="es">es</a>.<a href="../package.html" class="extype" name="es.weso">weso</a></p>
+        <h1>parser</h1><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parser</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="es.weso.parser.BNodeTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BNodeTableextendsProductwithSerializable"></a>
+      <a id="BNodeTable:BNodeTable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BNodeTable.html"><span class="name">BNodeTable</span></a><span class="params">(<span name="bNodeName">bNodeName: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="es.weso.rdf.nodes.BNodeId">BNodeId</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="nameBNode">nameBNode: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="es.weso.rdf.nodes.BNodeId">BNodeId</span>]</span>, <span name="nodes">nodes: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@BNodeTableextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.NTriplesParser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="NTriplesParserextendsPositionalwithRegexParsers"></a>
+      <a id="NTriplesParser:NTriplesParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NTriplesParser.html"><span class="name">NTriplesParser</span></a><span class="result"> extends <span class="extype" name="scala.util.parsing.input.Positional">Positional</span> with <span class="extype" name="scala.util.parsing.combinator.RegexParsers">RegexParsers</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@NTriplesParserextendsPositionalwithRegexParsers" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">NTriples Parser
+http://www.w3.org/TR/rdf-testcases/#ntriples
+</p><div class="fullcomment"><div class="comment cmt"><p>NTriples Parser
+http://www.w3.org/TR/rdf-testcases/#ntriples
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>18/11/2012</p></dd></dl></div>
+    </li><li name="es.weso.parser.ParserException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParserExceptionextendsRuntimeException"></a>
+      <a id="ParserException:ParserException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ParserException.html"><span class="name">ParserException</span></a><span class="result"> extends <a href="../../../scala/package.html#RuntimeException=RuntimeException" class="extmbr" name="scala.RuntimeException">RuntimeException</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@ParserExceptionextendsRuntimeException" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.TurtleParser" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TurtleParserextendsPositionalwithRegexParserswithStateParserwithW3cTokens"></a>
+      <a id="TurtleParser:TurtleParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TurtleParser.html"><span class="name">TurtleParser</span></a><span class="result"> extends <span class="extype" name="scala.util.parsing.input.Positional">Positional</span> with <span class="extype" name="scala.util.parsing.combinator.RegexParsers">RegexParsers</span> with <span class="extype" name="es.weso.parser.StateParser">StateParser</span> with <a href="W3cTokens.html" class="extype" name="es.weso.parser.W3cTokens">W3cTokens</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@TurtleParserextendsPositionalwithRegexParserswithStateParserwithW3cTokens" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.TurtleParserState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TurtleParserStateextendsProductwithSerializable"></a>
+      <a id="TurtleParserState:TurtleParserState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TurtleParserState.html"><span class="name">TurtleParserState</span></a><span class="params">(<span name="triples">triples: <a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="../rdf/triples/RDFTriple.html" class="extype" name="es.weso.rdf.triples.RDFTriple">RDFTriple</a>]</span>, <span name="namespaces">namespaces: <span class="extype" name="es.weso.rdf.PrefixMap">PrefixMap</span></span>, <span name="bNodeLabels">bNodeLabels: <a href="BNodeTable.html" class="extype" name="es.weso.parser.BNodeTable">BNodeTable</a></span>, <span name="baseIRI">baseIRI: <span class="extype" name="es.weso.rdf.nodes.IRI">IRI</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@TurtleParserStateextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.W3cTokens" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="W3cTokensextendsPositionalwithRegexParsers"></a>
+      <a id="W3cTokens:W3cTokens"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="W3cTokens.html"><span class="name">W3cTokens</span></a><span class="result"> extends <span class="extype" name="scala.util.parsing.input.Positional">Positional</span> with <span class="extype" name="scala.util.parsing.combinator.RegexParsers">RegexParsers</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@W3cTokensextendsPositionalwithRegexParsers" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="es.weso.parser.BNodeTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BNodeTable"></a>
+      <a id="BNodeTable:BNodeTable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BNodeTable$.html"><span class="name">BNodeTable</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@BNodeTable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.NTriplesParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NTriplesParser"></a>
+      <a id="NTriplesParser:NTriplesParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NTriplesParser$.html"><span class="name">NTriplesParser</span></a><span class="result"> extends <a href="NTriplesParser.html" class="extype" name="es.weso.parser.NTriplesParser">NTriplesParser</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@NTriplesParser" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.TurtleParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TurtleParser"></a>
+      <a id="TurtleParser:TurtleParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TurtleParser$.html"><span class="name">TurtleParser</span></a><span class="result"> extends <a href="TurtleParser.html" class="extype" name="es.weso.parser.TurtleParser">TurtleParser</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@TurtleParser" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="es.weso.parser.TurtleParserState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TurtleParserState"></a>
+      <a id="TurtleParserState:TurtleParserState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TurtleParserState$.html"><span class="name">TurtleParserState</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#es.weso.parser.package@TurtleParserState" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
