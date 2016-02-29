@@ -12,10 +12,10 @@ import com.hp.hpl.jena.rdf.model.{
   Literal,
   AnonId
 }
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import com.hp.hpl.jena.datatypes.BaseDatatype
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype
-import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.triples.RDFTriple
 import es.weso.rdf.PREFIXES._
 import scala.collection.JavaConversions._
 

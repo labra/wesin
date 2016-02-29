@@ -1,8 +1,8 @@
 package es.weso.rdfgraph
 
 import es.weso.tgraph.{ TContext, TGraph }
-import es.weso.rdfgraph.nodes.{ IRI, BNodeId, RDFNode }
-import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.nodes.{ IRI, BNodeId, RDFNode }
+import es.weso.rdf.triples.RDFTriple
 import scala.collection.immutable.Map
 import scala.collection.Set
 

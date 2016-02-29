@@ -2,7 +2,7 @@ package es.weso.parser
 
 import com.hp.hpl.jena.rdf.model.RDFNode
 
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 
 import com.typesafe.config._
 import com.hp.hpl.jena.rdf.model.ModelFactory

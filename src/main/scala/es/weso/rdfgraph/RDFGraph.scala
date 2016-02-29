@@ -6,8 +6,8 @@ import es.weso.tgraph.TGraphImpl
 import scala.collection.Set
 import scala.collection.immutable.{ Map }
 import scalax.collection.immutable.Graph
-import es.weso.rdfgraph.statements.RDFTriple
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.triples.RDFTriple
+import es.weso.rdf.nodes._
 
 /**
  * Type of exceptions raised
