@@ -1,5 +1,8 @@
 wesin
 =====
+[![Build Status](https://travis-ci.org/labra/wesin.svg?branch=master)](https://travis-ci.org/labra/wesin)
+[![codecov.io](http://codecov.io/github/labra/wesin/coverage.svg?branch=master)](http://codecov.io/github/labra/wesin?branch=master)
+
 
 Web Semantics Library in Scala
 
@@ -16,7 +19,6 @@ Links
 * [More info](http://labra.github.io/wesin)
 * [mailing list](https://groups.google.com/forum/?hl=en&fromgroups#!forum/wesin) 
 * [Binaries](https://bintray.com/weso/weso-releases/wesin/view)
-* [![Build Status](https://travis-ci.org/labra/wesin.svg?branch=master)](https://travis-ci.org/labra/wesin)
 
 Author
 ======
