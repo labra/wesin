@@ -2,13 +2,13 @@ package es.weso.rdf.jena
 
 // import es.weso.jena.JenaConversions
 import com.hp.hpl.jena.query._
-import es.weso.rdfgraph.nodes._
-import es.weso.rdfgraph.nodes.RDFNode
-import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.nodes._
+import es.weso.rdf.nodes.RDFNode
+import es.weso.rdf.triples.RDFTriple
 import scala.collection.JavaConversions._
 import scala.collection.immutable.StringOps._
 import scala.util.Try
-import es.weso.rdfgraph.statements._
+import es.weso.rdf.triples._
 import es.weso.rdf._
 import com.hp.hpl.jena.rdf.model.{
   Model,

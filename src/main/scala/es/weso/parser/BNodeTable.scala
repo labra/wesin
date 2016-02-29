@@ -12,7 +12,7 @@ import scala.util.parsing.combinator.syntactical.StdTokenParsers
 import scala.io.Codec
 import scala.util.matching.Regex
 import scala.collection.immutable.Map
-import es.weso.rdfgraph.nodes.BNodeId
+import es.weso.rdf.nodes.BNodeId
 
 case class BNodeTable(
     bNodeName: Map[BNodeId, Option[String]],

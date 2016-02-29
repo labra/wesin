@@ -6,7 +6,7 @@ import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input._
 import scala.util.parsing.input.Positional
 import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers

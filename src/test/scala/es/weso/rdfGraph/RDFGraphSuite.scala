@@ -3,10 +3,10 @@ package es.weso.rdfGraph
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import es.weso.tgraph.TContext
 import es.weso.rdfgraph.RDFGraph
-import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.triples.RDFTriple
 
 @RunWith(classOf[JUnitRunner])
 class RDFGraphSuite extends FunSuite {

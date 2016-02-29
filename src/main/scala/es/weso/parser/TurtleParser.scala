@@ -6,8 +6,8 @@ import scala.util.parsing.combinator.lexical.Lexical
 import scala.util.parsing.input._
 import scala.util.parsing.input.Positional
 import util.parsing.input.CharSequenceReader.EofCh
-import es.weso.rdfgraph.statements._
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.triples._
+import es.weso.rdf.nodes._
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.combinator.lexical.StdLexical
 import scala.util.parsing.combinator.syntactical.StdTokenParsers
@@ -15,8 +15,6 @@ import scala.io.Codec
 import scala.util.matching.Regex
 import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
-import es.weso.rdfgraph.statements._
-import es.weso.rdfgraph.nodes._
 import scala.util.Try
 import es.weso.rdf._
 

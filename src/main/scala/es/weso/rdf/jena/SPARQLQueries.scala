@@ -1,10 +1,10 @@
 package es.weso.rdf.jena
 
 import com.hp.hpl.jena.query._
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import scala.collection.JavaConversions._
 import scala.collection.immutable.StringOps._
-import es.weso.rdfgraph.statements._
+import es.weso.rdf.triples._
 import org.slf4j._
 import es.weso.rdf._
 

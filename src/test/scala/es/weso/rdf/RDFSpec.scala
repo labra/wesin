@@ -4,9 +4,9 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.Matchers
 import org.scalatest.FunSpec
-import es.weso.rdfgraph.statements.RDFTriple
-import es.weso.rdfgraph.nodes.IRI
-import es.weso.rdfgraph.nodes.StringLiteral
+import es.weso.rdf.triples.RDFTriple
+import es.weso.rdf.nodes.IRI
+import es.weso.rdf.nodes.StringLiteral
 
 @RunWith(classOf[JUnitRunner])
 class RDFSpec extends FunSpec
