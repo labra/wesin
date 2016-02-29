@@ -1,7 +1,7 @@
 package es.weso.parser
 
 import org.scalatest.FunSpec
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import org.scalatest.Matchers
 import es.weso.rdf._
 

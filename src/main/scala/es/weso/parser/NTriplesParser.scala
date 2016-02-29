@@ -6,9 +6,8 @@ import scala.util.parsing.input.Positional
 import scala.util.parsing.input._
 import util.parsing.input.CharSequenceReader.EofCh
 import scala.language.postfixOps
-
-import es.weso.rdfgraph.statements._
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.triples._
+import es.weso.rdf.nodes._
 
 /**
  * NTriples Parser

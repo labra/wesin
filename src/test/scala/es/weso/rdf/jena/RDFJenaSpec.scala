@@ -4,8 +4,8 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.Matchers
 import org.scalatest.FunSpec
-import es.weso.rdfgraph.statements.RDFTriple
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.triples.RDFTriple
+import es.weso.rdf.nodes._
 import es.weso.rdf.jena._
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.rdf._

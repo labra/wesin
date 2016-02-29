@@ -6,9 +6,9 @@ import org.scalatest.junit.JUnitRunner
 
 import scala.io.Source
 
-import es.weso.rdfgraph.nodes._
+import es.weso.rdf.nodes._
 import scala.util.parsing.input.CharArrayReader
-import es.weso.rdfgraph.statements.RDFTriple
+import es.weso.rdf.triples.RDFTriple
 
 @RunWith(classOf[JUnitRunner])
 class NTriplesParserSuite extends FunSuite with NTriplesParser {
