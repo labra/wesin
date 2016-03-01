@@ -1,3 +1,0 @@
-Notes on Turtle Parser
-
-1.- Duplicated name for test: turtle-syntax-bad-num-05

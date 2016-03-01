@@ -1,4 +1,4 @@
-package es.weso.rdfgraph
+package es.weso.rdf
 
 import es.weso.rdf.nodes.{ RDFNode, IRI, BNodeId }
 import es.weso.rdf.triples.RDFTriple

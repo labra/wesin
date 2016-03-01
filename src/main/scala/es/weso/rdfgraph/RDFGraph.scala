@@ -1,4 +1,4 @@
-package es.weso.rdfgraph
+package es.weso.rdf
 
 import es.weso.tgraph._
 import es.weso.tgraph.TGraph

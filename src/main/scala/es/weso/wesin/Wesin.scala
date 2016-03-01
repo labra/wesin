@@ -1,6 +1,6 @@
 package es.weso.wesin
 
-import es.weso.rdfgraph._
+import es.weso.rdf._
 import es.weso.utils.IO._
 import com.typesafe.config._
 import org.rogach.scallop._

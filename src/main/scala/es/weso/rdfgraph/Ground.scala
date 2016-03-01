@@ -1,4 +1,4 @@
-package es.weso.rdfgraph
+package es.weso.rdf
 
 import es.weso.tgraph.{ TContext, TGraph }
 import es.weso.rdf.nodes.{ IRI, BNodeId, RDFNode }

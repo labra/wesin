@@ -2,7 +2,7 @@ package es.weso.rdf
 
 /** Implementation of RDF trait using Sets of triples **/
 import es.weso.rdf.triples._
-// import es.weso.rdfgraph.RDFGraph
+// import es.weso.rdf.RDFGraph
 import es.weso.parser.TurtleParser
 import scala.util._
 import es.weso.rdf.nodes.InitialBNodeId

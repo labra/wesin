@@ -1,11 +1,11 @@
-package es.weso.rdfGraph
+package es.weso.rdf
 
 import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import es.weso.rdf.nodes._
 import es.weso.tgraph.TContext
-import es.weso.rdfgraph.RDFGraph
+import es.weso.rdf.RDFGraph
 import es.weso.rdf.triples.RDFTriple
 
 @RunWith(classOf[JUnitRunner])
