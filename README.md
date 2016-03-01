@@ -2,6 +2,7 @@ wesin
 =====
 [![Build Status](https://travis-ci.org/labra/wesin.svg?branch=master)](https://travis-ci.org/labra/wesin)
 [![codecov.io](http://codecov.io/github/labra/wesin/coverage.svg?branch=master)](http://codecov.io/github/labra/wesin?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/fdf40e9cabb54819ba3b92094539d27c)](https://www.codacy.com/app/jelabra/wesin)
 
 
 Web Semantics Library in Scala
