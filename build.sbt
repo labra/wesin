@@ -43,5 +43,6 @@ bintrayOrganization in bintray := Some("weso")
 
 licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0"))
 
+resolvers += Resolver.bintrayRepo("labra", "maven")
 
 
