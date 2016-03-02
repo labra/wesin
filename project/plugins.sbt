@@ -19,6 +19,10 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")
 
 resolvers += Classpaths.sbtPluginReleases
 
+resolvers += "Bintray" at "http://dl.bintray.com/weso/weso-releases"
+
+resolvers += "BintrayLabra" at "https://dl.bintray.com/labra/maven"
+
 resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 resolvers +=  Resolver.url(
